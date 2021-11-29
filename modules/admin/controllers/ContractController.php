@@ -4,6 +4,8 @@ namespace app\modules\admin\controllers;
 
 use app\models\Contract;
 use app\models\ContractSearch;
+use app\models\Project;
+use yii\helpers\ArrayHelper;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -68,7 +70,10 @@ class ContractController extends Controller
     {
         $model = new Contract();
 
+        $projects = ArrayHelper::map(Project::find()->all(), 'id', 'title');
+
         if ($this->request->isPost) {
+//            var_dump($this->request->post());die();
             if ($model->load($this->request->post()) && $model->save()) {
                 return $this->redirect(['view', 'id' => $model->id]);
             }
@@ -78,6 +83,7 @@ class ContractController extends Controller
 
         return $this->render('create', [
             'model' => $model,
+            'projects' => $projects
         ]);
     }
 

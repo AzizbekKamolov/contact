@@ -3,6 +3,7 @@
 namespace app\models;
 
 use Yii;
+use yii\behaviors\TimestampBehavior;
 
 /**
  * This is the model class for table "contract".
@@ -29,6 +30,13 @@ class Contract extends \yii\db\ActiveRecord
         return 'contract';
     }
 
+    public function behaviors()
+    {
+        return [
+            TimestampBehavior::className(),
+        ];
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -39,7 +47,6 @@ class Contract extends \yii\db\ActiveRecord
             [['description'], 'string'],
             [['price'], 'number'],
             [['deadline'], 'safe'],
-            [['created_at', 'updated_at'], 'required'],
             [['title', 'file_url'], 'string', 'max' => 255],
         ];
     }
@@ -62,5 +69,10 @@ class Contract extends \yii\db\ActiveRecord
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',
         ];
+    }
+
+    public function getProjects()
+    {
+        return $this->hasMany(Project::className(), ['id' => 'project_id']);
     }
 }

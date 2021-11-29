@@ -4,7 +4,7 @@
 namespace app\controllers;
 
 use app\models\Project;
-use yii\base\Controller;
+use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 
 class ProjectController extends Controller
@@ -20,10 +20,14 @@ class ProjectController extends Controller
 
     public function actionView($id)
     {
-        var_dump($id);die();
         return $this->render('view', [
-            'model' => $this->findModel($id),
+            'model' => $this->findModel(1),
         ]);
+    }
+
+    public function actionHello($id)
+    {
+        return 'Hello woorld ' . $id    ;
     }
 
     protected function findModel($id)

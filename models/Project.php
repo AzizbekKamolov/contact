@@ -46,8 +46,8 @@ class Project extends \yii\db\ActiveRecord
             [['budget_sum'], 'number'],
             [['project_year', 'deadline'], 'safe'],
             [['user_id', 'status_id', 'created_at', 'updated_at'], 'integer'],
-//            [['created_at', 'updated_at'], 'required'],
             [['title'], 'string', 'max' => 255],
+            [['title', 'description'], 'required']
         ];
     }
 
@@ -69,4 +69,5 @@ class Project extends \yii\db\ActiveRecord
             'updated_at' => 'Updated At',
         ];
     }
+
 }
