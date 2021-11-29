@@ -24,6 +24,7 @@ AppAsset::register($this);
 </head>
 <body class="d-flex flex-column h-100">
 <?php $this->beginBody() ?>
+<?php Yii::$app->name = 'ACDF' ?>
 
 <header>
     <?php
@@ -33,12 +34,14 @@ AppAsset::register($this);
         'options' => [
             'class' => 'navbar navbar-expand-md navbar-dark bg-dark fixed-top',
         ],
+        'containerOptions' => [
+                'class' => 'justify-content-end'
+        ]
     ]);
     echo Nav::widget([
         'options' => ['class' => 'navbar-nav'],
         'items' => [
             ['label' => 'Главная сайт', 'url' => ['/site/index']],
-            ['label' => 'О Нас', 'url' => ['/site/about']],
             ['label' => 'Проекты(project/index)', 'url' => ['/project/index']],
             ['label' => 'Регистрация', 'url' => ['/site/signup']],
             Yii::$app->user->isGuest ? (
@@ -71,7 +74,7 @@ AppAsset::register($this);
 
 <footer class="footer mt-auto py-3 text-muted">
     <div class="container">
-        <p class="float-left">&copy; My Company <?= date('Y') ?></p>
+        <p class="float-left">&copy; ACDF <?= date('Y') ?></p>
         <p class="float-right"><?= Yii::powered() ?></p>
     </div>
 </footer>

@@ -88,12 +88,13 @@ $config = [
         'class' => 'mdm\admin\components\AccessControl',
         'allowActions' => [
             'site/*',
-            'gii/*'
-//            'admin/*',
-//            'rbac/*',
+//            'gii/*'
+            'admin/*',
+            'rbac/*',
 //            'project/index'
         ]
     ],
+//    'layout' => '',
     'params' => $params,
 ];
 
