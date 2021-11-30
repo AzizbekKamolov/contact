@@ -18,13 +18,13 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'budget_sum')->textInput() ?>
 
-    <?= $form->field($model, 'project_year')->textInput() ?>
+    <?= $form->field($model, 'project_year')->textInput(['type'=>'date']) ?>
 
     <?/*= $form->field($model, 'user_id')->textInput() */?><!--
 
     --><?/*= $form->field($model, 'status_id')->textInput() */?>
 
-    <?= $form->field($model, 'deadline')->textInput() ?>
+    <?= $form->field($model, 'deadline')->textInput(['type' => 'date']) ?>
 
 <!--    <?/*= $form->field($model, 'created_at')->textInput() */?>
 

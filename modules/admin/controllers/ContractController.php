@@ -4,11 +4,13 @@ namespace app\modules\admin\controllers;
 
 use app\models\Contract;
 use app\models\ContractSearch;
+use app\models\ImageUpload;
 use app\models\Project;
 use yii\helpers\ArrayHelper;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\web\UploadedFile;
 
 /**
  * ContractController implements the CRUD actions for Contract model.
@@ -71,9 +73,10 @@ class ContractController extends Controller
         $model = new Contract();
 
         $projects = ArrayHelper::map(Project::find()->all(), 'id', 'title');
+        $user_id = \Yii::$app->user->id;
 
         if ($this->request->isPost) {
-//            var_dump($this->request->post());die();
+            $model->user_id = $user_id;
             if ($model->load($this->request->post()) && $model->save()) {
                 return $this->redirect(['view', 'id' => $model->id]);
             }
@@ -97,6 +100,7 @@ class ContractController extends Controller
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
+        $projects = ArrayHelper::map(Project::find()->all(), 'id', 'title');
 
         if ($this->request->isPost && $model->load($this->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
@@ -104,6 +108,7 @@ class ContractController extends Controller
 
         return $this->render('update', [
             'model' => $model,
+            'projects' => $projects
         ]);
     }
 
@@ -135,5 +140,27 @@ class ContractController extends Controller
         }
 
         throw new NotFoundHttpException('The requested page does not exist.');
+    }
+
+    public function actionSetFile($id)
+    {
+        $model = new ImageUpload;
+
+        if (\Yii::$app->request->isPost)
+        {
+            $contract = $this->findModel($id);
+            $file = UploadedFile::getInstance($model, 'image');
+
+            if ($contract->saveImage($model->uploadFile($file, $contract->file_url)))
+            {
+                return $this->redirect(['view',
+                    'id' => $contract->id
+                ]);
+            }
+        }
+
+        return $this->render('image', [
+            'model' => $model
+        ]);
     }
 }

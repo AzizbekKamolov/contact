@@ -3,15 +3,15 @@
 
 namespace app\controllers;
 
-use app\models\Project;
+use app\models\Contract;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 
-class ProjectController extends Controller
+class ContractController extends Controller
 {
     public function actionIndex()
     {
-        $model = Project::find()->all();
+        $model = Contract::find()->all();
 
         return $this->render('index', [
             'model' => $model
@@ -25,14 +25,9 @@ class ProjectController extends Controller
         ]);
     }
 
-    public function actionHello($id)
-    {
-        return 'Hello woorld ' . $id    ;
-    }
-
     protected function findModel($id)
     {
-        if (($model = Project::findOne($id)) !== null) {
+        if (($model = Contract::findOne($id)) !== null) {
             return $model;
         }
 

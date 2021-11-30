@@ -13,7 +13,8 @@ use yii\widgets\ActiveForm;
     <?php $form = ActiveForm::begin(); ?>
 
 <!--    --><?//= $form->field($model, 'project_id')->textInput() ?>
-    <?= Html::dropDownList('project_id', [], $projects, ['class' => 'form-control']) ?>
+<!--    --><?//= Html::dropDownList($model, 'project_id', [], $projects, ['class' => 'form-control']) ?>
+    <?= $form->field($model, 'project_id')->dropDownList($projects) ?>
 
     <?= $form->field($model, 'title')->textInput(['maxlength' => true]) ?>
 
@@ -23,11 +24,11 @@ use yii\widgets\ActiveForm;
 
     <?/*= $form->field($model, 'user_id')->textInput() */?>
 
-    <?/*= $form->field($model, 'file_url')->textInput(['maxlength' => true]) */?>
+<!--    --><?//= $form->field($model, 'file_url')->fileInput() ?>
 
     <?/*= $form->field($model, 'status_id')->textInput() */?>
 
-    <?= $form->field($model, 'deadline')->textInput() ?>
+    <?= $form->field($model, 'deadline')->textInput(['type' => 'date']) ?>
 
     <?/*= $form->field($model, 'created_at')->textInput() */?><!--
 

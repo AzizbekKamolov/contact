@@ -67,8 +67,10 @@ class ProjectController extends Controller
     public function actionCreate()
     {
         $model = new Project();
+        $user_id = \Yii::$app->user->id;
 
         if ($this->request->isPost) {
+            $model->user_id = $user_id;
             if ($model->load($this->request->post()) && $model->save()) {
                 return $this->redirect(['view', 'id' => $model->id]);
             }

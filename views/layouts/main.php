@@ -42,7 +42,8 @@ AppAsset::register($this);
         'options' => ['class' => 'navbar-nav'],
         'items' => [
             ['label' => 'Главная сайт', 'url' => ['/site/index']],
-            ['label' => 'Проекты(project/index)', 'url' => ['/project/index']],
+            ['label' => 'Проекты', 'url' => ['/project/index']],
+            ['label' => 'Контракты', 'url' => ['/contract/index']],
             ['label' => 'Регистрация', 'url' => ['/site/signup']],
             Yii::$app->user->isGuest ? (
                 ['label' => 'Войти', 'url' => ['/site/login']]
