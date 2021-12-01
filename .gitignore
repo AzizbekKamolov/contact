@@ -24,6 +24,9 @@ composer.phar
 # DB config file
 config/db.php
 
+# uploads folder
+web/uploads/*
+
 # phpunit itself is not needed
 phpunit.phar
 # local phpunit config

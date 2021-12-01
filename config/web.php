@@ -91,7 +91,8 @@ $config = [
 //            'gii/*'
             'admin/*',
             'rbac/*',
-            'project/*'
+            'project/*',
+            '/*'
         ]
     ],
 //    'layout' => '',

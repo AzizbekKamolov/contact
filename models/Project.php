@@ -70,4 +70,9 @@ class Project extends \yii\db\ActiveRecord
         ];
     }
 
+    public function getContracts()
+    {
+        return $this->hasMany(Contract::className(), ['project_id' => 'id']);
+    }
+
 }

@@ -1,6 +1,7 @@
 <?php
 
 use yii\helpers\Html;
+use yii\helpers\Url;
 use yii\widgets\DetailView;
 
 /* @var $this yii\web\View */
@@ -41,5 +42,27 @@ $this->params['breadcrumbs'][] = $this->title;
             'updated_at',
         ],
     ]) ?>
+
+    <table id="w0" class="table table-striped table-bordered detail-view">
+        <tbody>
+            <h2>Contracts</h2>
+            <?php if (!empty($contracts)):?>
+                <?php foreach ($contracts as $contract):?>
+                    <tr>
+                        <th>Contract Title</th>
+                        <td>
+                            <a href="<?= Url::toRoute(['contract/view','id' => $contract->id]) ; ?>">
+                                <h3><?= $contract->title ?></h3>
+                            </a>
+                        </td>
+                    </tr>
+                <?php endforeach; ?>
+            <?php else: ?>
+                <tr>
+                    <p class="text-danger">There are not any contracts:(</p>
+                </tr>
+            <?php endif;?>
+        </tbody>
+    </table>
 
 </div>

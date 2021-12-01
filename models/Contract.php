@@ -73,7 +73,7 @@ class Contract extends \yii\db\ActiveRecord
 
     public function getProjects()
     {
-        return $this->hasMany(Project::className(), ['id' => 'project_id']);
+        return $this->hasOne(Project::className(), ['id' => 'project_id']);
     }
 
     public function saveImage($filename)

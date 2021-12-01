@@ -20,8 +20,11 @@ class ProjectController extends Controller
 
     public function actionView($id)
     {
+        $contracts = $this->findModel($id)->contracts;
+
         return $this->render('view', [
             'model' => $this->findModel($id),
+            'contracts' => $contracts
         ]);
     }
 
