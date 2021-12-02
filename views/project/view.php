@@ -1,5 +1,6 @@
 <?php
 
+use yii\grid\GridView;
 use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\widgets\DetailView;
@@ -64,5 +65,27 @@ $this->params['breadcrumbs'][] = $this->title;
             <?php endif;?>
         </tbody>
     </table>
+
+    <?= GridView::widget([
+        'dataProvider' => $dataProvider,
+        'filterModel' => $searchModel,
+        'columns' => [
+            ['class' => 'yii\grid\SerialColumn'],
+
+//            'id',
+            'project_id',
+            'title',
+            'description:ntext',
+            'price',
+            //'user_id',
+            //'file_url:url',
+            //'status_id',
+            //'deadline',
+            //'created_at',
+            //'updated_at',
+
+            ['class' => 'yii\grid\ActionColumn'],
+        ],
+    ]); ?>
 
 </div>

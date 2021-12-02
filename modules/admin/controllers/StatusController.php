@@ -2,19 +2,16 @@
 
 namespace app\modules\admin\controllers;
 
-use app\models\Project;
-use app\models\Task;
-use app\models\TaskSearch;
-use DateTime;
-use yii\helpers\ArrayHelper;
+use app\models\Status;
+use app\models\StatusSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
 /**
- * TaskController implements the CRUD actions for Task model.
+ * StatusController implements the CRUD actions for Status model.
  */
-class TaskController extends Controller
+class StatusController extends Controller
 {
     /**
      * @inheritDoc
@@ -35,12 +32,12 @@ class TaskController extends Controller
     }
 
     /**
-     * Lists all Task models.
+     * Lists all Status models.
      * @return mixed
      */
     public function actionIndex()
     {
-        $searchModel = new TaskSearch();
+        $searchModel = new StatusSearch();
         $dataProvider = $searchModel->search($this->request->queryParams);
 
         return $this->render('index', [
@@ -50,34 +47,28 @@ class TaskController extends Controller
     }
 
     /**
-     * Displays a single Task model.
+     * Displays a single Status model.
      * @param int $id ID
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
      */
     public function actionView($id)
     {
-//        $model = $this->findModel($id);
-//        $epoch = $model->created_at;
-//        $dt = new DateTime("@$epoch");  // convert UNIX timestamp to PHP DateTime
-//        echo $dt->format('Y-m-d H:i:s');die();
         return $this->render('view', [
             'model' => $this->findModel($id),
         ]);
     }
 
     /**
-     * Creates a new Task model.
+     * Creates a new Status model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
     public function actionCreate()
     {
-        $projects = ArrayHelper::map(Project::find()->all(), 'id', 'title');
-        $model = new Task();
+        $model = new Status();
 
         if ($this->request->isPost) {
-            $model->user_id = \Yii::$app->user->id;
             if ($model->load($this->request->post()) && $model->save()) {
                 return $this->redirect(['view', 'id' => $model->id]);
             }
@@ -87,12 +78,11 @@ class TaskController extends Controller
 
         return $this->render('create', [
             'model' => $model,
-            'projects' => $projects
         ]);
     }
 
     /**
-     * Updates an existing Task model.
+     * Updates an existing Status model.
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param int $id ID
      * @return mixed
@@ -100,23 +90,19 @@ class TaskController extends Controller
      */
     public function actionUpdate($id)
     {
-        $projects = ArrayHelper::map(Project::find()->all(), 'id', 'title');
         $model = $this->findModel($id);
 
-
         if ($this->request->isPost && $model->load($this->request->post()) && $model->save()) {
-//            var_dump($model->touch('created_at'));die();
             return $this->redirect(['view', 'id' => $model->id]);
         }
 
         return $this->render('update', [
             'model' => $model,
-            'projects' => $projects
         ]);
     }
 
     /**
-     * Deletes an existing Task model.
+     * Deletes an existing Status model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param int $id ID
      * @return mixed
@@ -130,15 +116,15 @@ class TaskController extends Controller
     }
 
     /**
-     * Finds the Task model based on its primary key value.
+     * Finds the Status model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param int $id ID
-     * @return Task the loaded model
+     * @return Status the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)
     {
-        if (($model = Task::findOne($id)) !== null) {
+        if (($model = Status::findOne($id)) !== null) {
             return $model;
         }
 
