@@ -89,10 +89,10 @@ $config = [
         'allowActions' => [
             'site/*',
 //            'gii/*'
-            'admin/*',
-            'rbac/*',
-            'project/*',
-            '/*'
+//            'admin/*',
+//            'rbac/*',
+//            'project/*',
+//            '/*'
         ]
     ],
 //    'layout' => '',
