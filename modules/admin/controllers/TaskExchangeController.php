@@ -2,20 +2,16 @@
 
 namespace app\modules\admin\controllers;
 
-use app\models\Project;
-use app\models\Task;
-use app\models\TaskExecution;
-use app\models\TaskExecutionSearch;
-use app\models\User;
-use yii\helpers\ArrayHelper;
+use app\models\TaskExchange;
+use app\models\TaskExchangeSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
 /**
- * TaskExecutionController implements the CRUD actions for TaskExecution model.
+ * TaskExchangeController implements the CRUD actions for TaskExchange model.
  */
-class TaskExecutionController extends Controller
+class TaskExchangeController extends Controller
 {
     /**
      * @inheritDoc
@@ -36,12 +32,12 @@ class TaskExecutionController extends Controller
     }
 
     /**
-     * Lists all TaskExecution models.
+     * Lists all TaskExchange models.
      * @return mixed
      */
     public function actionIndex()
     {
-        $searchModel = new TaskExecutionSearch();
+        $searchModel = new TaskExchangeSearch();
         $dataProvider = $searchModel->search($this->request->queryParams);
 
         return $this->render('index', [
@@ -51,7 +47,7 @@ class TaskExecutionController extends Controller
     }
 
     /**
-     * Displays a single TaskExecution model.
+     * Displays a single TaskExchange model.
      * @param int $id ID
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
@@ -64,18 +60,15 @@ class TaskExecutionController extends Controller
     }
 
     /**
-     * Creates a new TaskExecution model.
+     * Creates a new TaskExchange model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
     public function actionCreate()
     {
-        $tasks = ArrayHelper::map(Task::find()->all(), 'id', 'title');
-        $users = ArrayHelper::map(User::find()->all(), 'id', 'username');
-        $model = new TaskExecution();
+        $model = new TaskExchange();
 
         if ($this->request->isPost) {
-            $model->user_id = \Yii::$app->user->id;
             if ($model->load($this->request->post()) && $model->save()) {
                 return $this->redirect(['view', 'id' => $model->id]);
             }
@@ -85,13 +78,11 @@ class TaskExecutionController extends Controller
 
         return $this->render('create', [
             'model' => $model,
-            'tasks' => $tasks,
-            'users' =>  $users
         ]);
     }
 
     /**
-     * Updates an existing TaskExecution model.
+     * Updates an existing TaskExchange model.
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param int $id ID
      * @return mixed
@@ -99,8 +90,6 @@ class TaskExecutionController extends Controller
      */
     public function actionUpdate($id)
     {
-        $tasks = ArrayHelper::map(Task::find()->all(), 'id', 'title');
-        $users = ArrayHelper::map(User::find()->all(), 'id', 'username');
         $model = $this->findModel($id);
 
         if ($this->request->isPost && $model->load($this->request->post()) && $model->save()) {
@@ -109,13 +98,11 @@ class TaskExecutionController extends Controller
 
         return $this->render('update', [
             'model' => $model,
-            'tasks' => $tasks,
-            'users' =>  $users
         ]);
     }
 
     /**
-     * Deletes an existing TaskExecution model.
+     * Deletes an existing TaskExchange model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param int $id ID
      * @return mixed
@@ -129,15 +116,15 @@ class TaskExecutionController extends Controller
     }
 
     /**
-     * Finds the TaskExecution model based on its primary key value.
+     * Finds the TaskExchange model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param int $id ID
-     * @return TaskExecution the loaded model
+     * @return TaskExchange the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)
     {
-        if (($model = TaskExecution::findOne($id)) !== null) {
+        if (($model = TaskExchange::findOne($id)) !== null) {
             return $model;
         }
 

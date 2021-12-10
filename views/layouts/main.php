@@ -45,6 +45,7 @@ AppAsset::register($this);
             ['label' => 'Проекты', 'url' => ['/project/index']],
             ['label' => 'Контракты', 'url' => ['/contract/index']],
             ['label' => 'Задачи', 'url' => ['/task/index']],
+            ['label' => 'Мои Задачи', 'url' => ['/task-execution/index']],
             ['label' => 'Регистрация', 'url' => ['/site/signup']],
             Yii::$app->user->isGuest ? (
                 ['label' => 'Войти', 'url' => ['/site/login']]

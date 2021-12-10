@@ -1,6 +1,6 @@
 <?php
 
-namespace app\modules\admin\controllers;
+namespace app\controllers;
 
 use app\models\Project;
 use app\models\Task;
@@ -43,6 +43,10 @@ class TaskExecutionController extends Controller
     {
         $searchModel = new TaskExecutionSearch();
         $dataProvider = $searchModel->search($this->request->queryParams);
+        $dataProvider->query->andWhere(['exe_user_id' =>  \Yii::$app->user->id]);
+        $dataProvider->setSort([
+            'defaultOrder' => ['id'=>SORT_DESC],
+        ]);
 
         return $this->render('index', [
             'searchModel' => $searchModel,

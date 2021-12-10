@@ -5,19 +5,18 @@ use yii\helpers\Html;
 /* @var $this yii\web\View */
 /* @var $model app\models\TaskExecution */
 
-$this->title = 'Update Task Execution: ' . $model->id;
+$this->title = 'Create Task Execution';
 $this->params['breadcrumbs'][] = ['label' => 'Task Executions', 'url' => ['index']];
-$this->params['breadcrumbs'][] = ['label' => $model->id, 'url' => ['view', 'id' => $model->id]];
-$this->params['breadcrumbs'][] = 'Update';
+$this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="task-execution-update">
+<div class="task-execution-create">
 
     <h1><?= Html::encode($this->title) ?></h1>
 
     <?= $this->render('_form', [
         'model' => $model,
         'tasks' => $tasks,
-        'users' =>  $users
+        'users' => $users
     ]) ?>
 
 </div>
