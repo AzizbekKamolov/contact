@@ -31,7 +31,13 @@ $this->params['breadcrumbs'][] = $this->title;
             'task_id',
             'user_id',
             'exe_user_id',
-            'status_id',
+            [
+                'label' => 'status_id',
+                'value' => function($data){
+                    return \app\models\Status::findOne(['id' => $data->status_id])->title;
+                },
+            ],
+//            'status_id',
             //'info:ntext',
             //'done_date',
             //'mark',

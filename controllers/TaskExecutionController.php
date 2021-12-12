@@ -3,7 +3,9 @@
 namespace app\controllers;
 
 use app\models\Project;
+use app\models\Status;
 use app\models\Task;
+use app\models\TaskExchange;
 use app\models\TaskExecution;
 use app\models\TaskExecutionSearch;
 use app\models\User;
@@ -43,10 +45,12 @@ class TaskExecutionController extends Controller
     {
         $searchModel = new TaskExecutionSearch();
         $dataProvider = $searchModel->search($this->request->queryParams);
-        $dataProvider->query->andWhere(['exe_user_id' =>  \Yii::$app->user->id]);
-        $dataProvider->setSort([
-            'defaultOrder' => ['id'=>SORT_DESC],
-        ]);
+        if (\Yii::$app->user->id !== 3){
+            $dataProvider->query->andWhere(['exe_user_id' =>  \Yii::$app->user->id]);
+            $dataProvider->setSort([
+                'defaultOrder' => ['id'=>SORT_DESC],
+            ]);
+        }
 
         return $this->render('index', [
             'searchModel' => $searchModel,
@@ -146,5 +150,81 @@ class TaskExecutionController extends Controller
         }
 
         throw new NotFoundHttpException('The requested page does not exist.');
+    }
+
+    public function actionTaskExe($id)
+    {
+        $model = new TaskExchange;
+
+        if ($this->request->isPost)
+        {
+            $taskExecution = $this->findModel($id);
+            $infoExecutor = $this->request->post("TaskExchange")['info_executor'];
+
+            $model->task_exe_id = $id;
+            $model->exe_user_id = \Yii::$app->user->id;
+            $model->rec_user_id = $taskExecution->receive_user;
+            $taskExecution->status_id = Status::findOne(['title' => 'Отправленная'])->id;
+            $model->info_executor =$infoExecutor;
+//            var_dump($taskExecution->save());die();
+            if ($model->save() && $taskExecution->save()) {
+                return $this->redirect(['view', 'id' => $taskExecution->id]);
+            }
+
+        }
+
+        return $this->render('task-executor', [
+            'model' => $model
+        ]);
+    }
+
+    public function actionTaskCheck($id)
+    {
+        $model = $this->findModel($id);
+        $taskExchange = TaskExchange::find()->where(['task_exe_id' => $id])->orderBy(['id' => SORT_DESC])->one();
+//        var_dump($taskExchange);die();
+
+        return $this->render('task-receiver',[
+            'model' => $model,
+            'taskExchange' => $taskExchange
+        ]);
+    }
+
+    public function actionTaskDeny($id)
+    {
+        $model = new TaskExchange;
+
+        if ($this->request->isPost)
+        {
+            $taskExecution = $this->findModel($id);
+            $infoReceiver = $this->request->post("TaskExchange")['info_receiver'];
+
+            $model->task_exe_id = $id;
+            $model->exe_user_id = $taskExecution->exe_user_id;
+            $model->rec_user_id = \Yii::$app->user->id;
+            $taskExecution->status_id = Status::findOne(['title' => 'Отказанная'])->id;
+            $model->info_receiver =$infoReceiver;
+
+            if ($model->save() && $taskExecution->save()) {
+                return $this->redirect(['view', 'id' => $taskExecution->id]);
+            }
+
+        }
+
+        return $this->render('task-deny', [
+            'model' => $model
+        ]);
+    }
+
+    public function actionTaskApprove($id)
+    {
+        $taskExecution = $this->findModel($id);
+
+        $taskExecution->status_id = Status::findOne(['title' => 'Одобренная'])->id;
+
+        if($taskExecution->save())
+        {
+            return $this->redirect(['view', 'id' => $taskExecution->id]);
+        }
     }
 }

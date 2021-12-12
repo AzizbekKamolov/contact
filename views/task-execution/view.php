@@ -17,6 +17,11 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <p>
         <?= Html::a('Update', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
+        <?php if (Yii::$app->user->id === $model->receive_user):?>
+            <?= Html::a('Check task', ['task-check', 'id' => $model->id], ['class' => ($model->status_id !== 2) ? 'btn btn-success disabled' : 'btn btn-success']) ?>
+        <?php else: ?>
+            <?= Html::a('Execute task', ['task-exe', 'id' => $model->id], ['class' => (($model->status_id === 2) || ($model->status_id === 4)) ? 'btn btn-success disabled' : 'btn btn-success']) ?>
+        <?php endif; ?>
         <?= Html::a('Delete', ['delete', 'id' => $model->id], [
             'class' => 'btn btn-danger',
             'data' => [
@@ -34,7 +39,13 @@ $this->params['breadcrumbs'][] = $this->title;
             'task_id',
             'user_id',
             'exe_user_id',
-            'status_id',
+            [
+                'label' => 'status',
+                'value' => function($data){
+                    return \app\models\Status::findOne(['id' => $data->status_id])->title;
+                },
+            ],
+//            'status_id',
             'info:ntext',
             'done_date',
             'mark',
