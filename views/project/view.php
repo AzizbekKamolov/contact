@@ -44,27 +44,7 @@ $this->params['breadcrumbs'][] = $this->title;
         ],
     ]) ?>
 
-    <table id="w0" class="table table-striped table-bordered detail-view">
-        <tbody>
-            <h2>Contracts</h2>
-            <?php if (!empty($contracts)):?>
-                <?php foreach ($contracts as $contract):?>
-                    <tr>
-                        <th>Contract Title</th>
-                        <td>
-                            <a href="<?= Url::toRoute(['contract/view','id' => $contract->id]) ; ?>">
-                                <h3><?= $contract->title ?></h3>
-                            </a>
-                        </td>
-                    </tr>
-                <?php endforeach; ?>
-            <?php else: ?>
-                <tr>
-                    <p class="text-danger">There are not any contracts:(</p>
-                </tr>
-            <?php endif;?>
-        </tbody>
-    </table>
+    <h1>Contracts</h1>
 
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
@@ -81,6 +61,28 @@ $this->params['breadcrumbs'][] = $this->title;
             //'file_url:url',
             //'status_id',
             //'deadline',
+            //'created_at',
+            //'updated_at',
+
+            ['class' => 'yii\grid\ActionColumn'],
+        ],
+    ]); ?>
+
+    <h1>Tasks</h1>
+
+    <?= GridView::widget([
+        'dataProvider' => $dataProviderTask,
+        'filterModel' => $searchModelTask,
+        'columns' => [
+            ['class' => 'yii\grid\SerialColumn'],
+
+            'id',
+            'project_id',
+            'title:ntext',
+            'price',
+            'deadline',
+            //'user_id',
+            //'status_id',
             //'created_at',
             //'updated_at',
 

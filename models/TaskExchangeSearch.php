@@ -17,8 +17,8 @@ class TaskExchangeSearch extends TaskExchange
     public function rules()
     {
         return [
-            [['id', 'task_exe_id', 'exe_user_id', 'rec_user_id', 'status_id', 'created_at', 'updated_at'], 'integer'],
-            [['info_executor', 'info_receiver'], 'safe'],
+            [['id', 'task_exe_id', 'exe_user_id', 'rec_user_id', 'created_at', 'updated_at'], 'integer'],
+            [['info'], 'safe'],
         ];
     }
 
@@ -62,13 +62,11 @@ class TaskExchangeSearch extends TaskExchange
             'task_exe_id' => $this->task_exe_id,
             'exe_user_id' => $this->exe_user_id,
             'rec_user_id' => $this->rec_user_id,
-            'status_id' => $this->status_id,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
         ]);
 
-        $query->andFilterWhere(['like', 'info_executor', $this->info_executor])
-            ->andFilterWhere(['like', 'info_receiver', $this->info_receiver]);
+        $query->andFilterWhere(['like', 'info', $this->info]);
 
         return $dataProvider;
     }

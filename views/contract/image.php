@@ -8,11 +8,12 @@ use yii\widgets\ActiveForm;
 /* @var $form yii\widgets\ActiveForm */
 ?>
 
-<div class="task-executor-form">
+<div class="article-form">
 
     <?php $form = ActiveForm::begin(); ?>
 
-    <?= $form->field($model, 'info')->textarea(['rows' => 6]) ?>
+    <?= $form->field($model, 'image')->fileInput(['maxlength' => true]) ?>
+
 
     <div class="form-group">
         <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>

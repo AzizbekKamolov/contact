@@ -10,6 +10,7 @@ use app\models\TaskExchangeSearch;
 use app\models\TaskExecution;
 use app\models\TaskExecutionSearch;
 use app\models\User;
+use Cassandra\Date;
 use yii\helpers\ArrayHelper;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -171,13 +172,13 @@ class TaskExecutionController extends Controller
         if ($this->request->isPost)
         {
             $taskExecution = $this->findModel($id);
-            $infoExecutor = $this->request->post("TaskExchange")['info_executor'];
+            $info = $this->request->post("TaskExchange")['info'];
 
             $model->task_exe_id = $id;
             $model->exe_user_id = \Yii::$app->user->id;
             $model->rec_user_id = $taskExecution->receive_user;
             $taskExecution->status_id = Status::findOne(['title' => 'Отправленная'])->id;
-            $model->info_executor =$infoExecutor;
+            $model->info =$info;
 //            var_dump($taskExecution->save());die();
             if ($model->save() && $taskExecution->save()) {
                 return $this->redirect(['view', 'id' => $taskExecution->id]);
@@ -209,13 +210,13 @@ class TaskExecutionController extends Controller
         if ($this->request->isPost)
         {
             $taskExecution = $this->findModel($id);
-            $infoReceiver = $this->request->post("TaskExchange")['info_receiver'];
+            $info = $this->request->post("TaskExchange")['info'];
 
             $model->task_exe_id = $id;
             $model->exe_user_id = $taskExecution->exe_user_id;
             $model->rec_user_id = \Yii::$app->user->id;
             $taskExecution->status_id = Status::findOne(['title' => 'Отказанная'])->id;
-            $model->info_receiver =$infoReceiver;
+            $model->info =$info;
 
             if ($model->save() && $taskExecution->save()) {
                 return $this->redirect(['view', 'id' => $taskExecution->id]);
@@ -231,12 +232,35 @@ class TaskExecutionController extends Controller
     public function actionTaskApprove($id)
     {
         $taskExecution = $this->findModel($id);
+        $marks = [
+            1 => 1,
+            2 => 2,
+            3 => 3,
+            4 => 4,
+            5 => 5,
+        ];
 
-        $taskExecution->status_id = Status::findOne(['title' => 'Одобренная'])->id;
 
-        if($taskExecution->save())
+
+        if ($this->request->isPost)
         {
-            return $this->redirect(['view', 'id' => $taskExecution->id]);
+            $mark = $this->request->post('TaskExecution')['mark'];
+            $done_date = \date('Y-m-d H:i:s');
+//            var_dump($done_date);die();
+
+            $taskExecution->status_id   = Status::findOne(['title' => 'Одобренная'])->id;
+            $taskExecution->mark        = $mark;
+            $taskExecution->done_date   = $done_date;
+
+            if($taskExecution->save())
+            {
+                return $this->redirect(['view', 'id' => $taskExecution->id]);
+            }
         }
+
+        return $this->render('task-mark',[
+            'model' => $taskExecution,
+            'marks' =>  $marks
+        ]);
     }
 }

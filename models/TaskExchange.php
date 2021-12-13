@@ -41,8 +41,8 @@ class TaskExchange extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['task_exe_id', 'exe_user_id', 'rec_user_id', 'status_id', 'created_at', 'updated_at'], 'integer'],
-            [['info_executor', 'info_receiver'], 'string'],
+            [['task_exe_id', 'exe_user_id', 'rec_user_id', 'created_at', 'updated_at'], 'integer'],
+            [['info'], 'string'],
 //            [['created_at', 'updated_at'], 'required'],
         ];
     }
@@ -57,9 +57,7 @@ class TaskExchange extends \yii\db\ActiveRecord
             'task_exe_id' => 'Task Exe ID',
             'exe_user_id' => 'Exe User ID',
             'rec_user_id' => 'Rec User ID',
-            'status_id' => 'Status ID',
-            'info_executor' => 'Info Executor',
-            'info_receiver' => 'Info Receiver',
+            'info' => 'Info',
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',
         ];

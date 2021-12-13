@@ -8,14 +8,14 @@ use yii\widgets\ActiveForm;
 /* @var $form yii\widgets\ActiveForm */
 ?>
 
-<div class="task-executor-form">
+<div class="task-mark-form">
 
     <?php $form = ActiveForm::begin(); ?>
 
-    <?= $form->field($model, 'info')->textarea(['rows' => 6]) ?>
+    <?= $form->field($model, 'mark')->dropDownList($marks) ?>
 
     <div class="form-group">
-        <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>
+        <?= Html::submitButton('Отправить', ['class' => 'btn btn-success']) ?>
     </div>
 
     <?php ActiveForm::end(); ?>

@@ -4,6 +4,7 @@
 /* @var $content string */
 
 use app\assets\AppAsset;
+use app\models\User;
 use app\widgets\Alert;
 use yii\bootstrap4\Breadcrumbs;
 use yii\bootstrap4\Html;
@@ -45,7 +46,7 @@ AppAsset::register($this);
             ['label' => 'Проекты', 'url' => ['/project/index']],
             ['label' => 'Контракты', 'url' => ['/contract/index']],
             ['label' => 'Задачи', 'url' => ['/task/index']],
-            \app\models\User::getMyRole() === 'admin' ? (
+            User::getMyRole() === 'admin' ? (
                     ['label' => 'Задачи на исп', 'url' => ['/task-execution/index']]
             ): (
                     ['label' => 'Мои Задачи', 'url' => ['/task-execution/index']]

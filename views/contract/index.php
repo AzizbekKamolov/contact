@@ -1,19 +1,46 @@
 <?php
 
+use yii\helpers\Html;
+use yii\grid\GridView;
+
 /* @var $this yii\web\View */
+/* @var $searchModel app\models\ContractSearch */
+/* @var $dataProvider yii\data\ActiveDataProvider */
 
-use yii\helpers\Url;
-
-$this->title = 'Projects';
+$this->title = 'Contracts';
+$this->params['breadcrumbs'][] = $this->title;
 ?>
+<div class="contract-index">
 
-<?php if (count($model)): ?>
-    <?php foreach ($model as $item):?>
-        <div class="alert alert-primary">
-            <a href="<?= Url::toRoute(['contract/view','id' => $item->id]) ; ?>">
-                <h3><?= $item->title ?></h3>
-            </a>
-            <p><?= $item->description ?></p>
-        </div>
-    <?php endforeach;?>
-<?php endif;?>
+    <h1><?= Html::encode($this->title) ?></h1>
+
+    <p>
+        <?= Html::a('Create Contract', ['create'], ['class' => 'btn btn-success']) ?>
+    </p>
+
+    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
+
+    <?= GridView::widget([
+        'dataProvider' => $dataProvider,
+        'filterModel' => $searchModel,
+        'columns' => [
+            ['class' => 'yii\grid\SerialColumn'],
+
+            'id',
+            'project_id',
+            'title',
+            'description:ntext',
+            'price',
+            //'user_id',
+            //'file_url:url',
+            //'status_id',
+            //'deadline',
+            //'created_at',
+            //'updated_at',
+
+            ['class' => 'yii\grid\ActionColumn'],
+        ],
+    ]); ?>
+
+
+</div>

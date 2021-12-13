@@ -69,8 +69,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'task_exe_id',
             'exe_user_id',
             'rec_user_id',
-            'info_executor:ntext',
-            'info_receiver:ntext',
+            'info:ntext',
             'created_at',
             'updated_at',
 

@@ -13,7 +13,7 @@ use yii\widgets\DetailView;
         'attributes' => [
             'task_exe_id',
             'exe_user_id',
-            'info_executor:ntext',
+            'info:ntext',
             'created_at',
         ],
     ]) ?>

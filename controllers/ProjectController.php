@@ -6,6 +6,8 @@ namespace app\controllers;
 use app\models\ContractSearch;
 use app\models\Project;
 use app\models\ProjectSearch;
+use app\models\Task;
+use app\models\TaskSearch;
 use app\models\User;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -25,7 +27,6 @@ class ProjectController extends Controller
 
     public function actionView($id)
     {
-        $contracts = $this->findModel($id)->contracts;
         $searchModel = new ContractSearch();
         $dataProvider = $searchModel->search(\Yii::$app->request->queryParams);
 
@@ -38,11 +39,19 @@ class ProjectController extends Controller
             'defaultOrder' => ['id'=>SORT_DESC],
         ]);
 
+        $searchModelTask = new TaskSearch();
+        $dataProviderTask = $searchModelTask->search(\Yii::$app->request->queryParams);
+        $dataProviderTask->query->andWhere(['project_id' => $id]);
+        $dataProviderTask->setSort([
+            'defaultOrder' => ['id'=>SORT_DESC],
+        ]);
+
         return $this->render('view', [
             'model' => $this->findModel($id),
-            'contracts' => $contracts,
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
+            'searchModelTask' => $searchModelTask,
+            'dataProviderTask' => $dataProviderTask
         ]);
     }
 
