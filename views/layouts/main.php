@@ -45,10 +45,10 @@ AppAsset::register($this);
             ['label' => 'Проекты', 'url' => ['/project/index']],
             ['label' => 'Контракты', 'url' => ['/contract/index']],
             ['label' => 'Задачи', 'url' => ['/task/index']],
-            Yii::$app->user->id === 3 ? (
+            \app\models\User::getMyRole() === 'admin' ? (
                     ['label' => 'Задачи на исп', 'url' => ['/task-execution/index']]
             ): (
-            ['label' => 'Мои Задачи', 'url' => ['/task-execution/index']]
+                    ['label' => 'Мои Задачи', 'url' => ['/task-execution/index']]
             ),
 //            ['label' => 'Регистрация', 'url' => ['/site/signup']],
             Yii::$app->user->isGuest ? (

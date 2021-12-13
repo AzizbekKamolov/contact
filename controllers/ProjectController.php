@@ -6,6 +6,7 @@ namespace app\controllers;
 use app\models\ContractSearch;
 use app\models\Project;
 use app\models\ProjectSearch;
+use app\models\User;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 
@@ -27,10 +28,16 @@ class ProjectController extends Controller
         $contracts = $this->findModel($id)->contracts;
         $searchModel = new ContractSearch();
         $dataProvider = $searchModel->search(\Yii::$app->request->queryParams);
+
+//        if (User::getMyRole() !== 'admin') {
+//            $dataProvider->query->andWhere(['project_id' =>  $id]);
+//        }
+
         $dataProvider->query->andWhere(['project_id' =>  $id]);
         $dataProvider->setSort([
             'defaultOrder' => ['id'=>SORT_DESC],
         ]);
+
         return $this->render('view', [
             'model' => $this->findModel($id),
             'contracts' => $contracts,

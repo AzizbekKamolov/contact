@@ -6,6 +6,7 @@ use app\models\Project;
 use app\models\Status;
 use app\models\Task;
 use app\models\TaskExchange;
+use app\models\TaskExchangeSearch;
 use app\models\TaskExecution;
 use app\models\TaskExecutionSearch;
 use app\models\User;
@@ -66,8 +67,19 @@ class TaskExecutionController extends Controller
      */
     public function actionView($id)
     {
+//        $taskExchange = TaskExchange::find()->where(['task_exe_id' => 10])->all();
+        $searchModel = new TaskExchangeSearch();
+        $dataProvider = $searchModel->search(($this->request->queryParams));
+        $dataProvider->query->andWhere(['task_exe_id' =>  $id]);
+        $dataProvider->setSort([
+            'defaultOrder' => ['id'=>SORT_DESC],
+        ]);
+
+
         return $this->render('view', [
-            'model' => $this->findModel($id),
+            'model'         => $this->findModel($id),
+            'searchModel'  => $searchModel,
+            'dataProvider'  => $dataProvider
         ]);
     }
 
