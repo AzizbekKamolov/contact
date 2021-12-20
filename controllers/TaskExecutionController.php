@@ -15,6 +15,7 @@ use yii\helpers\ArrayHelper;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\web\UploadedFile;
 
 /**
  * TaskExecutionController implements the CRUD actions for TaskExecution model.
@@ -47,7 +48,7 @@ class TaskExecutionController extends Controller
     {
         $searchModel = new TaskExecutionSearch();
         $dataProvider = $searchModel->search($this->request->queryParams);
-        if (\Yii::$app->user->id !== 3){
+        if (User::getMyRole() !== 'admin'){
             $dataProvider->query->andWhere(['exe_user_id' =>  \Yii::$app->user->id]);
             $dataProvider->setSort([
                 'defaultOrder' => ['id'=>SORT_DESC],

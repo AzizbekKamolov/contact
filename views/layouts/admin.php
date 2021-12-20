@@ -32,9 +32,11 @@ AppAsset::register($this);
         ['label' => 'Главная', 'url' => ['/admin/default/index']],
         ['label' => 'Проекты', 'url' => ['/admin/project/index']],
         ['label' => 'Контракты', 'url' => ['/admin/contract/index']],
+        ['label' => 'Конт на Исп', 'url' => ['/admin/contract-execution/index']],
+        ['label' => 'Конт на Exch', 'url' => ['/admin/contract-exchange/index']],
         ['label' => 'Задачи', 'url' => ['/admin/task/index']],
-        ['label' => 'Задачи на Испольнение', 'url' => ['/admin/task-execution/index']],
-        ['label' => 'Задачи на Exchange', 'url' => ['/admin/task-exchange/index']],
+        ['label' => 'Задачи на Исп', 'url' => ['/admin/task-execution/index']],
+        ['label' => 'Задачи на Exch', 'url' => ['/admin/task-exchange/index']],
         ['label' => 'Статусы', 'url' => ['/admin/status/index']],
         ['label' => 'Users', 'url' => ['/rbac/default/index']],
         Yii::$app->user->isGuest ? (

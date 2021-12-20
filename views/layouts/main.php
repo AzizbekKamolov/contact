@@ -45,13 +45,17 @@ AppAsset::register($this);
             ['label' => 'Главная сайт', 'url' => ['/site/index']],
             ['label' => 'Проекты', 'url' => ['/project/index']],
             ['label' => 'Контракты', 'url' => ['/contract/index']],
+            User::getMyRole() === 'admin' ? (
+                ['label' => 'Контракт на исп', 'url' => ['/contract-execution/index']]
+            ): (
+                ['label' => 'Мои Контракты', 'url' => ['/contract-execution/index']]
+            ),
             ['label' => 'Задачи', 'url' => ['/task/index']],
             User::getMyRole() === 'admin' ? (
                     ['label' => 'Задачи на исп', 'url' => ['/task-execution/index']]
             ): (
                     ['label' => 'Мои Задачи', 'url' => ['/task-execution/index']]
             ),
-//            ['label' => 'Регистрация', 'url' => ['/site/signup']],
             Yii::$app->user->isGuest ? (
                 ['label' => 'Войти', 'url' => ['/site/login']]
             ) : (

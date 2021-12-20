@@ -4,20 +4,19 @@ use yii\helpers\Html;
 use yii\widgets\DetailView;
 
 /* @var $this yii\web\View */
-/* @var $model app\models\Contract */
+/* @var $model app\models\ContractExecution */
 
 $this->title = $model->title;
-$this->params['breadcrumbs'][] = ['label' => 'Contracts', 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => 'Contract Executions', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 \yii\web\YiiAsset::register($this);
 ?>
-<div class="contract-view">
+<div class="contract-execution-view">
 
     <h1><?= Html::encode($this->title) ?></h1>
 
     <p>
         <?= Html::a('Update', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
-        <?= Html::a('File Upload', ['set-file', 'id' => $model->id], ['class' => 'btn btn-success']) ?>
         <?= Html::a('Delete', ['delete', 'id' => $model->id], [
             'class' => 'btn btn-danger',
             'data' => [
@@ -31,23 +30,16 @@ $this->params['breadcrumbs'][] = $this->title;
         'model' => $model,
         'attributes' => [
             'id',
-            'project_id',
             'title',
-            'description:ntext',
-            'price',
+            'contract_id',
             'user_id',
-//            'file_url:url',
-            [
-                    'label' => 'url',
-                    'value' => function($data)
-                    {
-                        return Html::a('File',  'uploads/' . $data->file_url);
-                    },
-                    'format' => 'raw',
-//                    'value' => Html::a('Download the File', \Yii::getAlias('@web') . 'uploads/'),
-            ],
+            'exe_user_id',
             'status_id',
-            'deadline',
+            'info:ntext',
+            'done_date',
+            'mark',
+            'receive_date',
+            'receive_user',
             'created_at',
             'updated_at',
         ],

@@ -5,23 +5,23 @@ use yii\helpers\Html;
 use yii\widgets\DetailView;
 
 /* @var $this yii\web\View */
-/* @var $model app\models\TaskExecution */
+/* @var $model app\models\ContractExecution */
 
-$this->title = $model->id;
-$this->params['breadcrumbs'][] = ['label' => 'Task Executions', 'url' => ['index']];
+$this->title = $model->title;
+$this->params['breadcrumbs'][] = ['label' => 'Contract Executions', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 \yii\web\YiiAsset::register($this);
 ?>
-<div class="task-execution-view">
+<div class="contract-execution-view">
 
     <h1><?= Html::encode($this->title) ?></h1>
 
     <p>
         <?= Html::a('Update', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
         <?php if (Yii::$app->user->id === $model->receive_user):?>
-            <?= Html::a('Check task', ['task-check', 'id' => $model->id], ['class' => ($model->status_id !== 2) ? 'btn btn-success disabled' : 'btn btn-success']) ?>
+            <?= Html::a('Check Contract', ['contract-check', 'id' => $model->id], ['class' => ($model->status_id !== 2) ? 'btn btn-success disabled' : 'btn btn-success']) ?>
         <?php else: ?>
-            <?= Html::a('Execute task', ['task-exe', 'id' => $model->id], ['class' => (($model->status_id === 2) || ($model->status_id === 4)) ? 'btn btn-success disabled' : 'btn btn-success']) ?>
+            <?= Html::a('Execute Contract', ['contract-exe', 'id' => $model->id], ['class' => (($model->status_id === 2) || ($model->status_id === 4)) ? 'btn btn-success disabled' : 'btn btn-success']) ?>
         <?php endif; ?>
         <?= Html::a('Delete', ['delete', 'id' => $model->id], [
             'class' => 'btn btn-danger',
@@ -37,16 +37,10 @@ $this->params['breadcrumbs'][] = $this->title;
         'attributes' => [
             'id',
             'title',
-            'task_id',
+            'contract_id',
             'user_id',
             'exe_user_id',
-            [
-                'label' => 'status',
-                'value' => function($data){
-                    return \app\models\Status::findOne(['id' => $data->status_id])->title;
-                },
-            ],
-//            'status_id',
+            'status_id',
             'info:ntext',
             'done_date',
             'mark',
@@ -70,7 +64,8 @@ $this->params['breadcrumbs'][] = $this->title;
 //            'exe_user_id',
 //            'rec_user_id',
             'info:ntext',
-            'created_at',
+            'file',
+//            'created_at',
             'updated_at',
 
 //            ['class' => 'yii\grid\ActionColumn'],

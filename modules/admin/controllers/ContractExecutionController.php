@@ -1,20 +1,20 @@
 <?php
 
-namespace app\controllers;
+namespace app\modules\admin\controllers;
 
-use app\models\Project;
-use app\models\Task;
-use app\models\TaskSearch;
-use DateTime;
+use app\models\Contract;
+use app\models\ContractExecution;
+use app\models\ContractExecutionSearch;
+use app\models\User;
 use yii\helpers\ArrayHelper;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
 /**
- * TaskController implements the CRUD actions for Task model.
+ * ContractExecutionController implements the CRUD actions for ContractExecution model.
  */
-class TaskController extends Controller
+class ContractExecutionController extends Controller
 {
     /**
      * @inheritDoc
@@ -35,12 +35,12 @@ class TaskController extends Controller
     }
 
     /**
-     * Lists all Task models.
+     * Lists all ContractExecution models.
      * @return mixed
      */
     public function actionIndex()
     {
-        $searchModel = new TaskSearch();
+        $searchModel = new ContractExecutionSearch();
         $dataProvider = $searchModel->search($this->request->queryParams);
 
         return $this->render('index', [
@@ -50,31 +50,28 @@ class TaskController extends Controller
     }
 
     /**
-     * Displays a single Task model.
+     * Displays a single ContractExecution model.
      * @param int $id ID
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
      */
     public function actionView($id)
     {
-//        $model = $this->findModel($id);
-//        $epoch = $model->created_at;
-//        $dt = new DateTime("@$epoch");  // convert UNIX timestamp to PHP DateTime
-//        echo $dt->format('Y-m-d H:i:s');die();
         return $this->render('view', [
             'model' => $this->findModel($id),
         ]);
     }
 
     /**
-     * Creates a new Task model.
+     * Creates a new ContractExecution model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
     public function actionCreate()
     {
-        $projects = ArrayHelper::map(Project::find()->all(), 'id', 'title');
-        $model = new Task();
+        $contracts = ArrayHelper::map(Contract::find()->all(), 'id', 'title');
+        $users = ArrayHelper::map(User::find()->all(), 'id', 'username');
+        $model = new ContractExecution();
 
         if ($this->request->isPost) {
             $model->user_id = \Yii::$app->user->id;
@@ -86,13 +83,14 @@ class TaskController extends Controller
         }
 
         return $this->render('create', [
-            'model' => $model,
-            'projects' => $projects
+            'model'     =>  $model,
+            'contracts' =>  $contracts,
+            'users'     =>  $users
         ]);
     }
 
     /**
-     * Updates an existing Task model.
+     * Updates an existing ContractExecution model.
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param int $id ID
      * @return mixed
@@ -100,23 +98,23 @@ class TaskController extends Controller
      */
     public function actionUpdate($id)
     {
-        $projects = ArrayHelper::map(Project::find()->all(), 'id', 'title');
+        $contracts = ArrayHelper::map(Contract::find()->all(), 'id', 'title');
+        $users = ArrayHelper::map(User::find()->all(), 'id', 'username');
         $model = $this->findModel($id);
 
-
         if ($this->request->isPost && $model->load($this->request->post()) && $model->save()) {
-//            var_dump($model->touch('created_at'));die();
             return $this->redirect(['view', 'id' => $model->id]);
         }
 
         return $this->render('update', [
             'model' => $model,
-            'projects' => $projects
+            'contracts' =>  $contracts,
+            'users'     =>  $users
         ]);
     }
 
     /**
-     * Deletes an existing Task model.
+     * Deletes an existing ContractExecution model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param int $id ID
      * @return mixed
@@ -130,15 +128,15 @@ class TaskController extends Controller
     }
 
     /**
-     * Finds the Task model based on its primary key value.
+     * Finds the ContractExecution model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param int $id ID
-     * @return Task the loaded model
+     * @return ContractExecution the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)
     {
-        if (($model = Task::findOne($id)) !== null) {
+        if (($model = ContractExecution::findOne($id)) !== null) {
             return $model;
         }
 

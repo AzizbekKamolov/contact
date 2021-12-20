@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "47bdbee23ccf86105347eeadd0028c55",
+    "content-hash": "34a861da21be496e5a85aad18fa98a07",
     "packages": [
         {
             "name": "bower-asset/inputmask",
@@ -59,6 +59,24 @@
                 "reference": "38c8d3131a82567bfef18da09f7f4db68c84f8a3"
             },
             "type": "bower-asset"
+        },
+        {
+            "name": "bower-asset/viewerjs",
+            "version": "v0.5.9",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/webodf/ViewerJS_release.git",
+                "reference": "4f6e52aaad44b4c11e5de28e40a488c0a4ccbebf"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/webodf/ViewerJS_release/zipball/4f6e52aaad44b4c11e5de28e40a488c0a4ccbebf",
+                "reference": "4f6e52aaad44b4c11e5de28e40a488c0a4ccbebf"
+            },
+            "type": "bower-asset",
+            "license": [
+                "AGPL-3.0"
+            ]
         },
         {
             "name": "bower-asset/yii2-pjax",
@@ -346,6 +364,55 @@
                 "source": "https://github.com/ezyang/htmlpurifier/tree/master"
             },
             "time": "2020-06-29T00:56:53+00:00"
+        },
+        {
+            "name": "lesha724/yii2-document-viewer",
+            "version": "v0.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/lesha724/yii2-document-viewer.git",
+                "reference": "3f8ceef2e95b5f11bc3b8a87cd44857a7d937a51"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/lesha724/yii2-document-viewer/zipball/3f8ceef2e95b5f11bc3b8a87cd44857a7d937a51",
+                "reference": "3f8ceef2e95b5f11bc3b8a87cd44857a7d937a51",
+                "shasum": ""
+            },
+            "require": {
+                "bower-asset/viewerjs": "*",
+                "yiisoft/yii2": "*"
+            },
+            "type": "yii2-extension",
+            "autoload": {
+                "psr-4": {
+                    "lesha724\\documentviewer\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "lesha724",
+                    "email": "neff.alexey@gmail.com"
+                }
+            ],
+            "description": "виджет для отображения online документов с помощью google viewer и microsoft document viewer",
+            "keywords": [
+                "Viewer",
+                "ViewerJS",
+                "docs",
+                "extension",
+                "widget",
+                "yii2"
+            ],
+            "support": {
+                "issues": "https://github.com/lesha724/yii2-document-viewer/issues",
+                "source": "https://github.com/lesha724/yii2-document-viewer/tree/master"
+            },
+            "time": "2018-11-03T17:45:22+00:00"
         },
         {
             "name": "mdmsoft/yii2-admin",

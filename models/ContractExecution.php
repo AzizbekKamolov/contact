@@ -3,6 +3,7 @@
 namespace app\models;
 
 use Yii;
+use yii\behaviors\TimestampBehavior;
 
 /**
  * This is the model class for table "contract_execution".
@@ -30,6 +31,13 @@ class ContractExecution extends \yii\db\ActiveRecord
         return 'contract_execution';
     }
 
+    public function behaviors()
+    {
+        return [
+            TimestampBehavior::className(),
+        ];
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -37,9 +45,9 @@ class ContractExecution extends \yii\db\ActiveRecord
     {
         return [
             [['contract_id', 'user_id', 'exe_user_id', 'status_id', 'mark', 'receive_user', 'created_at', 'updated_at'], 'integer'],
-            [['info'], 'string'],
+            [['info', 'title'], 'string'],
             [['done_date', 'receive_date'], 'safe'],
-            [['created_at', 'updated_at'], 'required'],
+//            [['created_at', 'updated_at'], 'required'],
         ];
     }
 
@@ -50,6 +58,7 @@ class ContractExecution extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
+            'title' => 'Title',
             'contract_id' => 'Contract ID',
             'user_id' => 'User ID',
             'exe_user_id' => 'Exe User ID',
