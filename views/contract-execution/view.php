@@ -40,7 +40,13 @@ $this->params['breadcrumbs'][] = $this->title;
             'contract_id',
             'user_id',
             'exe_user_id',
-            'status_id',
+//            'status_id',
+            [
+                'label' => 'status',
+                'value' => function($data){
+                    return \app\models\Status::findOne(['id' => $data->status_id])->title;
+                },
+            ],
             'info:ntext',
             'done_date',
             'mark',
@@ -51,7 +57,7 @@ $this->params['breadcrumbs'][] = $this->title;
         ],
     ]) ?>
 
-    <h1>Task Exchanges</h1>
+    <h1>Contract Exchanges</h1>
 
     <?= GridView::widget([
         'dataProvider' => $dataProvider,

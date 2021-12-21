@@ -82,7 +82,10 @@ $config = [
             ],
             'layout' => 'left-menu',
             'mainLayout' => '@app/views/layouts/admin.php',
-        ]
+        ],
+        'pdfjs' => [
+            'class' => '\yii2assets\pdfjs\Module',
+        ],
     ],
     'as access' => [
         'class' => 'mdm\admin\components\AccessControl',
