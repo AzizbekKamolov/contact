@@ -1,5 +1,6 @@
 <?php
 
+use yii\grid\GridView;
 use yii\helpers\Html;
 use yii\widgets\DetailView;
 
@@ -7,7 +8,7 @@ use yii\widgets\DetailView;
 /* @var $model app\models\Contract */
 
 $this->title = $model->title;
-$this->params['breadcrumbs'][] = ['label' => 'Contracts', 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => 'Контракты', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 \yii\web\YiiAsset::register($this);
 ?>
@@ -44,7 +45,7 @@ $this->params['breadcrumbs'][] = $this->title;
             [
                 'label' => 'Проект',
                 'value' =>  function($data) {
-                    return \app\models\Project::find(['id' => $data->project_id])->one()->title;
+                    return \app\models\Project::find()->where(['id' => $data->project_id])->one()->title;
                 }
             ],
             [
@@ -68,14 +69,14 @@ $this->params['breadcrumbs'][] = $this->title;
             [
                 'label' => 'Создатель',
                 'value' =>  function($data) {
-                    return \app\models\User::find(['id' => $data->user_id])->one()->username;
+                    return \app\models\User::find()->where(['id' => $data->user_id])->one()->username;
                 }
             ],
             [
                     'label' => 'Документ',
                     'value' => function($data)
                     {
-                        return Html::a('Загрузить',  '../uploads/' . $data->file_url);
+                        return Html::a('Загрузить',  '../uploads/' . $data->file_url, [ ($data->file_url) ? '' : 'class' => 'btn  disabled']);
                     },
                     'format' => 'raw',
             ],
@@ -101,5 +102,70 @@ $this->params['breadcrumbs'][] = $this->title;
 
         ],
     ]) ?>
+
+    <br>
+    <h1>Исполнение <?= $model->title?></h1>
+    <br>
+
+    <?= GridView::widget([
+        'dataProvider' => $dataProvider,
+        'filterModel' => $searchModel,
+        'columns' => [
+            ['class' => 'yii\grid\SerialColumn'],
+
+//            'id',
+//            'title',
+//            'contract_id',
+//            'user_id',
+//            'exe_user_id',
+//            'status_id',
+            //'info:ntext',
+            //'done_date',
+            //'mark',
+            //'receive_date',
+            //'receive_user',
+            //'created_at',
+            //'updated_at',
+            [
+                'label' => 'Название',
+                'value' =>  function($data) {
+                    return $data->title;
+                }
+            ],
+            [
+                'label' => 'Контракт',
+                'value' =>  function($data) {
+                    return \app\models\Contract::find()->where(['id' => $data->contract_id])->one()->title;
+                }
+            ],
+            [
+                'label' => 'Создатель',
+                'value' =>  function($data) {
+                    return \app\models\User::find()->where(['id' => $data->user_id])->one()->username;
+                }
+            ],
+            [
+                'label' => 'Исполнитель',
+                'value' =>  function($data) {
+                    return \app\models\User::find()->where(['id' => $data->exe_user_id])->one()->username;
+                }
+            ],
+            [
+                'label' => 'Статус',
+                'value' =>  function($data) {
+                    return \app\models\Status::find()->where(['id' => $data->status_id])->one()->title;
+                }
+            ],
+            [
+                'header' => 'Меню',
+                'format' => 'raw',
+                'value' => function($data){
+                    return Html::a('Перейти', ['contract-execution/view', 'id'=>$data->id]);
+                }
+            ],
+
+//            ['class' => 'yii\grid\ActionColumn'],
+        ],
+    ]); ?>
 
 </div>

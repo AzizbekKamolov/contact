@@ -7,8 +7,8 @@ use yii\widgets\DetailView;
 /* @var $this yii\web\View */
 /* @var $model app\models\TaskExecution */
 
-$this->title = $model->id;
-$this->params['breadcrumbs'][] = ['label' => 'Task Executions', 'url' => ['index']];
+$this->title = $model->title;
+$this->params['breadcrumbs'][] = ['label' => 'Выполнение задач', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 \yii\web\YiiAsset::register($this);
 ?>
@@ -36,42 +36,128 @@ $this->params['breadcrumbs'][] = $this->title;
         'model' => $model,
         'attributes' => [
             'id',
-            'title',
-            'task_id',
-            'user_id',
-            'exe_user_id',
-            [
-                'label' => 'status',
-                'value' => function($data){
-                    return \app\models\Status::findOne(['id' => $data->status_id])->title;
-                },
-            ],
+//            'title',
+//            'task_id',
+//            'user_id',
+//            'exe_user_id',
 //            'status_id',
-            'info:ntext',
-            'done_date',
-            'mark',
-            'receive_date',
-            'receive_user',
-            'created_at',
-            'updated_at',
+//            'info:ntext',
+//            'done_date',
+//            'mark',
+//            'receive_date',
+//            'receive_user',
+//            'created_at',
+//            'updated_at',
+            [
+                'label' => 'Название',
+                'value' =>  function($data) {
+                    return $data->title;
+                }
+            ],
+            [
+                'label' => 'Задача',
+                'value' =>  function($data) {
+                    return \app\models\Task::find()->where(['id' => $data->task_id])->one()->title;
+                }
+            ],[
+                'label' => 'Создатель',
+                'value' =>  function($data) {
+                    return \app\models\User::find()->where(['id' => $data->user_id])->one()->username;
+                }
+            ],[
+                'label' => 'Исполнитель',
+                'value' =>  function($data) {
+                    return \app\models\User::find()->where(['id' => $data->exe_user_id])->one()->username;
+                }
+            ],
+            [
+                'label' => 'Статус',
+                'value' =>  function($data) {
+                    return \app\models\Status::find()->where(['id' => $data->status_id])->one()->title;
+                }
+            ],
+            [
+                'label' => 'Описание',
+                'value' =>  function($data) {
+                    return $data->info;
+                }
+            ],
+            [
+                'label' => 'Дата завершения',
+                'value' =>  function($data) {
+                    return $data->done_date;
+                }
+            ],
+            [
+                'label' => 'Оценка',
+                'value' =>  function($data) {
+                    return $data->mark;
+                }
+            ],
+            [
+                'label' => 'Дата получения',
+                'value' =>  function($data) {
+                    return $data->receive_date;
+                }
+            ],
+            [
+                'label' => 'Получатель',
+                'value' =>  function($data) {
+                    return \app\models\User::find()->where(['id' => $data->receive_user])->one()->username;
+                }
+            ],
+            [
+                'label' => 'Создан',
+                'value' =>  function($data) {
+                    date_default_timezone_set('Asia/Tashkent');
+                    return date('d M Y H:i:s',$data->created_at);
+                }
+            ],
         ],
     ]) ?>
 
-    <h1>Task Exchanges</h1>
+    <br>
+    <h1>Обмены задачами</h1>
+    <br>
 
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
         'columns' => [
-//            ['class' => 'yii\grid\SerialColumn'],
+            ['class' => 'yii\grid\SerialColumn'],
 
-            'id',
+//            'id',
 //            'task_exe_id',
 //            'exe_user_id',
 //            'rec_user_id',
-            'info:ntext',
-            'created_at',
-            'updated_at',
+//            'info:ntext',
+//            'created_at',
+//            'updated_at',
+            [
+                'label' => 'Исполнитель',
+                'value' =>  function($data) {
+                    return \app\models\User::find()->where(['id' => $data->exe_user_id])->one()->username;
+                }
+            ],
+            [
+                'label' => 'Получатель',
+                'value' =>  function($data) {
+                    return \app\models\User::find()->where(['id' => $data->rec_user_id])->one()->username;
+                }
+            ],
+            [
+                'label' => 'Описание',
+                'value' =>  function($data) {
+                    return $data->info;
+                }
+            ],
+            [
+                'label' => 'Создан',
+                'value' =>  function($data) {
+                    date_default_timezone_set('Asia/Tashkent');
+                    return date('d M Y H:i:s',$data->created_at);
+                }
+            ],
 
 //            ['class' => 'yii\grid\ActionColumn'],
         ],

@@ -4,6 +4,7 @@ namespace app\controllers;
 
 use app\models\Project;
 use app\models\Task;
+use app\models\TaskExecutionSearch;
 use app\models\TaskSearch;
 use DateTime;
 use yii\helpers\ArrayHelper;
@@ -57,12 +58,14 @@ class TaskController extends Controller
      */
     public function actionView($id)
     {
-//        $model = $this->findModel($id);
-//        $epoch = $model->created_at;
-//        $dt = new DateTime("@$epoch");  // convert UNIX timestamp to PHP DateTime
-//        echo $dt->format('Y-m-d H:i:s');die();
+        $searchModel = new TaskExecutionSearch();
+        $dataProvider = $searchModel->search($this->request->queryParams);
+        $dataProvider->query->andWhere(['task_id' =>  $id]);
+
         return $this->render('view', [
             'model' => $this->findModel($id),
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
         ]);
     }
 

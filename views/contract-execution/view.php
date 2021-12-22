@@ -8,7 +8,7 @@ use yii\widgets\DetailView;
 /* @var $model app\models\ContractExecution */
 
 $this->title = $model->title;
-$this->params['breadcrumbs'][] = ['label' => 'Contract Executions', 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => 'Исполнение контрактов', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 \yii\web\YiiAsset::register($this);
 ?>
@@ -35,44 +35,140 @@ $this->params['breadcrumbs'][] = $this->title;
     <?= DetailView::widget([
         'model' => $model,
         'attributes' => [
-            'id',
-            'title',
-            'contract_id',
-            'user_id',
-            'exe_user_id',
+//            'id',
+//            'title',
+//            'contract_id',
+//            'user_id',
+//            'exe_user_id',
 //            'status_id',
+//            'info:ntext',
+//            'done_date',
+//            'mark',
+//            'receive_date',
+//            'receive_user',
+//            'created_at',
+//            'updated_at',
             [
-                'label' => 'status',
-                'value' => function($data){
-                    return \app\models\Status::findOne(['id' => $data->status_id])->title;
-                },
+                'label' => 'Название',
+                'value' =>  function($data) {
+                    return $data->title;
+                }
             ],
-            'info:ntext',
-            'done_date',
-            'mark',
-            'receive_date',
-            'receive_user',
-            'created_at',
-            'updated_at',
+            [
+                'label' => 'Контракт',
+                'value' =>  function($data) {
+                    return \app\models\Contract::find()->where(['id' => $data->contract_id])->one()->title;
+                }
+            ],
+            [
+                'label' => 'Создатель',
+                'value' =>  function($data) {
+                    return \app\models\User::find()->where(['id' => $data->user_id])->one()->username;
+                }
+            ],
+            [
+                'label' => 'Исполнитель',
+                'value' =>  function($data) {
+                    return \app\models\User::find()->where(['id' => $data->exe_user_id])->one()->username;
+                }
+            ],
+            [
+                'label' => 'Статус',
+                'value' =>  function($data) {
+                    return \app\models\Status::find()->where(['id' => $data->status_id])->one()->title;
+                }
+            ],
+            [
+                'label' => 'Описание',
+                'value' =>  function($data) {
+                    return $data->info;
+                }
+            ],
+            [
+                'label' => 'Дата завершения',
+                'value' =>  function($data) {
+                    return $data->done_date;
+                }
+            ],
+            [
+                'label' => 'Оценка',
+                'value' =>  function($data) {
+                    return $data->mark;
+                }
+            ],
+            [
+                'label' => 'Дата получения',
+                'value' =>  function($data) {
+                    return $data->receive_date;
+                }
+            ],
+            [
+                'label' => 'Получатель',
+                'value' =>  function($data) {
+                    return \app\models\User::find()->where(['id' => $data->receive_user])->one()->username;
+                }
+            ],
+            [
+                'label' => 'Создан',
+                'value' =>  function($data) {
+                    date_default_timezone_set('Asia/Tashkent');
+                    return date('d M Y H:i:s',$data->created_at);
+                }
+            ],
         ],
     ]) ?>
 
-    <h1>Contract Exchanges</h1>
+    <br>
+    <h1>Обмен контрактами</h1>
+    <br>
 
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
         'columns' => [
-//            ['class' => 'yii\grid\SerialColumn'],
+            ['class' => 'yii\grid\SerialColumn'],
 
-            'id',
+//            'id',
 //            'task_exe_id',
 //            'exe_user_id',
 //            'rec_user_id',
-            'info:ntext',
-            'file',
+//            'info:ntext',
+//            'file',
 //            'created_at',
-            'updated_at',
+//            'updated_at',
+            [
+                'label' => 'Исполнитель',
+                'value' =>  function($data) {
+                    return \app\models\User::find()->where(['id' => $data->exe_user_id])->one()->username;
+                }
+            ],
+            [
+                'label' => 'Получатель',
+                'value' =>  function($data) {
+                    return \app\models\User::find()->where(['id' => $data->rec_user_id])->one()->username;
+                }
+            ],
+            [
+                'label' => 'Описание',
+                'value' =>  function($data) {
+                    return $data->info;
+                }
+            ],
+            [
+                'label' => 'Документ',
+                'value' => function($data)
+                {
+                    return Html::a('Загрузить',  '../uploads/' . $data->file, [ ($data->file) ? '' : 'class' => 'btn  disabled']);
+                },
+                'format' => 'raw',
+            ],
+            [
+                'label' => 'Создан',
+                'value' =>  function($data) {
+                    date_default_timezone_set('Asia/Tashkent');
+                    return date('d M Y H:i:s',$data->created_at);
+                }
+            ],
 
 //            ['class' => 'yii\grid\ActionColumn'],
         ],

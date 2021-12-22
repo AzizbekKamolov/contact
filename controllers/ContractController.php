@@ -4,6 +4,7 @@
 namespace app\controllers;
 
 use app\models\Contract;
+use app\models\ContractExecutionSearch;
 use app\models\ContractSearch;
 use app\models\ImageUpload;
 use app\models\Project;
@@ -56,8 +57,14 @@ class ContractController extends Controller
      */
     public function actionView($id)
     {
+        $searchModel = new ContractExecutionSearch();
+        $dataProvider = $searchModel->search($this->request->queryParams);
+        $dataProvider->query->andWhere(['contract_id' =>  $id]);
+
         return $this->render('view', [
             'model' => $this->findModel($id),
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
         ]);
     }
 

@@ -71,9 +71,9 @@ class ContractExecutionController extends Controller
         $searchModel = new ContractExchangeSearch();
         $dataProvider = $searchModel->search(($this->request->queryParams));
         $dataProvider->query->andWhere(['con_exe_id' =>  $id]);
-        $dataProvider->setSort([
-            'defaultOrder' => ['id'=>SORT_DESC],
-        ]);
+//        $dataProvider->setSort([
+//            'defaultOrder' => ['id'=>SORT_DESC],
+//        ]);
         return $this->render('view', [
             'model' => $this->findModel($id),
             'searchModel'  => $searchModel,
@@ -250,7 +250,7 @@ class ContractExecutionController extends Controller
 
             $model->con_exe_id = $id;
             $model->exe_user_id = \Yii::$app->user->id;
-            $model->rec_user_id = $contractExecution->receive_user;
+            $model->rec_user_id = $contractExecution->exe_user_id;
             $contractExecution->status_id = Status::findOne(['title' => 'Отказанная'])->id;
             $model->info =$info;
 //            var_dump($fileUpload->uploadFile($file, $model->file));die();

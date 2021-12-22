@@ -7,7 +7,7 @@ use yii\grid\GridView;
 /* @var $searchModel app\models\TaskExecutionSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Task Executions';
+$this->title = 'Выполнение задач';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="task-execution-index">
@@ -15,7 +15,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <h1><?= Html::encode($this->title) ?></h1>
 
     <p>
-        <?= Html::a('Create Task Execution', ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a('Создать Вып. задач', ['create'], ['class' => 'btn btn-success']) ?>
     </p>
 
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
@@ -26,17 +26,11 @@ $this->params['breadcrumbs'][] = $this->title;
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 
-            'id',
-            'title',
-            'task_id',
-            'user_id',
-            'exe_user_id',
-            [
-                'label' => 'status_id',
-                'value' => function($data){
-                    return \app\models\Status::findOne(['id' => $data->status_id])->title;
-                },
-            ],
+//            'id',
+//            'title',
+//            'task_id',
+//            'user_id',
+//            'exe_user_id',
 //            'status_id',
             //'info:ntext',
             //'done_date',
@@ -45,6 +39,30 @@ $this->params['breadcrumbs'][] = $this->title;
             //'receive_user',
             //'created_at',
             //'updated_at',
+            [
+                'label' => 'Название',
+                'value' =>  function($data) {
+                    return $data->title;
+                }
+            ],
+            [
+                'label' => 'Задача',
+                'value' =>  function($data) {
+                    return \app\models\Task::find()->where(['id' => $data->task_id])->one()->title;
+                }
+            ],
+            [
+                'label' => 'Исполнитель',
+                'value' =>  function($data) {
+                    return \app\models\User::find()->where(['id' => $data->exe_user_id])->one()->username;
+                }
+            ],
+            [
+                'label' => 'Статус',
+                'value' =>  function($data) {
+                    return \app\models\Status::find()->where(['id' => $data->status_id])->one()->title;
+                }
+            ],
 
             ['class' => 'yii\grid\ActionColumn'],
         ],
