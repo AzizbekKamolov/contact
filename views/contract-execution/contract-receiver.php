@@ -21,8 +21,8 @@ $this->registerAssetBundle('app\assets\ViewerJsAssets');
 
     <?=
         \lesha724\documentviewer\ViewerJsDocumentViewer::widget([
-                'url' => \Yii::getAlias('@web') . 'uploads/' . $contractExchange->file,
-//            'url' => 'http://p-control.loc/uploads/1b60729a45ee8c6403c27d179036f688.docx',
+//                'url' => \Yii::getAlias('@web') . 'uploads/' . $contractExchange->file,
+            'url' => 'http://10.p-control.loc/uploads/4cd0c72540c28ec8e038a9745b49c465.pdf',
             'width'=>'724',
             'height'=>'1024',
 //            'embedded'=>true,
@@ -33,7 +33,7 @@ $this->registerAssetBundle('app\assets\ViewerJsAssets');
     <iframe src = <?= \Yii::getAlias('@web') . 'uploads/' . $contractExchange->file ?> width='724' height='1024' allowfullscreen webkitallowfullscreen></iframe>
 
     <?= \yii2assets\pdfjs\PdfJs::widget([
-        'url'=> 'http://p-control.loc/uploads/1664b6090a870e6dcc796925650a17da.pdf'
+        'url'=> \Yii::getAlias('@web') . 'uploads/' . $contractExchange->file
     ]); ?>
 
     <?= Html::a('Одобрить', ['contract-approve', 'id' => $model->id], ['class' => 'btn btn-success']) ?>

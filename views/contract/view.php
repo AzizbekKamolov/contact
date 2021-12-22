@@ -31,25 +31,74 @@ $this->params['breadcrumbs'][] = $this->title;
         'model' => $model,
         'attributes' => [
             'id',
-            'project_id',
-            'title',
-            'description:ntext',
-            'price',
-            'user_id',
+//            'project_id',
+//            'title',
+//            'description:ntext',
+//            'price',
+//            'user_id',
 //            'file_url:url',
+//            'status_id',
+//            'deadline',
+//            'created_at',
+//            'updated_at',
             [
-                    'label' => 'url',
+                'label' => 'Проект',
+                'value' =>  function($data) {
+                    return \app\models\Project::find(['id' => $data->project_id])->one()->title;
+                }
+            ],
+            [
+                'label' => 'Название',
+                'value' =>  function($data) {
+                    return $data->title;
+                }
+            ],
+            [
+                'label' => 'Описание',
+                'value' =>  function($data) {
+                    return $data->description;
+                }
+            ],
+            [
+                'label' => 'Цена',
+                'value' =>  function($data) {
+                    return $data->price;
+                }
+            ],
+            [
+                'label' => 'Создатель',
+                'value' =>  function($data) {
+                    return \app\models\User::find(['id' => $data->user_id])->one()->username;
+                }
+            ],
+            [
+                    'label' => 'Документ',
                     'value' => function($data)
                     {
-                        return Html::a('File',  'uploads/' . $data->file_url);
+                        return Html::a('Загрузить',  '../uploads/' . $data->file_url);
                     },
                     'format' => 'raw',
-//                    'value' => Html::a('Download the File', \Yii::getAlias('@web') . 'uploads/'),
             ],
-            'status_id',
-            'deadline',
-            'created_at',
-            'updated_at',
+            [
+                'label' => 'Статус',
+                'value' =>  function($data) {
+                    return \app\models\Status::find(['id' => $data->status_id])->one()->title;
+                }
+            ],
+            [
+                'label' => 'Срок',
+                'value' =>  function($data) {
+                    return $data->deadline;
+                }
+            ],
+            [
+                'label' => 'Создан',
+                'value' =>  function($data) {
+                    date_default_timezone_set('Asia/Tashkent');
+                    return date('d M Y H:i:s',$data->created_at);
+                }
+            ],
+
         ],
     ]) ?>
 
