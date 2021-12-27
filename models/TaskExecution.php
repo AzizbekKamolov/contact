@@ -58,11 +58,11 @@ class TaskExecution extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'title' => 'Title',
-            'task_id' => 'Task ID',
+            'title' => 'Название',
+            'task_id' => 'Задача',
             'user_id' => 'User ID',
-            'exe_user_id' => 'Exe User ID',
-            'status_id' => 'Status ID',
+            'exe_user_id' => 'Исполнитель',
+            'status_id' => 'Статус',
             'info' => 'Info',
             'done_date' => 'Done Date',
             'mark' => 'Mark',

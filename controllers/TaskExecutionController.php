@@ -48,6 +48,15 @@ class TaskExecutionController extends Controller
     {
         $searchModel = new TaskExecutionSearch();
         $dataProvider = $searchModel->search($this->request->queryParams);
+
+        $tasks = ArrayHelper::map(Task::find()->all(), 'id', 'title');
+        $users = ArrayHelper::map(User::find()->all(), 'id', 'username');
+        $statuses = ArrayHelper::map(Status::find()->all(), 'id', 'title');
+
+        $tasks = array('' => 'Задача') + $tasks;
+        $users = array('' => 'Ползователь') + $users;
+        $statuses = array('' => 'Статус') + $statuses;
+
         if (User::getMyRole() !== 'admin'){
             $dataProvider->query->andWhere(['exe_user_id' =>  \Yii::$app->user->id]);
             $dataProvider->setSort([
@@ -55,9 +64,14 @@ class TaskExecutionController extends Controller
             ]);
         }
 
+
+
         return $this->render('index', [
-            'searchModel' => $searchModel,
-            'dataProvider' => $dataProvider,
+            'searchModel'   => $searchModel,
+            'dataProvider'  => $dataProvider,
+            'tasks'         => $tasks,
+            'users'         => $users,
+            'statuses'      => $statuses
         ]);
     }
 

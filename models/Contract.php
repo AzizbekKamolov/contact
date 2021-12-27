@@ -59,13 +59,13 @@ class Contract extends \yii\db\ActiveRecord
         return [
             'id' => 'ID',
             'project_id' => 'Project ID',
-            'title' => 'Title',
+            'title' => 'Название',
             'description' => 'Description',
-            'price' => 'Price',
-            'user_id' => 'User ID',
+            'price' => 'Цена',
+            'user_id' => 'Создатель',
             'file_url' => 'File Url',
-            'status_id' => 'Status ID',
-            'deadline' => 'Deadline',
+            'status_id' => 'Статус',
+            'deadline' => 'Срок',
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',
         ];

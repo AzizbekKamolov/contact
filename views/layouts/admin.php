@@ -29,7 +29,7 @@ AppAsset::register($this);
 <header>
     <?php
     $menuItems = [
-        ['label' => 'Главная', 'url' => ['/admin/default/index']],
+//        ['label' => 'Главная', 'url' => ['/admin/default/index']],
         ['label' => 'Проекты', 'url' => ['/admin/project/index']],
         ['label' => 'Контракты', 'url' => ['/admin/contract/index']],
         ['label' => 'Конт на Исп', 'url' => ['/admin/contract-execution/index']],
@@ -37,6 +37,7 @@ AppAsset::register($this);
         ['label' => 'Задачи', 'url' => ['/admin/task/index']],
         ['label' => 'Задачи на Исп', 'url' => ['/admin/task-execution/index']],
         ['label' => 'Задачи на Exch', 'url' => ['/admin/task-exchange/index']],
+        ['label' => 'Валюта', 'url' => ['/admin/currency/index']],
         ['label' => 'Статусы', 'url' => ['/admin/status/index']],
         ['label' => 'Users', 'url' => ['/rbac/default/index']],
         Yii::$app->user->isGuest ? (

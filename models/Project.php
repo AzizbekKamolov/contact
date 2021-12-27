@@ -4,6 +4,7 @@ namespace app\models;
 
 use Yii;
 use yii\behaviors\TimestampBehavior;
+use yii\helpers\ArrayHelper;
 
 /**
  * This is the model class for table "project".
@@ -45,7 +46,7 @@ class Project extends \yii\db\ActiveRecord
             [['description'], 'string'],
             [['budget_sum'], 'number'],
             [['project_year', 'deadline'], 'safe'],
-            [['user_id', 'status_id', 'created_at', 'updated_at'], 'integer'],
+            [['user_id', 'status_id', 'created_at', 'updated_at', 'currency_id'], 'integer'],
             [['title'], 'string', 'max' => 255],
             [['title', 'description'], 'required']
         ];
@@ -58,12 +59,13 @@ class Project extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'title' => 'Title',
+            'title' => 'Название',
             'description' => 'Description',
-            'budget_sum' => 'Budget Sum',
+            'budget_sum' => 'Бюджет',
+            'currency_id' => 'Currency ID',
             'project_year' => 'Project Year',
-            'user_id' => 'User ID',
-            'status_id' => 'Status ID',
+            'user_id' => 'Создатель',
+            'status_id' => 'Статус',
             'deadline' => 'Deadline',
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',

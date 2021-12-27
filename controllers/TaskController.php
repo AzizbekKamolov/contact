@@ -3,9 +3,11 @@
 namespace app\controllers;
 
 use app\models\Project;
+use app\models\Status;
 use app\models\Task;
 use app\models\TaskExecutionSearch;
 use app\models\TaskSearch;
+use app\models\User;
 use DateTime;
 use yii\helpers\ArrayHelper;
 use yii\web\Controller;
@@ -44,9 +46,20 @@ class TaskController extends Controller
         $searchModel = new TaskSearch();
         $dataProvider = $searchModel->search($this->request->queryParams);
 
+        $projects = ArrayHelper::map(Project::find()->all(), 'id', 'title');
+        $users = ArrayHelper::map(User::find()->all(), 'id', 'username');
+        $statuses = ArrayHelper::map(Status::find()->all(), 'id', 'title');
+
+        $projects = array('' => 'Проект') + $projects;
+        $users = array('' => 'Ползователь') + $users;
+        $statuses = array('' => 'Статус') + $statuses;
+
         return $this->render('index', [
-            'searchModel' => $searchModel,
-            'dataProvider' => $dataProvider,
+            'searchModel'   => $searchModel,
+            'dataProvider'  => $dataProvider,
+            'projects'      => $projects,
+            'users'         => $users,
+            'statuses'      => $statuses
         ]);
     }
 

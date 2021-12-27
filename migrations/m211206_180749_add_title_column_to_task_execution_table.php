@@ -20,6 +20,6 @@ class m211206_180749_add_title_column_to_task_execution_table extends Migration
      */
     public function safeDown()
     {
-        $this->dropColumn('tasks', 'title');
+        $this->dropColumn('task_execution', 'title');
     }
 }

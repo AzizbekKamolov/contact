@@ -35,6 +35,7 @@ $this->params['breadcrumbs'][] = $this->title;
 //            'title',
 //            'description:ntext',
 //            'budget_sum',
+//            'currency_id',
 //            'project_year',
 //            'user_id',
 //            'status_id',
@@ -57,6 +58,12 @@ $this->params['breadcrumbs'][] = $this->title;
                 'label' => 'Бюджет',
                 'value' =>  function($data) {
                     return $data->budget_sum;
+                }
+            ],
+            [
+                'label' => 'Валюта',
+                'value' =>  function($data) {
+                    return \app\models\Currency::find()->where(['id' => $data->currency_id])->one()->name;
                 }
             ],
             [

@@ -4,12 +4,12 @@ namespace app\models;
 
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use app\models\Project;
+use app\models\Currency;
 
 /**
- * ProjectSearch represents the model behind the search form of `app\models\Project`.
+ * CurrencySearch represents the model behind the search form of `app\models\Currency`.
  */
-class ProjectSearch extends Project
+class CurrencySearch extends Currency
 {
     /**
      * {@inheritdoc}
@@ -17,9 +17,8 @@ class ProjectSearch extends Project
     public function rules()
     {
         return [
-            [['id', 'user_id', 'status_id', 'created_at', 'updated_at', 'currency_id'], 'integer'],
-            [['title', 'description', 'project_year', 'deadline'], 'safe'],
-            [['budget_sum'], 'number'],
+            [['id', 'created_at', 'updated_at'], 'integer'],
+            [['name', 'short_name'], 'safe'],
         ];
     }
 
@@ -41,7 +40,7 @@ class ProjectSearch extends Project
      */
     public function search($params)
     {
-        $query = Project::find();
+        $query = Currency::find();
 
         // add conditions that should always apply here
 
@@ -60,18 +59,12 @@ class ProjectSearch extends Project
         // grid filtering conditions
         $query->andFilterWhere([
             'id' => $this->id,
-            'budget_sum' => $this->budget_sum,
-            'currency_id' => $this->currency_id,
-            'project_year' => $this->project_year,
-            'user_id' => $this->user_id,
-            'status_id' => $this->status_id,
-            'deadline' => $this->deadline,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
         ]);
 
-        $query->andFilterWhere(['like', 'title', $this->title])
-            ->andFilterWhere(['like', 'description', $this->description]);
+        $query->andFilterWhere(['like', 'name', $this->name])
+            ->andFilterWhere(['like', 'short_name', $this->short_name]);
 
         return $dataProvider;
     }

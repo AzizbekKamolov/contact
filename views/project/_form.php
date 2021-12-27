@@ -18,6 +18,8 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'budget_sum')->textInput() ?>
 
+    <?= $form->field($model, 'currency_id')->dropDownList($currencies) ?>
+
     <?= $form->field($model, 'project_year')->textInput(['type'=>'date']) ?>
 
     <?/*= $form->field($model, 'user_id')->textInput() */?><!--

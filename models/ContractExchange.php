@@ -54,11 +54,11 @@ class ContractExchange extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'con_exe_id' => 'Con Exe ID',
-            'exe_user_id' => 'Exe User ID',
+            'con_exe_id' => 'Контракт',
+            'exe_user_id' => 'Исполнитель',
             'rec_user_id' => 'Rec User ID',
-            'info' => 'Info',
-            'file' => 'File Url',
+            'info' => 'Описание',
+            'file' => 'Документ',
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',
         ];

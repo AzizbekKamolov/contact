@@ -18,11 +18,11 @@ $this->params['breadcrumbs'][] = $this->title;
         <?= Html::a('Создать Проект', ['create'], ['class' => 'btn btn-success']) ?>
     </p>
 
-    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
+    <?php echo $this->render('_search', ['model' => $searchModel, 'users' => $users, 'statuses' => $statuses]); ?>
 
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
-        'filterModel' => $searchModel,
+//        'filterModel' => $searchModel,
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 
@@ -45,21 +45,13 @@ $this->params['breadcrumbs'][] = $this->title;
             [
                 'label' => 'Бюджет',
                 'value' =>  function($data) {
-                    return $data->budget_sum;
-                }
-            ],
-            [
-                'label' => 'Дата проекта',
-                'value' =>  function($data) {
-                    return $data->project_year;
+                    return number_format($data->budget_sum, 2) . ' ' . \app\models\Currency::find()->where(['id' => $data->currency_id])->one()->short_name;
                 }
             ],
             [
                 'label' => 'Создатель',
                 'value' =>  function($data) {
-//                    var_dump(\app\models\User::find()->where(['id' => $data->user_id])->one()->username);die();
                     return \app\models\User::find()->where(['id' => $data->user_id])->one()->username;
-//                    return $data->user_id;
                 }
             ],
             [
@@ -68,12 +60,12 @@ $this->params['breadcrumbs'][] = $this->title;
                     return \app\models\Status::find(['id' => $data->status_id])->one()->title;
                 }
             ],
-            [
-                'label' => 'Срок',
-                'value' =>  function($data) {
-                    return $data->deadline;
-                }
-            ],
+//            [
+//                'label' => 'Срок',
+//                'value' =>  function($data) {
+//                    return $data->deadline;
+//                }
+//            ],
 
             ['class' => 'yii\grid\ActionColumn'],
         ],

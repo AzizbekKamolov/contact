@@ -15,17 +15,17 @@ use yii\widgets\ActiveForm;
         'method' => 'get',
     ]); ?>
 
-    <?= $form->field($model, 'id') ?>
+    <?php // $form->field($model, 'id') ?>
 
     <?= $form->field($model, 'title') ?>
 
-    <?= $form->field($model, 'task_id') ?>
+    <?= $form->field($model, 'task_id')->dropDownList($tasks) ?>
 
-    <?= $form->field($model, 'user_id') ?>
+    <?php // $form->field($model, 'user_id') ?>
 
-    <?= $form->field($model, 'exe_user_id') ?>
+    <?= $form->field($model, 'exe_user_id')->dropDownList($users) ?>
 
-    <?= $form->field($model, 'status_id') ?>
+    <?= $form->field($model, 'status_id')->dropDownList($statuses) ?>
 
     <?php // echo $form->field($model, 'info') ?>
 
@@ -43,7 +43,7 @@ use yii\widgets\ActiveForm;
 
     <div class="form-group">
         <?= Html::submitButton('Search', ['class' => 'btn btn-primary']) ?>
-        <?= Html::resetButton('Reset', ['class' => 'btn btn-outline-secondary']) ?>
+        <?php // Html::resetButton('Reset', ['class' => 'btn btn-outline-secondary']) ?>
     </div>
 
     <?php ActiveForm::end(); ?>

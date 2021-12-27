@@ -3,6 +3,7 @@
 namespace app\models;
 
 use Yii;
+use yii\helpers\ArrayHelper;
 
 /**
  * This is the model class for table "status".
@@ -41,5 +42,12 @@ class Status extends \yii\db\ActiveRecord
             'title' => 'Title',
             'type' => 'Type',
         ];
+    }
+
+    public static function getIdsByStatus($status)
+    {
+        $models = self::find()->where(['in','title',$status])->all();
+        $result = ArrayHelper::map($models, 'id', 'id');
+        return $result;
     }
 }

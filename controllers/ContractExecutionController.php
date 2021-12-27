@@ -10,6 +10,8 @@ use app\models\ContractExecutionSearch;
 use app\models\FileUpload;
 use app\models\Status;
 use app\models\User;
+use DateTime;
+use phpDocumentor\Reflection\Types\Null_;
 use yii\helpers\ArrayHelper;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -54,9 +56,20 @@ class ContractExecutionController extends Controller
             ]);
         }
 
+        $users = ArrayHelper::map(User::find()->all(), 'id', 'username');
+        $statuses = ArrayHelper::map(Status::find()->all(), 'id', 'title');
+        $contracts = ArrayHelper::map(Contract::find()->all(), 'id', 'title');
+
+        $users = array('' => 'Ползователь') + $users;
+        $statuses = array('' => 'Статус') + $statuses;
+        $contracts = array('' => 'Контракт') + $contracts;
+
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
+            'users'         => $users,
+            'statuses'      =>  $statuses,
+            'contracts'     => $contracts
         ]);
     }
 
@@ -197,7 +210,13 @@ class ContractExecutionController extends Controller
     {
         $model = $this->findModel($id);
         $contractExchange = ContractExchange::find()->where(['con_exe_id' => $id])->orderBy(['id' => SORT_DESC])->one();
-//        var_dump($taskExchange);die();
+
+        if ($model->receive_date === NULL)
+        {
+            $receive_date = \date('Y-m-d H:i:s');
+            $model->receive_date = $receive_date;
+            $model->save();
+        }
 
         return $this->render('contract-receiver',[
             'model' => $model,

@@ -56,12 +56,12 @@ class Task extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'project_id' => 'Project ID',
-            'title' => 'Title',
+            'project_id' => 'Проект',
+            'title' => 'Название',
             'price' => 'Price',
-            'deadline' => 'Deadline',
-            'user_id' => 'User ID',
-            'status_id' => 'Status ID',
+            'deadline' => 'Срок',
+            'user_id' => 'Создатель',
+            'status_id' => 'Статус',
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',
         ];
