@@ -46,6 +46,8 @@ class TaskExecutionController extends Controller
      */
     public function actionIndex()
     {
+        $myRole = User::getMyRole();
+
         $searchModel = new TaskExecutionSearch();
         $dataProvider = $searchModel->search($this->request->queryParams);
 
@@ -53,18 +55,17 @@ class TaskExecutionController extends Controller
         $users = ArrayHelper::map(User::find()->all(), 'id', 'username');
         $statuses = ArrayHelper::map(Status::find()->all(), 'id', 'title');
 
-        $tasks = array('' => 'Задача') + $tasks;
-        $users = array('' => 'Ползователь') + $users;
-        $statuses = array('' => 'Статус') + $statuses;
-
-        if (User::getMyRole() !== 'admin'){
-            $dataProvider->query->andWhere(['exe_user_id' =>  \Yii::$app->user->id]);
+        if ($myRole === 'headOfDep'){
+            $dataProvider->query->andWhere(['user_id' =>  \Yii::$app->user->id])->orWhere(['receive_user' => \Yii::$app->user->id])->orWhere(['exe_user_id' => \Yii::$app->user->id]);
+            $dataProvider->setSort([
+                'defaultOrder' => ['id'=>SORT_DESC],
+            ]);
+        } elseif ($myRole === "simpleUser") {
+            $dataProvider->query->andWhere(['exe_user_id' =>  \Yii::$app->user->id])->orWhere(['receive_user' => \Yii::$app->user->id]);
             $dataProvider->setSort([
                 'defaultOrder' => ['id'=>SORT_DESC],
             ]);
         }
-
-
 
         return $this->render('index', [
             'searchModel'   => $searchModel,
@@ -87,9 +88,9 @@ class TaskExecutionController extends Controller
         $searchModel = new TaskExchangeSearch();
         $dataProvider = $searchModel->search(($this->request->queryParams));
         $dataProvider->query->andWhere(['task_exe_id' =>  $id]);
-        $dataProvider->setSort([
-            'defaultOrder' => ['id'=>SORT_DESC],
-        ]);
+//        $dataProvider->setSort([
+//            'defaultOrder' => ['id'=>SORT_DESC],
+//        ]);
 
 
         return $this->render('view', [
@@ -104,7 +105,7 @@ class TaskExecutionController extends Controller
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
-    public function actionCreate()
+    public function actionCreate($task_id = 1)
     {
         $tasks = ArrayHelper::map(Task::find()->all(), 'id', 'title');
         $users = ArrayHelper::map(User::find()->all(), 'id', 'username');
@@ -122,7 +123,8 @@ class TaskExecutionController extends Controller
         return $this->render('create', [
             'model' => $model,
             'tasks' => $tasks,
-            'users' =>  $users
+            'users' =>  $users,
+            'task_id' => $task_id
         ]);
     }
 

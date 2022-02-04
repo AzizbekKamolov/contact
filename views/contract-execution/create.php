@@ -5,8 +5,8 @@ use yii\helpers\Html;
 /* @var $this yii\web\View */
 /* @var $model app\models\ContractExecution */
 
-$this->title = 'Create Contract Execution';
-$this->params['breadcrumbs'][] = ['label' => 'Contract Executions', 'url' => ['index']];
+$this->title = 'Создать исполнение контракта';
+$this->params['breadcrumbs'][] = ['label' => 'Исполнение контрактов', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="contract-execution-create">
@@ -16,7 +16,8 @@ $this->params['breadcrumbs'][] = $this->title;
     <?= $this->render('_form', [
         'model' => $model,
         'users' =>  $users,
-        'contracts' =>  $contracts
+        'contracts' =>  $contracts,
+        'contract_id' => $contract_id
     ]) ?>
 
 </div>

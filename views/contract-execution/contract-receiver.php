@@ -18,9 +18,9 @@ $this->registerAssetBundle('app\assets\ViewerJsAssets');
 //            'file',
 //            'created_at',
             [
-                'label' => 'Контракт',
+                'label' => 'Исполнение контракта',
                 'value' =>  function($data) {
-                    return \app\models\Contract::find()->where(['id' => $data->con_exe_id])->one()->title;
+                    return \app\models\ContractExecution::find()->where(['id' => $data->con_exe_id])->one()->title;
                 }
             ],
             [

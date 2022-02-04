@@ -5,10 +5,10 @@ use yii\helpers\Html;
 /* @var $this yii\web\View */
 /* @var $model app\models\Contract */
 
-$this->title = 'Update Contract: ' . $model->title;
-$this->params['breadcrumbs'][] = ['label' => 'Contracts', 'url' => ['index']];
+$this->title = 'Обновить Контракт: ' . $model->title;
+$this->params['breadcrumbs'][] = ['label' => 'Контракты', 'url' => ['index']];
 $this->params['breadcrumbs'][] = ['label' => $model->title, 'url' => ['view', 'id' => $model->id]];
-$this->params['breadcrumbs'][] = 'Update';
+$this->params['breadcrumbs'][] = 'Обновить';
 ?>
 <div class="contract-update">
 
@@ -16,7 +16,8 @@ $this->params['breadcrumbs'][] = 'Update';
 
     <?= $this->render('_form', [
         'model' => $model,
-        'projects' => $projects
+        'projects' => $projects,
+        'currencies'    => $currencies
     ]) ?>
 
 </div>

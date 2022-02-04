@@ -58,7 +58,7 @@ class Task extends \yii\db\ActiveRecord
             'id' => 'ID',
             'project_id' => 'Проект',
             'title' => 'Название',
-            'price' => 'Price',
+            'price' => 'Цена',
             'deadline' => 'Срок',
             'user_id' => 'Создатель',
             'status_id' => 'Статус',

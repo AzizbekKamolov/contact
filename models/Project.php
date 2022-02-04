@@ -60,13 +60,13 @@ class Project extends \yii\db\ActiveRecord
         return [
             'id' => 'ID',
             'title' => 'Название',
-            'description' => 'Description',
+            'description' => 'Описание',
             'budget_sum' => 'Бюджет',
-            'currency_id' => 'Currency ID',
-            'project_year' => 'Project Year',
-            'user_id' => 'Создатель',
+            'currency_id' => 'Тип валюты',
+            'project_year' => 'Год проекта',
+            'user_id' => 'Ответственный',
             'status_id' => 'Статус',
-            'deadline' => 'Deadline',
+            'deadline' => 'Срок',
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',
         ];

@@ -2,6 +2,7 @@
 
 namespace app\models;
 
+use phpDocumentor\Reflection\Types\Null_;
 use yii\base\Model;
 use yii\web\UploadedFile;
 
@@ -11,21 +12,24 @@ class FileUpload extends Model {
     public function rules()
     {
         return [
-          [['file'], 'required'],
+//          [['file'], 'required'],
           [['file'], 'file', 'extensions' => 'doc,docx,pdf,pptx']
         ];
     }
 
-    public function uploadFile(UploadedFile $file, $currentFile)
+    public function uploadFile($file, $currentFile)
     {
-        $this->file = $file;
+        if (!empty($file)) {
+            $this->file = $file;
 
-        if ($this->validate())
-        {
-            $this->deleteCurrentFile($currentFile);
+            if ($this->validate())
+            {
+                $this->deleteCurrentFile($currentFile);
 
-            return $this->saveFile();
+                return $this->saveFile();
+            }
         }
+        return null;
     }
 
     public function getFolder()

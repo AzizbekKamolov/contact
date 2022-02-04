@@ -25,8 +25,8 @@ class ProjectController extends Controller
         $users = ArrayHelper::map(User::find()->all(), 'id', 'username');
         $statuses = ArrayHelper::map(Status::find()->all(), 'id', 'title');
 
-        $users = array('' => 'Ползователь') + $users;
-        $statuses = array('' => 'Статус') + $statuses;
+//        $users = array('' => 'Ползователь') + $users;
+//        $statuses = array('' => 'Статус') + $statuses;
 
         return $this->render('index', [
             'searchModel'   => $searchModel,
@@ -40,6 +40,8 @@ class ProjectController extends Controller
     {
         $searchModel = new ContractSearch();
         $dataProvider = $searchModel->search(\Yii::$app->request->queryParams);
+
+        $statuses = ArrayHelper::map(Status::find()->all(), 'id', 'title');
 
 //        if (User::getMyRole() !== 'admin') {
 //            $dataProvider->query->andWhere(['project_id' =>  $id]);
@@ -62,7 +64,8 @@ class ProjectController extends Controller
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
             'searchModelTask' => $searchModelTask,
-            'dataProviderTask' => $dataProviderTask
+            'dataProviderTask' => $dataProviderTask,
+            'statuses'  => $statuses
         ]);
     }
 
@@ -72,9 +75,10 @@ class ProjectController extends Controller
         $user_id = \Yii::$app->user->id;
 
         $currencies = ArrayHelper::map(Currency::find()->all(), 'id', 'name');
+        $users = ArrayHelper::map(User::find()->all(), 'id', 'username');
 
         if ($this->request->isPost) {
-            $model->user_id = $user_id;
+//            $model->user_id = $user_id;
             if ($model->load($this->request->post()) && $model->save()) {
                 return $this->redirect(['view', 'id' => $model->id]);
             }
@@ -83,8 +87,9 @@ class ProjectController extends Controller
         }
 
         return $this->render('create', [
-            'model' => $model,
-            'currencies' => $currencies
+            'model'         => $model,
+            'currencies'    => $currencies,
+            'users'         => $users
         ]);
     }
 
@@ -92,14 +97,16 @@ class ProjectController extends Controller
     {
         $model = $this->findModel($id);
         $currencies = ArrayHelper::map(Currency::find()->all(), 'id', 'name');
+        $users = ArrayHelper::map(User::find()->all(), 'id', 'username');
 
         if ($this->request->isPost && $model->load($this->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
         }
 
         return $this->render('update', [
-            'model' => $model,
-            'currencies' => $currencies
+            'model'         => $model,
+            'currencies'    => $currencies,
+            'users'         => $users
         ]);
     }
 

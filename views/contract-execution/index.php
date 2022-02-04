@@ -9,68 +9,115 @@ use yii\grid\GridView;
 
 $this->title = 'Исполнение контрактов';
 $this->params['breadcrumbs'][] = $this->title;
+$myRole = \app\models\User::getMyRole();
+if($myRole === "admin" || $myRole === "superAdmin"){
+    $template = '{view}{update}{delete}';
+}
+else {
+    $template = '{view}';
+}
 ?>
 <div class="contract-execution-index">
 
     <h1><?= Html::encode($this->title) ?></h1>
 
     <p>
-        <?= Html::a('Создать Исп контрактов', ['create'], ['class' => 'btn btn-success']) ?>
+        <?= ($myRole !== "simpleUser") ? Html::a('Создать Исп контрактов', ['create'], ['class' => 'btn btn-success']) : "" ?>
     </p>
 
-    <?php echo $this->render('_search', ['model' => $searchModel, 'users' => $users, 'statuses' =>  $statuses, 'contracts'     => $contracts]); ?>
+    <?php // echo $this->render('_search', ['model' => $searchModel, 'users' => $users, 'statuses' =>  $statuses, 'contracts'     => $contracts]); ?>
 
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
-//        'filterModel' => $searchModel,
+        'filterModel' => $searchModel,
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 
 //            'id',
-//            'title',
-//            'contract_id',
-//            'user_id',
-//            'exe_user_id',
-//            'status_id',
-            //'info:ntext',
-            //'done_date',
-            //'mark',
-            //'receive_date',
-            //'receive_user',
-            //'created_at',
-            //'updated_at',
-            [
-                'label' => 'Название',
-                'value' =>  function($data) {
-                    return $data->title;
-                }
-            ],
-            [
-                'label' => 'Контракт',
+            'title',
+            'contract_id' => [
+                'attribute' => 'contract_id',
+                'filter'    => $contracts,
                 'value' =>  function($data) {
                     return \app\models\Contract::find()->where(['id' => $data->contract_id])->one()->title;
                 }
             ],
-            [
-                'label' => 'Создатель',
+            'user_id' => [
+                'attribute' => 'user_id',
+                'filter' => $users,
                 'value' =>  function($data) {
                     return \app\models\User::find()->where(['id' => $data->user_id])->one()->username;
                 }
             ],
-            [
-                'label' => 'Исполнитель',
+            'exe_user_id' => [
+                'attribute' => 'exe_user_id',
+                'filter' => $users,
                 'value' =>  function($data) {
                     return \app\models\User::find()->where(['id' => $data->exe_user_id])->one()->username;
                 }
             ],
-            [
-                'label' => 'Статус',
+            'receive_user' => [
+                'attribute' => 'receive_user',
+                'filter' => $users,
+                'value' =>  function($data) {
+                    return \app\models\User::find()->where(['id' => $data->receive_user])->one()->username;
+                }
+            ],
+            'status_id' => [
+                'attribute' => 'status_id',
+                'filter' => $statuses,
                 'value' =>  function($data) {
                     return \app\models\Status::find()->where(['id' => $data->status_id])->one()->title;
                 }
             ],
+            //'info:ntext',
+            //'done_date',
+            //'mark',
+            //'receive_date',
+            'receive_user' => [
+                'attribute' => 'receive_user',
+                'filter' => $users,
+                'value' =>  function($data) {
+                    return \app\models\User::find()->where(['id' => $data->receive_user])->one()->username;
+                }
+            ],
+            //'created_at',
+            //'updated_at',
+//            [
+//                'label' => 'Название',
+//                'value' =>  function($data) {
+//                    return $data->title;
+//                }
+//            ],
+//            [
+//                'label' => 'Контракт',
+//                'value' =>  function($data) {
+//                    return \app\models\Contract::find()->where(['id' => $data->contract_id])->one()->title;
+//                }
+//            ],
+//            [
+//                'label' => 'Создатель',
+//                'value' =>  function($data) {
+//                    return \app\models\User::find()->where(['id' => $data->user_id])->one()->username;
+//                }
+//            ],
+//            [
+//                'label' => 'Исполнитель',
+//                'value' =>  function($data) {
+//                    return \app\models\User::find()->where(['id' => $data->exe_user_id])->one()->username;
+//                }
+//            ],
+//            [
+//                'label' => 'Статус',
+//                'value' =>  function($data) {
+//                    return \app\models\Status::find()->where(['id' => $data->status_id])->one()->title;
+//                }
+//            ],
 
-            ['class' => 'yii\grid\ActionColumn'],
+            [
+                'class' => 'yii\grid\ActionColumn',
+                'template'  => $template
+            ],
         ],
     ]); ?>
 

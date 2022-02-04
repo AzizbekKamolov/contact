@@ -14,20 +14,20 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'title')->textInput() ?>
 
-    <?= $form->field($model, 'task_id')->dropDownList($tasks) ?>
+    <?= $form->field($model, 'task_id')->dropDownList($tasks, ['prompt' => 'Выберите задачу', 'options'=> [$task_id => ["Selected"=>true]]]) ?>
 
 
-    <?= $form->field($model, 'exe_user_id')->dropDownList($users) ?>
+    <?= $form->field($model, 'exe_user_id')->dropDownList($users, ['prompt' => 'Выберите исполнитель']) ?>
 
     <?= $form->field($model, 'info')->textarea(['rows' => 6]) ?>
 
 
 <!--    --><?//= $form->field($model, 'receive_date')->textInput() ?>
 
-    <?= $form->field($model, 'receive_user')->dropDownList($users) ?>
+    <?= $form->field($model, 'receive_user')->dropDownList($users, ['prompt' => 'Выберите получатель']) ?>
 
     <div class="form-group">
-        <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>
+        <?= Html::submitButton('Сохранить', ['class' => 'btn btn-success']) ?>
     </div>
 
     <?php ActiveForm::end(); ?>

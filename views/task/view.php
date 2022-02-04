@@ -11,20 +11,21 @@ $this->title = $model->title;
 $this->params['breadcrumbs'][] = ['label' => 'Задачи', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 \yii\web\YiiAsset::register($this);
+$myRole = \app\models\User::getMyRole();
 ?>
 <div class="task-view">
 
     <h1><?= Html::encode($this->title) ?></h1>
 
     <p>
-        <?= Html::a('Update', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
-        <?= Html::a('Delete', ['delete', 'id' => $model->id], [
+        <?= ($myRole === "admin" || $myRole === "superAdmin") ? Html::a('Обновить', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) : "" ?>
+        <?= ($myRole === "admin" || $myRole === "superAdmin") ? Html::a('Удалить', ['delete', 'id' => $model->id], [
             'class' => 'btn btn-danger',
             'data' => [
                 'confirm' => 'Are you sure you want to delete this item?',
                 'method' => 'post',
             ],
-        ]) ?>
+        ]) : "" ?>
     </p>
 
     <?= DetailView::widget([
@@ -87,7 +88,14 @@ $this->params['breadcrumbs'][] = $this->title;
     ]) ?>
 
     <br>
-    <h1>Исполнение <?= $model->title?></h1>
+    <div class="row">
+        <div class="col-9">
+            <h1>Исполнение по <span style="color: rgba(0, 0, 0, 0.4);"><?= $model->title?></span></h1>
+        </div>
+        <div class="col-3">
+            <?= (Yii::$app->user->id === $model->user_id) ? Html::a('Создать Исп по Задачу', ['task-execution/create', 'task_id' => $model->id], ['class' => 'btn btn-success float-right']) : "" ?>
+        </div>
+    </div>
     <br>
 
     <?= GridView::widget([

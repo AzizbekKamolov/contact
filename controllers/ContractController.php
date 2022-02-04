@@ -6,6 +6,7 @@ namespace app\controllers;
 use app\models\Contract;
 use app\models\ContractExecutionSearch;
 use app\models\ContractSearch;
+use app\models\Currency;
 use app\models\ImageUpload;
 use app\models\Project;
 use app\models\Status;
@@ -48,8 +49,8 @@ class ContractController extends Controller
         $users = ArrayHelper::map(User::find()->all(), 'id', 'username');
         $statuses = ArrayHelper::map(Status::find()->all(), 'id', 'title');
 
-        $users = array('' => 'Ползователь') + $users;
-        $statuses = array('' => 'Статус') + $statuses;
+//        $users = array('' => 'Ползователь') + $users;
+//        $statuses = array('' => 'Статус') + $statuses;
 
         return $this->render('index', [
             'searchModel' => $searchModel,
@@ -71,10 +72,15 @@ class ContractController extends Controller
         $dataProvider = $searchModel->search($this->request->queryParams);
         $dataProvider->query->andWhere(['contract_id' =>  $id]);
 
+        $users = ArrayHelper::map(User::find()->all(), 'id', 'username');
+        $statuses = ArrayHelper::map(Status::find()->all(), 'id', 'title');
+
         return $this->render('view', [
             'model' => $this->findModel($id),
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
+            'users'         => $users,
+            'statuses'      =>  $statuses
         ]);
     }
 
@@ -83,11 +89,12 @@ class ContractController extends Controller
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
-    public function actionCreate()
+    public function actionCreate($project_id = 1)
     {
         $model = new Contract();
 
-        $projects = ArrayHelper::map(Project::find()->all(), 'id', 'title');
+        $projects = ArrayHelper::map(Project::find()->where(['user_id' => \Yii::$app->user->id])->all(), 'id', 'title');
+        $currencies = ArrayHelper::map(Currency::find()->all(), 'id', 'name');
         $user_id = \Yii::$app->user->id;
 
         if ($this->request->isPost) {
@@ -101,7 +108,9 @@ class ContractController extends Controller
 
         return $this->render('create', [
             'model' => $model,
-            'projects' => $projects
+            'projects' => $projects,
+            'project_id'    => $project_id,
+            'currencies'    => $currencies
         ]);
     }
 
@@ -116,14 +125,16 @@ class ContractController extends Controller
     {
         $model = $this->findModel($id);
         $projects = ArrayHelper::map(Project::find()->all(), 'id', 'title');
+        $currencies = ArrayHelper::map(Currency::find()->all(), 'id', 'name');
 
         if ($this->request->isPost && $model->load($this->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
-        }
+    }
 
         return $this->render('update', [
             'model' => $model,
-            'projects' => $projects
+            'projects' => $projects,
+            'currencies'    => $currencies
         ]);
     }
 

@@ -14,7 +14,14 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'info')->textarea(['rows' => 6]) ?>
 
-    <?= $form->field($fileUpload, 'file')->fileInput() ?>
+    <div class="row">
+        <div class="col-6">
+            <?= $form->field($fileUpload, 'file')->fileInput() ?>
+        </div>
+        <div class="col-6">
+            <?=Html::dropDownList('new_receive_user','',$users, ['prompt' => "Select a User", 'class' => 'form-control'])?>
+        </div>
+    </div>
 
     <div class="form-group">
         <?= Html::submitButton('Отправить', ['class' => 'btn btn-success']) ?>

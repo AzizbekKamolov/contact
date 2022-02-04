@@ -22,9 +22,9 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'project_year')->textInput(['type'=>'date']) ?>
 
-    <?/*= $form->field($model, 'user_id')->textInput() */?><!--
+    <?= $form->field($model, 'user_id')->dropDownList($users) ?>
 
-    --><?/*= $form->field($model, 'status_id')->textInput() */?>
+    <?/*= $form->field($model, 'status_id')->textInput() */?>
 
     <?= $form->field($model, 'deadline')->textInput(['type' => 'date']) ?>
 

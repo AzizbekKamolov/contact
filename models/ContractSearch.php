@@ -17,7 +17,7 @@ class ContractSearch extends Contract
     public function rules()
     {
         return [
-            [['id', 'project_id', 'user_id', 'status_id', 'created_at', 'updated_at'], 'integer'],
+            [['id', 'project_id', 'currency_id', 'user_id', 'status_id', 'created_at', 'updated_at'], 'integer'],
             [['title', 'description', 'file_url', 'deadline'], 'safe'],
             [['price'], 'number'],
         ];
@@ -62,6 +62,7 @@ class ContractSearch extends Contract
             'id' => $this->id,
             'project_id' => $this->project_id,
             'price' => $this->price,
+            'currency_id' => $this->currency_id,
             'user_id' => $this->user_id,
             'status_id' => $this->status_id,
             'deadline' => $this->deadline,

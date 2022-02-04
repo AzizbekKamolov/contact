@@ -43,7 +43,7 @@ class Contract extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['project_id', 'user_id', 'status_id', 'created_at', 'updated_at'], 'integer'],
+            [['project_id', 'user_id', 'currency_id', 'status_id', 'created_at', 'updated_at'], 'integer'],
             [['description'], 'string'],
             [['price'], 'number'],
             [['deadline'], 'safe'],
@@ -58,10 +58,11 @@ class Contract extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'project_id' => 'Project ID',
+            'project_id' => 'Проект',
             'title' => 'Название',
-            'description' => 'Description',
+            'description' => 'Описание',
             'price' => 'Цена',
+            'currency_id' => 'Тип валюты',
             'user_id' => 'Создатель',
             'file_url' => 'File Url',
             'status_id' => 'Статус',

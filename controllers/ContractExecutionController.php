@@ -49,20 +49,27 @@ class ContractExecutionController extends Controller
     {
         $searchModel = new ContractExecutionSearch();
         $dataProvider = $searchModel->search($this->request->queryParams);
-        if (User::getMyRole() !== 'admin'){
-            $dataProvider->query->andWhere(['exe_user_id' =>  \Yii::$app->user->id]);
+
+        if (User::getMyRole() === 'headOfDep'){
+            $dataProvider->query->andWhere(['user_id' =>  \Yii::$app->user->id])->orWhere(['receive_user' => \Yii::$app->user->id])->orWhere(['exe_user_id' => \Yii::$app->user->id]);
+            $dataProvider->setSort([
+                'defaultOrder' => ['id'=>SORT_DESC],
+            ]);
+        } elseif (User::getMyRole() === "simpleUser") {
+            $dataProvider->query->andWhere(['exe_user_id' =>  \Yii::$app->user->id])->orWhere(['receive_user' => \Yii::$app->user->id]);
             $dataProvider->setSort([
                 'defaultOrder' => ['id'=>SORT_DESC],
             ]);
         }
 
+
         $users = ArrayHelper::map(User::find()->all(), 'id', 'username');
         $statuses = ArrayHelper::map(Status::find()->all(), 'id', 'title');
         $contracts = ArrayHelper::map(Contract::find()->all(), 'id', 'title');
 
-        $users = array('' => 'Ползователь') + $users;
-        $statuses = array('' => 'Статус') + $statuses;
-        $contracts = array('' => 'Контракт') + $contracts;
+//        $users = array('' => 'Ползователь') + $users;
+//        $statuses = array('' => 'Статус') + $statuses;
+//        $contracts = array('' => 'Контракт') + $contracts;
 
         return $this->render('index', [
             'searchModel' => $searchModel,
@@ -99,9 +106,9 @@ class ContractExecutionController extends Controller
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
-    public function actionCreate()
+    public function actionCreate($contract_id = 1)
     {
-        $contracts = ArrayHelper::map(Contract::find()->all(), 'id', 'title');
+        $contracts = ArrayHelper::map(Contract::find()->where(['user_id' => \Yii::$app->user->id])->all(), 'id', 'title');
         $users = ArrayHelper::map(User::find()->all(), 'id', 'username');
         $model = new ContractExecution();
 
@@ -117,7 +124,8 @@ class ContractExecutionController extends Controller
         return $this->render('create', [
             'model'     =>  $model,
             'contracts' =>  $contracts,
-            'users'     =>  $users
+            'users'     =>  $users,
+            'contract_id' => $contract_id
         ]);
     }
 
@@ -177,11 +185,24 @@ class ContractExecutionController extends Controller
 
     public function actionContractExe($id)
     {
+        $users = ArrayHelper::map(User::find()->all(), 'id', 'username');
         $model = new ContractExchange();
         $fileUpload = new FileUpload();
 
         if ($this->request->isPost)
         {
+            if($this->request->post("new_receive_user")){
+                $exe_model = new ContractExecution();
+                $exe_model->contract_id = ContractExecution::findOne($id)->contract_id;
+                $exe_model->user_id = \Yii::$app->user->id;
+                $exe_model->exe_user_id = $this->request->post("new_receive_user");
+                $exe_model->receive_user = \Yii::$app->user->id;
+                $exe_model->status_id = 1;
+                $exe_model->title = $this->request->post("ContractExchange")['info'];
+                if($exe_model->save()){
+                    return $this->redirect(['view', 'id' => $exe_model->id]);
+                }
+            }
             $contractExecution = $this->findModel($id);
             $file = UploadedFile::getInstance($fileUpload, 'file');
             $info = $this->request->post("ContractExchange")['info'];
@@ -202,7 +223,8 @@ class ContractExecutionController extends Controller
 
         return $this->render('contract-executor', [
             'model' => $model,
-            'fileUpload' => $fileUpload
+            'fileUpload' => $fileUpload,
+            'users' => $users
         ]);
     }
 

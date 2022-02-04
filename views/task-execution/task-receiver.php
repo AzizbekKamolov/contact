@@ -16,9 +16,9 @@ use yii\widgets\DetailView;
 //            'info:ntext',
 //            'created_at',
             [
-                'label' => 'Контракт',
+                'label' => 'Выполнение задачи',
                 'value' =>  function($data) {
-                    return \app\models\Task::find()->where(['id' => $data->task_exe_id])->one()->title;
+                    return \app\models\TaskExecution::find()->where(['id' => $data->task_exe_id])->one()->title;
                 }
             ],
             [

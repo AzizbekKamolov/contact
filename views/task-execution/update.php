@@ -5,9 +5,9 @@ use yii\helpers\Html;
 /* @var $this yii\web\View */
 /* @var $model app\models\TaskExecution */
 
-$this->title = 'Update Task Execution: ' . $model->id;
-$this->params['breadcrumbs'][] = ['label' => 'Task Executions', 'url' => ['index']];
-$this->params['breadcrumbs'][] = ['label' => $model->id, 'url' => ['view', 'id' => $model->id]];
+$this->title = 'Обновить вып. задачи: ' . $model->title;
+$this->params['breadcrumbs'][] = ['label' => 'Выполнение задач', 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => $model->title, 'url' => ['view', 'id' => $model->id]];
 $this->params['breadcrumbs'][] = 'Update';
 ?>
 <div class="task-execution-update">

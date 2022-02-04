@@ -9,66 +9,99 @@ use yii\grid\GridView;
 
 $this->title = 'Контракты';
 $this->params['breadcrumbs'][] = $this->title;
+$myRole = \app\models\User::getMyRole();
+if($myRole=="admin" || $myRole === "superAdmin"){
+    $template = '{view}{update}{delete}';
+}
+else{
+    $template = '{view}';
+}
 ?>
 <div class="contract-index">
 
     <h1><?= Html::encode($this->title) ?></h1>
 
     <p>
-        <?= Html::a('Создать Контракт', ['create'], ['class' => 'btn btn-success']) ?>
+        <?= ($myRole !== "simpleUser") ? Html::a('Создать Контракт', ['create'], ['class' => 'btn btn-success']) : "" ?>
     </p>
 
-    <?php echo $this->render('_search', ['model' => $searchModel, 'users' => $users, 'statuses' =>  $statuses]); ?>
+    <?php // echo $this->render('_search', ['model' => $searchModel, 'users' => $users, 'statuses' =>  $statuses]); ?>
 
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
-//        'filterModel' => $searchModel,
+        'filterModel' => $searchModel,
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 
 //            'id',
 //            'project_id',
-//            'title',
+            'title',
 //            'description:ntext',
-//            'price',
-            //'user_id',
-            //'file_url:url',
-            //'status_id',
-            //'deadline',
-            //'created_at',
-            //'updated_at',
-            [
-                'label' => 'Название',
+            'price' => [
+                'attribute' => 'price',
                 'value' =>  function($data) {
-                    return $data->title;
+                    return number_format($data->price, 2) . ' ' . \app\models\Currency::find()->where(['id' => $data->currency_id])->one()->short_name;
                 }
             ],
-            [
-                'label' => 'Цена',
-                'value' =>  function($data) {
-                    return $data->price;
-                }
-            ],
-            [
-                'label' => 'Создатель',
+            'user_id' => [
+                'attribute' => 'user_id',
+                'filter' => $users,
                 'value' =>  function($data) {
                     return \app\models\User::find()->where(['id' => $data->user_id])->one()->username;
                 }
             ],
-            [
-                'label' => 'Статус',
+            //'file_url:url',
+            'status_id' => [
+                'attribute' => 'status_id',
+                'filter'    => $statuses,
                 'value' =>  function($data) {
                     return \app\models\Status::find(['id' => $data->status_id])->one()->title;
                 }
             ],
-            [
-                'label' => 'Срок',
+            'deadline' => [
+                'attribute' => 'deadline',
                 'value' =>  function($data) {
-                    return $data->deadline;
+                    return date('d-m-Y', strtotime($data->deadline));
+//                    return $data->deadline;
                 }
             ],
+            //'created_at',
+            //'updated_at',
+//            [
+//                'label' => 'Название',
+//                'value' =>  function($data) {
+//                    return $data->title;
+//                }
+//            ],
+//            [
+//                'label' => 'Цена',
+//                'value' =>  function($data) {
+//                    return $data->price;
+//                }
+//            ],
+//            [
+//                'label' => 'Создатель',
+//                'value' =>  function($data) {
+//                    return \app\models\User::find()->where(['id' => $data->user_id])->one()->username;
+//                }
+//            ],
+//            [
+//                'label' => 'Статус',
+//                'value' =>  function($data) {
+//                    return \app\models\Status::find(['id' => $data->status_id])->one()->title;
+//                }
+//            ],
+//            [
+//                'label' => 'Срок',
+//                'value' =>  function($data) {
+//                    return $data->deadline;
+//                }
+//            ],
 
-            ['class' => 'yii\grid\ActionColumn'],
+            [
+                'class' => 'yii\grid\ActionColumn',
+                'template' => $template,
+            ],
         ],
     ]); ?>
 

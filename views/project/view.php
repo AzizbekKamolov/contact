@@ -12,20 +12,21 @@ $this->title = $model->title;
 $this->params['breadcrumbs'][] = ['label' => 'Проекты', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 \yii\web\YiiAsset::register($this);
+$myRole = \app\models\User::getMyRole();
 ?>
 <div class="project-view">
 
     <h1><?= Html::encode($this->title) ?></h1>
 
     <p>
-        <?= Html::a('Update', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
-        <?= Html::a('Delete', ['delete', 'id' => $model->id], [
+        <?= ($myRole === "admin") ? Html::a('Update', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) : "" ?>
+        <?= ($myRole === "admin") ? Html::a('Delete', ['delete', 'id' => $model->id], [
             'class' => 'btn btn-danger',
             'data' => [
                 'confirm' => 'Are you sure you want to delete this item?',
                 'method' => 'post',
             ],
-        ]) ?>
+        ]) : "" ?>
     </p>
 
     <?= DetailView::widget([
@@ -73,7 +74,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 }
             ],
             [
-                'label' => 'Создатель',
+                'label' => 'Ответственный',
                 'value' =>  function($data) {
                     return \app\models\User::find()->where(['id' => $data->user_id])->one()->username;
                 }
@@ -101,50 +102,68 @@ $this->params['breadcrumbs'][] = $this->title;
     ]) ?>
 
     <br>
-    <h1>Контракты <?= $model->title?></h1>
+    <div class="row">
+        <div class="col-9">
+            <h1>Контракты по <span style="color: rgba(0, 0, 0, 0.4);"><?= $model->title?></span></h1>
+        </div>
+        <div class="col-3">
+            <?= (Yii::$app->user->id === $model->user_id) ? Html::a('Создать Kонтракт', ['contract/create', 'project_id' => $model->id], ['class' => 'btn btn-success float-right']) : "" ?>
+        </div>
+    </div>
     <br>
 
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
-//        'filterModel' => $searchModel,
+        'filterModel' => $searchModel,
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 
 //            'id',
 //            'project_id',
-//            'title',
+            'title',
 //            'description:ntext',
-//            'price',
-            //'user_id',
-            //'file_url:url',
-            //'status_id',
-            //'deadline',
-            //'created_at',
-            //'updated_at',
-            [
-                'label' => 'Название',
-                'value' =>  function($data) {
-                    return $data->title;
-                }
-            ],
-            [
-                'label' => 'Описание',
-                'value' =>  function($data) {
-                    return $data->description;
-                }
-            ],
-            [
-                'label' => 'Цена',
-                'value' =>  function($data) {
+            'price' => [
+                'attribute' => 'price',
+                'value' => function($data) {
                     return $data->price;
                 }
             ],
-            [
-                'label' => 'Статус',
+            //'user_id',
+            //'file_url:url',
+            'status_id' => [
+                'attribute' => 'status_id',
+                'filter' => $statuses,
                 'value' =>  function($data) {
                     return \app\models\Status::find(['id' => $data->status_id])->one()->title;
                 }
             ],
+            //'deadline',
+            //'created_at',
+            //'updated_at',
+//            [
+//                'label' => 'Название',
+//                'value' =>  function($data) {
+//                    return $data->title;
+//                }
+//            ],
+//            [
+//                'label' => 'Описание',
+//                'value' =>  function($data) {
+//                    return $data->description;
+//                }
+//            ],
+//            [
+//                'label' => 'Цена',
+//                'value' =>  function($data) {
+//                    return $data->price;
+//                }
+//            ],
+//            [
+//                'label' => 'Статус',
+//                'value' =>  function($data) {
+//                    return \app\models\Status::find(['id' => $data->status_id])->one()->title;
+//                }
+//            ],
             [
                     'header' => 'Меню',
                     'format' => 'raw',
@@ -157,49 +176,72 @@ $this->params['breadcrumbs'][] = $this->title;
     ]); ?>
 
     <br>
-    <h1>Задачи <?= $model->title?></h1>
+    <div class="row">
+        <div class="col-9">
+            <h1>Задачи по <span style="color: rgba(0, 0, 0, 0.4);"><?= $model->title?></span></h1>
+        </div>
+        <div class="col-3">
+            <?= (Yii::$app->user->id === $model->user_id) ? Html::a('Создать Задача', ['task/create', 'project_id' => $model->id], ['class' => 'btn btn-success float-right']) : "" ?>
+        </div>
+    </div>
     <br>
 
     <?= GridView::widget([
         'dataProvider' => $dataProviderTask,
-//        'filterModel' => $searchModelTask,
+        'filterModel' => $searchModelTask,
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 //
 //            'id',
 //            'project_id',
-//            'title:ntext',
-//            'price',
-//            'deadline',
-            //'user_id',
-            //'status_id',
-            //'created_at',
-            //'updated_at',
-
-            [
-                'label' => 'Название',
-                'value' =>  function($data) {
-                    return $data->title;
-                }
-            ],
-            [
-                'label' => 'Цена',
-                'value' =>  function($data) {
+            'title:ntext',
+            'price' => [
+                'attribute' => 'price',
+                'value' => function($data) {
                     return $data->price;
                 }
             ],
-            [
-                'label' => 'Срок',
+            'deadline' => [
+                'attribute' => 'deadline',
                 'value' =>  function($data) {
                     return $data->deadline;
                 }
             ],
-            [
-                'label' => 'Статус',
+            //'user_id',
+            'status_id' => [
+                'attribute' => 'status_id',
+                'filter' => $statuses,
                 'value' =>  function($data) {
                     return \app\models\Status::find(['id' => $data->status_id])->one()->title;
                 }
             ],
+            //'created_at',
+            //'updated_at',
+
+//            [
+//                'label' => 'Название',
+//                'value' =>  function($data) {
+//                    return $data->title;
+//                }
+//            ],
+//            [
+//                'label' => 'Цена',
+//                'value' =>  function($data) {
+//                    return $data->price;
+//                }
+//            ],
+//            [
+//                'label' => 'Срок',
+//                'value' =>  function($data) {
+//                    return $data->deadline;
+//                }
+//            ],
+//            [
+//                'label' => 'Статус',
+//                'value' =>  function($data) {
+//                    return \app\models\Status::find(['id' => $data->status_id])->one()->title;
+//                }
+//            ],
             [
                 'header' => 'Меню',
                 'format' => 'raw',

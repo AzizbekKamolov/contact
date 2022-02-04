@@ -29,6 +29,7 @@ AppAsset::register($this);
 
 <header>
     <?php
+    $myRole = User::getMyRole();
     NavBar::begin([
         'brandLabel' => Yii::$app->name,
         'brandUrl' => Yii::$app->homeUrl,
@@ -42,16 +43,16 @@ AppAsset::register($this);
     echo Nav::widget([
         'options' => ['class' => 'navbar-nav'],
         'items' => [
-            ['label' => 'Главная сайт', 'url' => ['/site/index']],
+//            ['label' => 'Главная сайт', 'url' => ['/site/index']],
             ['label' => 'Проекты', 'url' => ['/project/index']],
             ['label' => 'Контракты', 'url' => ['/contract/index']],
-            User::getMyRole() === 'admin' ? (
+            ($myRole !== 'simpleUser') ? (
                 ['label' => 'Контракт на исп', 'url' => ['/contract-execution/index']]
             ): (
                 ['label' => 'Мои Контракты', 'url' => ['/contract-execution/index']]
             ),
             ['label' => 'Задачи', 'url' => ['/task/index']],
-            User::getMyRole() === 'admin' ? (
+            ($myRole !== 'simpleUser') ? (
                     ['label' => 'Задачи на исп', 'url' => ['/task-execution/index']]
             ): (
                     ['label' => 'Мои Задачи', 'url' => ['/task-execution/index']]
@@ -86,8 +87,8 @@ AppAsset::register($this);
 
 <footer class="footer mt-auto py-3 text-muted">
     <div class="container">
-        <p class="float-left">&copy; ACDF <?= date('Y') ?></p>
-        <p class="float-right"><?= Yii::powered() ?></p>
+        <p class="text-center">&copy; 2017 - <?= date('Y') ?> Фонд развития культуры и искусства при Кабинете Министров Республики Узбекистан.</p>
+<!--        <p class="float-right">--><?//= Yii::powered() ?><!--</p>-->
     </div>
 </footer>
 

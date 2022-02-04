@@ -11,25 +11,26 @@ $this->title = $model->title;
 $this->params['breadcrumbs'][] = ['label' => 'Выполнение задач', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 \yii\web\YiiAsset::register($this);
+$myRole = \app\models\User::getMyRole();
 ?>
 <div class="task-execution-view">
 
     <h1><?= Html::encode($this->title) ?></h1>
 
     <p>
-        <?= Html::a('Update', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
+        <?= ($myRole === "admin" || $myRole === "superAdmin") ? Html::a('Обновить', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) : "" ?>
         <?php if (Yii::$app->user->id === $model->receive_user):?>
-            <?= Html::a('Check task', ['task-check', 'id' => $model->id], ['class' => ($model->status_id !== 2) ? 'btn btn-success disabled' : 'btn btn-success']) ?>
+            <?= Html::a('Проверить задачу', ['task-check', 'id' => $model->id], ['class' => ($model->status_id !== 2) ? 'btn btn-success disabled' : 'btn btn-success']) ?>
         <?php elseif(Yii::$app->user->id === $model->exe_user_id): ?>
-            <?= Html::a('Execute task', ['task-exe', 'id' => $model->id], ['class' => (($model->status_id === 2) || ($model->status_id === 4)) ? 'btn btn-success disabled' : 'btn btn-success']) ?>
+            <?= Html::a('Выполнить задачу', ['task-exe', 'id' => $model->id], ['class' => (($model->status_id === 2) || ($model->status_id === 4)) ? 'btn btn-success disabled' : 'btn btn-success']) ?>
         <?php endif; ?>
-        <?= Html::a('Delete', ['delete', 'id' => $model->id], [
+        <?= ($myRole === "admin" || $myRole === "superAdmin") ? Html::a('Удалить', ['delete', 'id' => $model->id], [
             'class' => 'btn btn-danger',
             'data' => [
                 'confirm' => 'Are you sure you want to delete this item?',
                 'method' => 'post',
             ],
-        ]) ?>
+        ]) : "" ?>
     </p>
 
     <?= DetailView::widget([
@@ -94,12 +95,12 @@ $this->params['breadcrumbs'][] = $this->title;
                     return $data->mark;
                 }
             ],
-            [
-                'label' => 'Дата получения',
-                'value' =>  function($data) {
-                    return $data->receive_date;
-                }
-            ],
+//            [
+//                'label' => 'Дата получения',
+//                'value' =>  function($data) {
+//                    return $data->receive_date;
+//                }
+//            ],
             [
                 'label' => 'Получатель',
                 'value' =>  function($data) {
@@ -117,7 +118,7 @@ $this->params['breadcrumbs'][] = $this->title;
     ]) ?>
 
     <br>
-    <h1>Обмены задачами</h1>
+    <h1>Обмены задачами по <span style="color: rgba(0, 0, 0, 0.4);"><?= $model->title?></span></h1>
     <br>
 
     <?= GridView::widget([

@@ -63,11 +63,11 @@ class ContractExecution extends \yii\db\ActiveRecord
             'user_id' => 'Создатель',
             'exe_user_id' => 'Исполнитель',
             'status_id' => 'Статус',
-            'info' => 'Info',
+            'info' => 'Информация',
             'done_date' => 'Done Date',
             'mark' => 'Оценка',
             'receive_date' => 'Receive Date',
-            'receive_user' => 'Receive User',
+            'receive_user' => 'Получатель',
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',
         ];

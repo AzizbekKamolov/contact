@@ -50,9 +50,9 @@ class TaskController extends Controller
         $users = ArrayHelper::map(User::find()->all(), 'id', 'username');
         $statuses = ArrayHelper::map(Status::find()->all(), 'id', 'title');
 
-        $projects = array('' => 'Проект') + $projects;
-        $users = array('' => 'Ползователь') + $users;
-        $statuses = array('' => 'Статус') + $statuses;
+//        $projects = array('' => 'Проект') + $projects;
+//        $users = array('' => 'Ползователь') + $users;
+//        $statuses = array('' => 'Статус') + $statuses;
 
         return $this->render('index', [
             'searchModel'   => $searchModel,
@@ -87,9 +87,9 @@ class TaskController extends Controller
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
-    public function actionCreate()
+    public function actionCreate($project_id = 1)
     {
-        $projects = ArrayHelper::map(Project::find()->all(), 'id', 'title');
+        $projects = ArrayHelper::map(Project::find()->where(["user_id" => \Yii::$app->user->id])->all(), 'id', 'title');
         $model = new Task();
 
         if ($this->request->isPost) {
@@ -103,7 +103,8 @@ class TaskController extends Controller
 
         return $this->render('create', [
             'model' => $model,
-            'projects' => $projects
+            'projects' => $projects,
+            'project_id' => $project_id
         ]);
     }
 

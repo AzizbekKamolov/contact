@@ -6,13 +6,16 @@ use yii\widgets\ActiveForm;
 /* @var $this yii\web\View */
 /* @var $model app\models\Task */
 /* @var $form yii\widgets\ActiveForm */
+if ($model->deadline) {
+    $model->deadline = date('Y-m-d', strtotime($model->deadline));
+}
 ?>
 
 <div class="task-form">
 
     <?php $form = ActiveForm::begin(); ?>
 
-    <?= $form->field($model, 'project_id')->dropDownList($projects) ?>
+    <?= $form->field($model, 'project_id')->dropDownList($projects, ['prompt'=>'Select a Project', 'options'=> [$project_id => ["Selected"=>true]] ]) ?>
 
     <?= $form->field($model, 'title')->textarea(['rows' => 6]) ?>
 

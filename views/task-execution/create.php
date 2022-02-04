@@ -5,8 +5,8 @@ use yii\helpers\Html;
 /* @var $this yii\web\View */
 /* @var $model app\models\TaskExecution */
 
-$this->title = 'Create Task Execution';
-$this->params['breadcrumbs'][] = ['label' => 'Task Executions', 'url' => ['index']];
+$this->title = 'Создать выполнение задачи';
+$this->params['breadcrumbs'][] = ['label' => 'Выполнение задач', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="task-execution-create">
@@ -16,7 +16,8 @@ $this->params['breadcrumbs'][] = $this->title;
     <?= $this->render('_form', [
         'model' => $model,
         'tasks' => $tasks,
-        'users' => $users
+        'users' => $users,
+        'task_id' => $task_id
     ]) ?>
 
 </div>
