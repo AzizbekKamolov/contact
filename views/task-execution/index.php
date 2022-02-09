@@ -1,5 +1,8 @@
 <?php
 
+use app\models\Status;
+use app\models\Task;
+use app\models\User;
 use yii\helpers\Html;
 use yii\grid\GridView;
 
@@ -44,28 +47,31 @@ else{
                 'attribute' => 'task_id',
                 'filter' => $tasks,
                 'value' =>  function($data) {
-                    return \app\models\Task::find()->where(['id' => $data->task_id])->one()->title;
+                    return Task::getTaskById($data->task_id)->title;
                 }
             ],
             'user_id' => [
                 'attribute' => 'user_id',
                 'filter' => $users,
                 'value' =>  function($data) {
-                    return \app\models\User::find()->where(['id' => $data->user_id])->one()->username;
+                    return User::getUserById($data->user_id)->fullname;
                 }
             ],
             'exe_user_id' => [
                 'attribute' => 'exe_user_id',
                 'filter' => $users,
                 'value' =>  function($data) {
-                    return \app\models\User::find()->where(['id' => $data->exe_user_id])->one()->username;
+                    return User::getUserById($data->exe_user_id)->fullname;
                 }
             ],
             'status_id' => [
-                    'attribute' => 'status_id',
+                'attribute' => 'status_id',
                 'filter'    => $statuses,
                 'value' =>  function($data) {
-                    return \app\models\Status::find()->where(['id' => $data->status_id])->one()->title;
+                    return Status::getStatusById($data->status_id)->title;
+                },
+                'contentOptions' => function($data) {
+                    return ['class' => Status::getStatusColor($data->status_id)];
                 }
             ],
             //'info:ntext',

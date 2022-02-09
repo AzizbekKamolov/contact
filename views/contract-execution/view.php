@@ -1,5 +1,8 @@
 <?php
 
+use app\models\Contract;
+use app\models\Status;
+use app\models\User;
 use yii\grid\GridView;
 use yii\helpers\Html;
 use yii\widgets\DetailView;
@@ -58,25 +61,25 @@ $myRole = \app\models\User::getMyRole();
             [
                 'label' => 'Контракт',
                 'value' =>  function($data) {
-                    return \app\models\Contract::find()->where(['id' => $data->contract_id])->one()->title;
+                    return Contract::getContrctById($data->contract_id)->title;
                 }
             ],
             [
                 'label' => 'Создатель',
                 'value' =>  function($data) {
-                    return \app\models\User::find()->where(['id' => $data->user_id])->one()->username;
+                    return User::getUserById($data->user_id)->fullname;
                 }
             ],
             [
                 'label' => 'Исполнитель',
                 'value' =>  function($data) {
-                    return \app\models\User::find()->where(['id' => $data->exe_user_id])->one()->username;
+                    return User::getUserById($data->exe_user_id)->fullname;
                 }
             ],
             [
                 'label' => 'Статус',
                 'value' =>  function($data) {
-                    return \app\models\Status::find()->where(['id' => $data->status_id])->one()->title;
+                    return Status::getStatusById($data->status_id)->title;
                 }
             ],
             [
@@ -106,7 +109,7 @@ $myRole = \app\models\User::getMyRole();
             [
                 'label' => 'Получатель',
                 'value' =>  function($data) {
-                    return \app\models\User::find()->where(['id' => $data->receive_user])->one()->username;
+                    return User::getUserById($data->receive_user)->fullname;
                 }
             ],
             [
@@ -140,13 +143,13 @@ $myRole = \app\models\User::getMyRole();
             [
                 'label' => 'Исполнитель',
                 'value' =>  function($data) {
-                    return \app\models\User::find()->where(['id' => $data->exe_user_id])->one()->username;
+                    return User::getUserById($data->exe_user_id)->fullname;
                 }
             ],
             [
                 'label' => 'Получатель',
                 'value' =>  function($data) {
-                    return \app\models\User::find()->where(['id' => $data->rec_user_id])->one()->username;
+                    return User::getUserById($data->rec_user_id)->fullname;
                 }
             ],
             [

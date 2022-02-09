@@ -1,5 +1,9 @@
 <?php
 
+use app\models\Project;
+use app\models\Status;
+use app\models\Task;
+use app\models\User;
 use yii\grid\GridView;
 use yii\helpers\Html;
 use yii\widgets\DetailView;
@@ -44,7 +48,7 @@ $myRole = \app\models\User::getMyRole();
             [
                 'label' => 'Проект',
                 'value' =>  function($data) {
-                    return \app\models\Project::find(['id' => $data->project_id])->one()->title;
+                    return Project::getProjectById($data->project_id)->title;
                 }
             ],
             [
@@ -62,19 +66,19 @@ $myRole = \app\models\User::getMyRole();
             [
                 'label' => 'Срок',
                 'value' =>  function($data) {
-                    return $data->deadline;
+                    return date('d-m-Y', strtotime($data->deadline));
                 }
             ],
             [
                 'label' => 'Создатель',
                 'value' =>  function($data) {
-                    return \app\models\User::find()->where(['id' => $data->user_id])->one()->username;
+                    return User::getUserById($data->user_id)->fullname;
                 }
             ],
             [
                 'label' => 'Статус',
                 'value' =>  function($data) {
-                    return \app\models\Status::find(['id' => $data->status_id])->one()->title;
+                    return Status::getStatusById($data->status_id)->title;
                 }
             ],
             [
@@ -126,19 +130,22 @@ $myRole = \app\models\User::getMyRole();
             [
                 'label' => 'Задача',
                 'value' =>  function($data) {
-                    return \app\models\Task::find()->where(['id' => $data->task_id])->one()->title;
+                    return Task::getTaskById($data->task_id)->title;
                 }
             ],
             [
                 'label' => 'Исполнитель',
                 'value' =>  function($data) {
-                    return \app\models\User::find()->where(['id' => $data->exe_user_id])->one()->username;
+                    return User::getUserById($data->exe_user_id)->fullname;
                 }
             ],
             [
                 'label' => 'Статус',
                 'value' =>  function($data) {
-                    return \app\models\Status::find()->where(['id' => $data->status_id])->one()->title;
+                    return Status::getStatusById($data->status_id)->title;
+                },
+                'contentOptions' => function($data) {
+                    return ['class' => Status::getStatusColor($data->status_id)];
                 }
             ],
             [

@@ -15,10 +15,10 @@ $this->title = Yii::t('rbac-admin', 'Login');
     <div class="row">
         <div class="col-lg-4 col-md-6 col-sm-8 ml-auto mr-auto" style="background: white;border-radius: 13px;">
             <div class="fond-logo">
-                <img src="<?= Yii::getAlias('@web') . '/img/logo.png'?>" alt="Logo">
+                <img src="<?= Yii::getAlias('@web') . '/img/logo_ru.png'?>" alt="Logo" style="width: 300px">
             </div>
             <?php $form = ActiveForm::begin(['id' => 'login-form']); ?>
-            <?= $form->field($model, 'username')->input('text', ['placeholder' => 'Username...', 'class' => 'form-control custom-form'])->label(false) ?>
+            <?= $form->field($model, 'username')->input('text', ['placeholder' => 'Username...', 'class' => 'form-control custom-form', 'autofocus' => true])->label(false) ?>
             <?= $form->field($model, 'password')->passwordInput()->input('password', ['placeholder' => 'Password...', 'class' => 'form-control custom-form'])->label(false) ?>
             <?= $form->field($model, 'rememberMe')->checkbox() ?>
 <!--            <div style="color:#999;margin:1em 0">-->

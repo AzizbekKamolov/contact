@@ -18,11 +18,11 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'budget_sum')->textInput() ?>
 
-    <?= $form->field($model, 'currency_id')->dropDownList($currencies) ?>
+    <?= $form->field($model, 'currency_id')->dropDownList($currencies, ['prompt'=>'Выберите валюту']) ?>
 
     <?= $form->field($model, 'project_year')->textInput(['type'=>'date']) ?>
 
-    <?= $form->field($model, 'user_id')->dropDownList($users) ?>
+    <?= $form->field($model, 'user_id')->dropDownList($users, ['prompt' => 'Выберите ответственный']) ?>
 
     <?/*= $form->field($model, 'status_id')->textInput() */?>
 

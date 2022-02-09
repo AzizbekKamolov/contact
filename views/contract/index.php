@@ -1,5 +1,8 @@
 <?php
 
+use app\models\Currency;
+use app\models\Status;
+use app\models\User;
 use yii\helpers\Html;
 use yii\grid\GridView;
 
@@ -40,14 +43,14 @@ else{
             'price' => [
                 'attribute' => 'price',
                 'value' =>  function($data) {
-                    return number_format($data->price, 2) . ' ' . \app\models\Currency::find()->where(['id' => $data->currency_id])->one()->short_name;
+                    return number_format($data->price, 2) . ' ' . Currency::getCurrencyById($data->currency_id)->short_name;
                 }
             ],
             'user_id' => [
                 'attribute' => 'user_id',
                 'filter' => $users,
                 'value' =>  function($data) {
-                    return \app\models\User::find()->where(['id' => $data->user_id])->one()->username;
+                    return User::getUserById($data->user_id)->fullname;
                 }
             ],
             //'file_url:url',
@@ -55,14 +58,16 @@ else{
                 'attribute' => 'status_id',
                 'filter'    => $statuses,
                 'value' =>  function($data) {
-                    return \app\models\Status::find(['id' => $data->status_id])->one()->title;
+                    return Status::getStatusById($data->status_id)->title;
+                },
+                'contentOptions' => function($data) {
+                    return ['class' => Status::getStatusColor($data->status_id)];
                 }
             ],
             'deadline' => [
                 'attribute' => 'deadline',
                 'value' =>  function($data) {
                     return date('d-m-Y', strtotime($data->deadline));
-//                    return $data->deadline;
                 }
             ],
             //'created_at',

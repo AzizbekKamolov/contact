@@ -4,6 +4,7 @@ namespace app\models;
 
 use Yii;
 use yii\behaviors\TimestampBehavior;
+use yii\helpers\ArrayHelper;
 
 /**
  * This is the model class for table "task".
@@ -65,5 +66,15 @@ class Task extends \yii\db\ActiveRecord
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',
         ];
+    }
+
+    public static function getTasks()
+    {
+        return ArrayHelper::map(Task::find()->all(), 'id', 'title');
+    }
+
+    public static function getTaskById($id)
+    {
+        return Task::find()->where(['id' => $id])->one();
     }
 }

@@ -1,5 +1,8 @@
 <?php
 
+use app\models\Contract;
+use app\models\Status;
+use app\models\User;
 use yii\helpers\Html;
 use yii\grid\GridView;
 
@@ -39,48 +42,44 @@ else {
                 'attribute' => 'contract_id',
                 'filter'    => $contracts,
                 'value' =>  function($data) {
-                    return \app\models\Contract::find()->where(['id' => $data->contract_id])->one()->title;
+                    return Contract::getContrctById($data->contract_id)->title;
                 }
             ],
             'user_id' => [
                 'attribute' => 'user_id',
                 'filter' => $users,
                 'value' =>  function($data) {
-                    return \app\models\User::find()->where(['id' => $data->user_id])->one()->username;
+                    return User::getUserById($data->user_id)->fullname;
                 }
             ],
             'exe_user_id' => [
                 'attribute' => 'exe_user_id',
                 'filter' => $users,
                 'value' =>  function($data) {
-                    return \app\models\User::find()->where(['id' => $data->exe_user_id])->one()->username;
+                    return User::getUserById($data->exe_user_id)->fullname;
                 }
             ],
             'receive_user' => [
                 'attribute' => 'receive_user',
                 'filter' => $users,
                 'value' =>  function($data) {
-                    return \app\models\User::find()->where(['id' => $data->receive_user])->one()->username;
+                    return User::getUserById($data->receive_user)->fullname;
                 }
             ],
             'status_id' => [
                 'attribute' => 'status_id',
                 'filter' => $statuses,
                 'value' =>  function($data) {
-                    return \app\models\Status::find()->where(['id' => $data->status_id])->one()->title;
+                    return Status::getStatusById($data->status_id)->title;
+                },
+                'contentOptions' => function($data) {
+                    return ['class' => Status::getStatusColor($data->status_id)];
                 }
             ],
             //'info:ntext',
             //'done_date',
             //'mark',
             //'receive_date',
-            'receive_user' => [
-                'attribute' => 'receive_user',
-                'filter' => $users,
-                'value' =>  function($data) {
-                    return \app\models\User::find()->where(['id' => $data->receive_user])->one()->username;
-                }
-            ],
             //'created_at',
             //'updated_at',
 //            [

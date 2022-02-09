@@ -1,9 +1,12 @@
 <?php
 
+use app\models\Currency;
+use app\models\Status;
 use yii\grid\GridView;
 use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\widgets\DetailView;
+use \app\models\User;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\Project */
@@ -64,7 +67,7 @@ $myRole = \app\models\User::getMyRole();
             [
                 'label' => 'Валюта',
                 'value' =>  function($data) {
-                    return \app\models\Currency::find()->where(['id' => $data->currency_id])->one()->name;
+                    return Currency::getCurrencyById($data->currency_id)->name;
                 }
             ],
             [
@@ -76,14 +79,17 @@ $myRole = \app\models\User::getMyRole();
             [
                 'label' => 'Ответственный',
                 'value' =>  function($data) {
-                    return \app\models\User::find()->where(['id' => $data->user_id])->one()->username;
+                    return User::getUserById($data->user_id)->fullname;
                 }
             ],
             [
                 'label' => 'Статус',
                 'value' =>  function($data) {
-                    return \app\models\Status::find(['id' => $data->status_id])->one()->title;
-                }
+                    return Status::getStatusById($data->status_id)->title;
+                },
+//                'contentOptions' => function($data) {
+//                    return ['class' => Status::getStatusColor($data->status_id)];
+//                },
             ],
             [
                 'label' => 'Срок',
@@ -107,7 +113,7 @@ $myRole = \app\models\User::getMyRole();
             <h1>Контракты по <span style="color: rgba(0, 0, 0, 0.4);"><?= $model->title?></span></h1>
         </div>
         <div class="col-3">
-            <?= (Yii::$app->user->id === $model->user_id) ? Html::a('Создать Kонтракт', ['contract/create', 'project_id' => $model->id], ['class' => 'btn btn-success float-right']) : "" ?>
+            <?= (Yii::$app->user->id === $model->user_id || $myRole == "admin" || $myRole == "superAdmin") ? Html::a('Создать Kонтракт', ['contract/create', 'project_id' => $model->id], ['class' => 'btn btn-success float-right']) : "" ?>
         </div>
     </div>
     <br>
@@ -134,7 +140,10 @@ $myRole = \app\models\User::getMyRole();
                 'attribute' => 'status_id',
                 'filter' => $statuses,
                 'value' =>  function($data) {
-                    return \app\models\Status::find(['id' => $data->status_id])->one()->title;
+                    return Status::getStatusById($data->status_id)->title;
+                },
+                'contentOptions' => function($data) {
+                    return ['class' => Status::getStatusColor($data->status_id)];
                 }
             ],
             //'deadline',
@@ -181,7 +190,7 @@ $myRole = \app\models\User::getMyRole();
             <h1>Задачи по <span style="color: rgba(0, 0, 0, 0.4);"><?= $model->title?></span></h1>
         </div>
         <div class="col-3">
-            <?= (Yii::$app->user->id === $model->user_id) ? Html::a('Создать Задача', ['task/create', 'project_id' => $model->id], ['class' => 'btn btn-success float-right']) : "" ?>
+            <?= (Yii::$app->user->id === $model->user_id || $myRole == "admin" || $myRole == "superAdmin") ? Html::a('Создать Задача', ['task/create', 'project_id' => $model->id], ['class' => 'btn btn-success float-right']) : "" ?>
         </div>
     </div>
     <br>
@@ -212,7 +221,10 @@ $myRole = \app\models\User::getMyRole();
                 'attribute' => 'status_id',
                 'filter' => $statuses,
                 'value' =>  function($data) {
-                    return \app\models\Status::find(['id' => $data->status_id])->one()->title;
+                    return Status::getStatusById($data->status_id)->title;;
+                },
+                'contentOptions' => function($data) {
+                    return ['class' => Status::getStatusColor($data->status_id)];
                 }
             ],
             //'created_at',

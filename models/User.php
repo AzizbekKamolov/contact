@@ -3,6 +3,7 @@
 namespace app\models;
 use mdm\admin\models\Assignment;
 use mdm\admin\models\User as UserModel;
+use yii\helpers\ArrayHelper;
 
 class User extends UserModel
 {
@@ -18,5 +19,15 @@ class User extends UserModel
         else {
             return 'guest';
         }
+    }
+
+    public static function getUsers()
+    {
+        return ArrayHelper::map(User::find()->all(), 'id', 'fullname');
+    }
+
+    public static function getUserById($id)
+    {
+        return User::find()->where(['id' => $id])->one();
     }
 }

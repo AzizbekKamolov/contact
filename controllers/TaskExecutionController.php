@@ -51,10 +51,6 @@ class TaskExecutionController extends Controller
         $searchModel = new TaskExecutionSearch();
         $dataProvider = $searchModel->search($this->request->queryParams);
 
-        $tasks = ArrayHelper::map(Task::find()->all(), 'id', 'title');
-        $users = ArrayHelper::map(User::find()->all(), 'id', 'username');
-        $statuses = ArrayHelper::map(Status::find()->all(), 'id', 'title');
-
         if ($myRole === 'headOfDep'){
             $dataProvider->query->andWhere(['user_id' =>  \Yii::$app->user->id])->orWhere(['receive_user' => \Yii::$app->user->id])->orWhere(['exe_user_id' => \Yii::$app->user->id]);
             $dataProvider->setSort([
@@ -70,9 +66,9 @@ class TaskExecutionController extends Controller
         return $this->render('index', [
             'searchModel'   => $searchModel,
             'dataProvider'  => $dataProvider,
-            'tasks'         => $tasks,
-            'users'         => $users,
-            'statuses'      => $statuses
+            'tasks'         => Task::getTasks(),
+            'users'         => User::getUsers(),
+            'statuses'      => Status::getStatuses()
         ]);
     }
 
@@ -84,7 +80,6 @@ class TaskExecutionController extends Controller
      */
     public function actionView($id)
     {
-//        $taskExchange = TaskExchange::find()->where(['task_exe_id' => 10])->all();
         $searchModel = new TaskExchangeSearch();
         $dataProvider = $searchModel->search(($this->request->queryParams));
         $dataProvider->query->andWhere(['task_exe_id' =>  $id]);
@@ -107,8 +102,7 @@ class TaskExecutionController extends Controller
      */
     public function actionCreate($task_id = 1)
     {
-        $tasks = ArrayHelper::map(Task::find()->all(), 'id', 'title');
-        $users = ArrayHelper::map(User::find()->all(), 'id', 'username');
+        $tasks = ArrayHelper::map(Task::find()->where(['user_id' => \Yii::$app->user->id])->all(), 'id', 'title');
         $model = new TaskExecution();
 
         if ($this->request->isPost) {
@@ -123,7 +117,7 @@ class TaskExecutionController extends Controller
         return $this->render('create', [
             'model' => $model,
             'tasks' => $tasks,
-            'users' =>  $users,
+            'users' =>  User::getUsers(),
             'task_id' => $task_id
         ]);
     }
@@ -137,8 +131,6 @@ class TaskExecutionController extends Controller
      */
     public function actionUpdate($id)
     {
-        $tasks = ArrayHelper::map(Task::find()->all(), 'id', 'title');
-        $users = ArrayHelper::map(User::find()->all(), 'id', 'username');
         $model = $this->findModel($id);
 
         if ($this->request->isPost && $model->load($this->request->post()) && $model->save()) {
@@ -147,8 +139,8 @@ class TaskExecutionController extends Controller
 
         return $this->render('update', [
             'model' => $model,
-            'tasks' => $tasks,
-            'users' =>  $users
+            'tasks' => Task::getTasks(),
+            'users' =>  User::getUsers()
         ]);
     }
 

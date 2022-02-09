@@ -63,20 +63,12 @@ class ContractExecutionController extends Controller
         }
 
 
-        $users = ArrayHelper::map(User::find()->all(), 'id', 'username');
-        $statuses = ArrayHelper::map(Status::find()->all(), 'id', 'title');
-        $contracts = ArrayHelper::map(Contract::find()->all(), 'id', 'title');
-
-//        $users = array('' => 'Ползователь') + $users;
-//        $statuses = array('' => 'Статус') + $statuses;
-//        $contracts = array('' => 'Контракт') + $contracts;
-
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
-            'users'         => $users,
-            'statuses'      =>  $statuses,
-            'contracts'     => $contracts
+            'users'         => User::getUsers(),
+            'statuses'      =>  Status::getStatuses(),
+            'contracts'     => Contract::getContracts()
         ]);
     }
 
@@ -109,7 +101,6 @@ class ContractExecutionController extends Controller
     public function actionCreate($contract_id = 1)
     {
         $contracts = ArrayHelper::map(Contract::find()->where(['user_id' => \Yii::$app->user->id])->all(), 'id', 'title');
-        $users = ArrayHelper::map(User::find()->all(), 'id', 'username');
         $model = new ContractExecution();
 
         if ($this->request->isPost) {
@@ -124,7 +115,7 @@ class ContractExecutionController extends Controller
         return $this->render('create', [
             'model'     =>  $model,
             'contracts' =>  $contracts,
-            'users'     =>  $users,
+            'users'     =>  User::getUsers(),
             'contract_id' => $contract_id
         ]);
     }
@@ -138,8 +129,6 @@ class ContractExecutionController extends Controller
      */
     public function actionUpdate($id)
     {
-        $contracts = ArrayHelper::map(Contract::find()->all(), 'id', 'title');
-        $users = ArrayHelper::map(User::find()->all(), 'id', 'username');
         $model = $this->findModel($id);
 
         if ($this->request->isPost && $model->load($this->request->post()) && $model->save()) {
@@ -148,8 +137,8 @@ class ContractExecutionController extends Controller
 
         return $this->render('update', [
             'model' => $model,
-            'contracts' =>  $contracts,
-            'users'     =>  $users
+            'contracts' =>  Contract::getContracts(),
+            'users'     =>   User::getUsers()
         ]);
     }
 
@@ -185,7 +174,6 @@ class ContractExecutionController extends Controller
 
     public function actionContractExe($id)
     {
-        $users = ArrayHelper::map(User::find()->all(), 'id', 'username');
         $model = new ContractExchange();
         $fileUpload = new FileUpload();
 
@@ -224,7 +212,7 @@ class ContractExecutionController extends Controller
         return $this->render('contract-executor', [
             'model' => $model,
             'fileUpload' => $fileUpload,
-            'users' => $users
+            'users' => User::getUsers()
         ]);
     }
 

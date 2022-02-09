@@ -4,6 +4,7 @@ namespace app\models;
 
 use Yii;
 use yii\behaviors\TimestampBehavior;
+use yii\helpers\ArrayHelper;
 
 /**
  * This is the model class for table "currency".
@@ -51,5 +52,15 @@ class Currency extends \yii\db\ActiveRecord
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',
         ];
+    }
+
+    public static function getCurrencies()
+    {
+        return ArrayHelper::map(Currency::find()->all(), 'id', 'name');
+    }
+
+    public static function getCurrencyById($id)
+    {
+        return Currency::find()->where(['id' => $id])->one();
     }
 }

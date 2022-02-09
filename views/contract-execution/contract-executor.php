@@ -19,6 +19,7 @@ use yii\widgets\ActiveForm;
             <?= $form->field($fileUpload, 'file')->fileInput() ?>
         </div>
         <div class="col-6">
+            <label for="new_receive_user">If you want to sent contract to another user </label>
             <?=Html::dropDownList('new_receive_user','',$users, ['prompt' => "Select a User", 'class' => 'form-control'])?>
         </div>
     </div>

@@ -1,5 +1,10 @@
 <?php
 
+use app\models\Contract;
+use app\models\Currency;
+use app\models\Project;
+use app\models\Status;
+use app\models\User;
 use yii\grid\GridView;
 use yii\helpers\Html;
 use yii\widgets\DetailView;
@@ -46,7 +51,7 @@ $myRole = \app\models\User::getMyRole();
             [
                 'label' => 'Проект',
                 'value' =>  function($data) {
-                    return \app\models\Project::find()->where(['id' => $data->project_id])->one()->title;
+                    return Project::getProjectById($data->project_id)->title;
                 }
             ],
             [
@@ -70,13 +75,13 @@ $myRole = \app\models\User::getMyRole();
             [
                 'label' => 'Валюта',
                 'value' =>  function($data) {
-                    return \app\models\Currency::find()->where(['id' => $data->currency_id])->one()->name;
+                    return Currency::getCurrencyById($data->currency_id)->name;
                 }
             ],
             [
                 'label' => 'Создатель',
                 'value' =>  function($data) {
-                    return \app\models\User::find()->where(['id' => $data->user_id])->one()->username;
+                    return User::getUserById($data->user_id)->fullname;
                 }
             ],
             [
@@ -90,7 +95,7 @@ $myRole = \app\models\User::getMyRole();
             [
                 'label' => 'Статус',
                 'value' =>  function($data) {
-                    return \app\models\Status::find(['id' => $data->status_id])->one()->title;
+                    return Status::getStatusById($data->status_id)->title;
                 }
             ],
             [
@@ -116,7 +121,7 @@ $myRole = \app\models\User::getMyRole();
             <h1>Исполнение по <span style="color: rgba(0, 0, 0, 0.4);"><?= $model->title?></span></h1>
         </div>
         <div class="col-3">
-            <?= (Yii::$app->user->id === $model->user_id) ? Html::a('Создать Исп по Kонтракт', ['contract-execution/create', 'contract_id' => $model->id], ['class' => 'btn btn-success float-right']) : "" ?>
+            <?= (Yii::$app->user->id === $model->user_id || $myRole == "admin" || $myRole == "superAdmin") ? Html::a('Создать Исп по Kонтракт', ['contract-execution/create', 'contract_id' => $model->id], ['class' => 'btn btn-success float-right']) : "" ?>
         </div>
     </div>
     <br>
@@ -132,28 +137,31 @@ $myRole = \app\models\User::getMyRole();
             'contract_id' => [
                 'attribute' => 'contract_id',
                 'value' =>  function($data) {
-                    return \app\models\Contract::find()->where(['id' => $data->contract_id])->one()->title;
+                    return Contract::getContrctById($data->contract_id)->title;
                 }
             ],
             'user_id' => [
                 'attribute' => 'user_id',
                 'filter' => $users,
                 'value' =>  function($data) {
-                    return \app\models\User::find()->where(['id' => $data->user_id])->one()->username;
+                    return User::getUserById($data->user_id)->fullname;
                 }
             ],
             'exe_user_id' => [
                 'attribute' => 'exe_user_id',
                 'filter' => $users,
                 'value' =>  function($data) {
-                    return \app\models\User::find()->where(['id' => $data->exe_user_id])->one()->username;
+                    return User::getUserById($data->exe_user_id)->fullname;
                 }
             ],
             'status_id' => [
                 'attribute' => 'status_id',
                 'filter' => $statuses,
                 'value' =>  function($data) {
-                    return \app\models\Status::find()->where(['id' => $data->status_id])->one()->title;
+                    return Status::getStatusById($data->status_id)->title;
+                },
+                'contentOptions' => function($data) {
+                    return ['class' => Status::getStatusColor($data->status_id)];
                 }
             ],
             //'info:ntext',
@@ -164,7 +172,7 @@ $myRole = \app\models\User::getMyRole();
                 'attribute' => 'receive_user',
                 'filter' => $users,
                 'value' =>  function($data) {
-                    return \app\models\User::find()->where(['id' => $data->receive_user])->one()->username;
+                    return User::getUserById($data->receive_user)->fullname;
                 }
             ],
             //'created_at',

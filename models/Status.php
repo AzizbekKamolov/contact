@@ -50,4 +50,26 @@ class Status extends \yii\db\ActiveRecord
         $result = ArrayHelper::map($models, 'id', 'id');
         return $result;
     }
+
+    public static function getStatuses()
+    {
+        return ArrayHelper::map(Status::find()->all(), 'id', 'title');
+    }
+
+    public static function getStatusById($id)
+    {
+        return Status::find()->where(['id' => $id])->one();
+    }
+
+    public static function getStatusColor($id)
+    {
+        switch ($id) {
+            case 1: return 'text-primary' ; break;
+            case 2: return 'text-warning' ; break;
+            case 3: return 'text-danger' ; break;
+            case 4: return 'text-success' ; break;
+            case 5: return 'text-info' ; break;
+            case 6: return 'text-success' ; break;
+        }
+    }
 }

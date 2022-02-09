@@ -4,6 +4,7 @@
 namespace app\controllers;
 
 use app\models\Contract;
+use app\models\ContractExecution;
 use app\models\ContractExecutionSearch;
 use app\models\ContractSearch;
 use app\models\Currency;
@@ -43,21 +44,49 @@ class ContractController extends Controller
      */
     public function actionIndex()
     {
+        $this->checkStatus();
         $searchModel = new ContractSearch();
         $dataProvider = $searchModel->search($this->request->queryParams);
-
-        $users = ArrayHelper::map(User::find()->all(), 'id', 'username');
-        $statuses = ArrayHelper::map(Status::find()->all(), 'id', 'title');
-
-//        $users = array('' => 'Ползователь') + $users;
-//        $statuses = array('' => 'Статус') + $statuses;
 
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
-            'users'         => $users,
-            'statuses'      =>  $statuses
+            'users'         => User::getUsers(),
+            'statuses'      =>  Status::getStatuses()
         ]);
+    }
+
+    public function checkStatus()
+    {
+        $contracts = Contract::find()->all();
+        $contractExecutions = ContractExecution::find()->all();
+
+        $check = 0;
+        $hasContract = 0;
+        foreach ($contracts as $contract) {
+            foreach ($contractExecutions as $contractExe) {
+                if ($contract->id == $contractExe->contract_id){
+                    if ($contractExe->status_id !== 4){
+                        $check++;
+                    }
+                    $hasContract++;
+                }
+            }
+
+            if($hasContract != 0) {
+                if ($check != 0) {
+                    $model = $this->findModel($contract->id);
+                    $model->status_id = 5;
+                    $model->save();
+                } else {
+                    $model = $this->findModel($contract->id);
+                    $model->status_id = 6;
+                    $model->save();
+                }
+            }
+            $check = 0;
+            $hasContract = 0;
+        }
     }
 
     /**
@@ -68,19 +97,17 @@ class ContractController extends Controller
      */
     public function actionView($id)
     {
+        $this->checkStatus();
         $searchModel = new ContractExecutionSearch();
         $dataProvider = $searchModel->search($this->request->queryParams);
         $dataProvider->query->andWhere(['contract_id' =>  $id]);
-
-        $users = ArrayHelper::map(User::find()->all(), 'id', 'username');
-        $statuses = ArrayHelper::map(Status::find()->all(), 'id', 'title');
 
         return $this->render('view', [
             'model' => $this->findModel($id),
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
-            'users'         => $users,
-            'statuses'      =>  $statuses
+            'users'         => User::getUsers(),
+            'statuses'      =>  Status::getStatuses()
         ]);
     }
 
@@ -94,7 +121,6 @@ class ContractController extends Controller
         $model = new Contract();
 
         $projects = ArrayHelper::map(Project::find()->where(['user_id' => \Yii::$app->user->id])->all(), 'id', 'title');
-        $currencies = ArrayHelper::map(Currency::find()->all(), 'id', 'name');
         $user_id = \Yii::$app->user->id;
 
         if ($this->request->isPost) {
@@ -110,7 +136,7 @@ class ContractController extends Controller
             'model' => $model,
             'projects' => $projects,
             'project_id'    => $project_id,
-            'currencies'    => $currencies
+            'currencies'    => Currency::getCurrencies()
         ]);
     }
 
@@ -124,8 +150,6 @@ class ContractController extends Controller
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
-        $projects = ArrayHelper::map(Project::find()->all(), 'id', 'title');
-        $currencies = ArrayHelper::map(Currency::find()->all(), 'id', 'name');
 
         if ($this->request->isPost && $model->load($this->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
@@ -133,8 +157,8 @@ class ContractController extends Controller
 
         return $this->render('update', [
             'model' => $model,
-            'projects' => $projects,
-            'currencies'    => $currencies
+            'projects' => Project::getProjects(),
+            'currencies'    => Currency::getCurrencies()
         ]);
     }
 

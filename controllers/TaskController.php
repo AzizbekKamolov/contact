@@ -5,6 +5,7 @@ namespace app\controllers;
 use app\models\Project;
 use app\models\Status;
 use app\models\Task;
+use app\models\TaskExecution;
 use app\models\TaskExecutionSearch;
 use app\models\TaskSearch;
 use app\models\User;
@@ -43,24 +44,50 @@ class TaskController extends Controller
      */
     public function actionIndex()
     {
+        $this->checkStatus();
         $searchModel = new TaskSearch();
         $dataProvider = $searchModel->search($this->request->queryParams);
-
-        $projects = ArrayHelper::map(Project::find()->all(), 'id', 'title');
-        $users = ArrayHelper::map(User::find()->all(), 'id', 'username');
-        $statuses = ArrayHelper::map(Status::find()->all(), 'id', 'title');
-
-//        $projects = array('' => 'Проект') + $projects;
-//        $users = array('' => 'Ползователь') + $users;
-//        $statuses = array('' => 'Статус') + $statuses;
 
         return $this->render('index', [
             'searchModel'   => $searchModel,
             'dataProvider'  => $dataProvider,
-            'projects'      => $projects,
-            'users'         => $users,
-            'statuses'      => $statuses
+            'projects'      => Project::getProjects(),
+            'users'         => User::getUsers(),
+            'statuses'      => Status::getStatuses()
         ]);
+    }
+
+    public function checkStatus()
+    {
+        $tasks = Task::find()->all();
+        $taskExecutions = TaskExecution::find()->all();
+
+        $check = 0;
+        $hasTask = 0;
+        foreach ($tasks as $task) {
+            foreach ($taskExecutions as $taskExe) {
+                if ($task->id == $taskExe->task_id){
+                    if ($taskExe->status_id !== 4){
+                        $check++;
+                    }
+                    $hasTask++;
+                }
+            }
+
+            if($hasTask != 0) {
+                if ($check != 0) {
+                    $model = $this->findModel($task->id);
+                    $model->status_id = 5;
+                    $model->save();
+                } else {
+                    $model = $this->findModel($task->id);
+                    $model->status_id = 6;
+                    $model->save();
+                }
+            }
+            $check = 0;
+            $hasTask = 0;
+        }
     }
 
     /**
@@ -71,6 +98,7 @@ class TaskController extends Controller
      */
     public function actionView($id)
     {
+        $this->checkStatus();
         $searchModel = new TaskExecutionSearch();
         $dataProvider = $searchModel->search($this->request->queryParams);
         $dataProvider->query->andWhere(['task_id' =>  $id]);
@@ -89,7 +117,6 @@ class TaskController extends Controller
      */
     public function actionCreate($project_id = 1)
     {
-        $projects = ArrayHelper::map(Project::find()->where(["user_id" => \Yii::$app->user->id])->all(), 'id', 'title');
         $model = new Task();
 
         if ($this->request->isPost) {
@@ -117,7 +144,6 @@ class TaskController extends Controller
      */
     public function actionUpdate($id)
     {
-        $projects = ArrayHelper::map(Project::find()->all(), 'id', 'title');
         $model = $this->findModel($id);
 
 
@@ -128,7 +154,7 @@ class TaskController extends Controller
 
         return $this->render('update', [
             'model' => $model,
-            'projects' => $projects
+            'projects' => Project::getProjects()
         ]);
     }
 
