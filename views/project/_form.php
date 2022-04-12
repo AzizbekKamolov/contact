@@ -36,7 +36,7 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'user_id')->dropDownList($users, ['prompt' => 'Выберите ответственный']) ?>
 
-    <?/*= $form->field($model, 'status_id')->textInput() */?>
+    <?php // $form->field($model, 'status_id')->textInput() ?>
 
     <?= $form->field($model, 'deadline')->textInput(['type' => 'date']) ?>
 
