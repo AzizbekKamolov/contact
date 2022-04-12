@@ -118,6 +118,7 @@ class TaskController extends Controller
     public function actionCreate($project_id = 1)
     {
         $model = new Task();
+        $projects = ArrayHelper::map(Project::find()->where(['user_id' => \Yii::$app->user->id])->all(), 'id', 'title');
 
         if ($this->request->isPost) {
             $model->user_id = \Yii::$app->user->id;

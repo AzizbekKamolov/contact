@@ -22,8 +22,8 @@ $myRole = \app\models\User::getMyRole();
     <h1><?= Html::encode($this->title) ?></h1>
 
     <p>
-        <?= ($myRole === "admin") ? Html::a('Update', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) : "" ?>
-        <?= ($myRole === "admin") ? Html::a('Delete', ['delete', 'id' => $model->id], [
+        <?= ($myRole === "admin") ? Html::a('Обновить', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) : "" ?>
+        <?= ($myRole === "admin") ? Html::a('Удалить', ['delete', 'id' => $model->id], [
             'class' => 'btn btn-danger',
             'data' => [
                 'confirm' => 'Are you sure you want to delete this item?',
@@ -61,7 +61,7 @@ $myRole = \app\models\User::getMyRole();
             [
                 'label' => 'Бюджет',
                 'value' =>  function($data) {
-                    return $data->budget_sum;
+                    return number_format($data->budget_sum, 2) . ' ' . Currency::getCurrencyById($data->currency_id)->short_name;
                 }
             ],
             [

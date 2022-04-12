@@ -16,6 +16,13 @@ $config = [
         'authManager' => [
             'class' => 'yii\rbac\DbManager', // or use 'yii\rbac\DbManager'
         ],
+        'assetManager' => [
+            'bundles' => [
+                'kartik\form\ActiveFormAsset' => [
+                    'bsDependencyEnabled' => false // do not load bootstrap assets for a specific asset bundle
+                ],
+            ],
+        ],
         'request' => [
             // !!! insert a secret key in the following (if it is empty) - this is required by cookie validation
             'cookieValidationKey' => 'SgdEiVvagdl4UkHXZokmzJJJFXT9z6lc',
@@ -65,6 +72,9 @@ $config = [
                 ],
             ],
         ],
+        'view' => [
+            'class' => 'app\components\View',
+        ],
     ],
     'modules' => [
         'admin' => [
@@ -91,11 +101,12 @@ $config = [
         'class' => 'mdm\admin\components\AccessControl',
         'allowActions' => [
             'site/*',
-//            'gii/*'
+            'gii/*',
 //            'admin/*',
 //            'rbac/*',
 //            'project/*',
-//            '/*'
+            '/*',
+            'debug/*',
         ]
     ],
 //    'layout' => '',
@@ -108,14 +119,16 @@ if (YII_ENV_DEV) {
     $config['modules']['debug'] = [
         'class' => 'yii\debug\Module',
         // uncomment the following to add your IP if you are not connecting from localhost.
-        //'allowedIPs' => ['127.0.0.1', '::1'],
+//        'allowedIPs' => ['127.0.0.1', '::1'],
+        'allowedIPs' => ['*'],
     ];
 
     $config['bootstrap'][] = 'gii';
     $config['modules']['gii'] = [
         'class' => 'yii\gii\Module',
         // uncomment the following to add your IP if you are not connecting from localhost.
-        'allowedIPs' => ['127.0.0.1', '::1', '10.10.10.1'],
+//        'allowedIPs' => ['127.0.0.1', '::1', '10.10.10.1'],
+        'allowedIPs' => ['*'],
     ];
 }
 

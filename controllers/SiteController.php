@@ -141,4 +141,8 @@ class SiteController extends Controller
         return $this->render('about');
     }
 
+    public function actionTest()
+    {
+        return isAvailable(Yii::$app->user->id);
+    }
 }

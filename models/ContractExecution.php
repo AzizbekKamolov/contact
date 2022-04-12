@@ -9,6 +9,7 @@ use yii\behaviors\TimestampBehavior;
  * This is the model class for table "contract_execution".
  *
  * @property int $id
+ *  @property string|null $title
  * @property int|null $contract_id
  * @property int|null $user_id
  * @property int|null $exe_user_id

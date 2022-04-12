@@ -11,8 +11,10 @@ $this->title = 'ACDF Project Monitoring';
             <div class="col-12">
                 <div class="d-flex justify-content-center mt-5">
                     <img class="align-self-center mt-5 img-fluid" src="<?= Yii::getAlias('@web') . '/img/logo_ru.png'?>" alt="Logo">
+                    <?php // $this->testA()?>
                 </div>
             </div>
         </div>
     </div>
 </div>
+

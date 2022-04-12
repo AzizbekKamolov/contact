@@ -1,5 +1,6 @@
 <?php
 
+use kartik\money\MaskMoney;
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
@@ -16,7 +17,18 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'description')->textarea(['rows' => 6]) ?>
 
-    <?= $form->field($model, 'budget_sum')->textInput() ?>
+    <?=
+        $form->field($model, 'budget_sum')->widget(MaskMoney::classname(), [
+            'name' => 'amount_german',
+            'value' => 0,
+            'pluginOptions' => [
+                'prefix' => '¢ ',
+                'thousands' => ' ',
+                'decimal' => ',',
+                'precision' => 0
+            ],
+        ]);
+    ?>
 
     <?= $form->field($model, 'currency_id')->dropDownList($currencies, ['prompt'=>'Выберите валюту']) ?>
 
@@ -28,12 +40,12 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'deadline')->textInput(['type' => 'date']) ?>
 
-<!--    <?/*= $form->field($model, 'created_at')->textInput() */?>
+   <?php // $form->field($model, 'created_at')->textInput() ?>
 
-    --><?/*= $form->field($model, 'updated_at')->textInput() */?>
+    <?php // $form->field($model, 'updated_at')->textInput() ?>
 
     <div class="form-group">
-        <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>
+        <?= Html::submitButton('Сохранить', ['class' => 'btn btn-success']) ?>
     </div>
 
     <?php ActiveForm::end(); ?>

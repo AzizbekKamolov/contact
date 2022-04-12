@@ -50,17 +50,17 @@ class ContractExecutionController extends Controller
         $searchModel = new ContractExecutionSearch();
         $dataProvider = $searchModel->search($this->request->queryParams);
 
-        if (User::getMyRole() === 'headOfDep'){
-            $dataProvider->query->andWhere(['user_id' =>  \Yii::$app->user->id])->orWhere(['receive_user' => \Yii::$app->user->id])->orWhere(['exe_user_id' => \Yii::$app->user->id]);
-            $dataProvider->setSort([
-                'defaultOrder' => ['id'=>SORT_DESC],
-            ]);
-        } elseif (User::getMyRole() === "simpleUser") {
-            $dataProvider->query->andWhere(['exe_user_id' =>  \Yii::$app->user->id])->orWhere(['receive_user' => \Yii::$app->user->id]);
-            $dataProvider->setSort([
-                'defaultOrder' => ['id'=>SORT_DESC],
-            ]);
-        }
+//        if (User::getMyRole() === 'headOfDep'){
+//            $dataProvider->query->andWhere(['user_id' => \Yii::$app->user->id])->orWhere(['receive_user' => \Yii::$app->user->id])->orWhere(['exe_user_id' => \Yii::$app->user->id]);
+//            $dataProvider->setSort([
+//                'defaultOrder' => ['id'=>SORT_DESC],
+//            ]);
+//        } elseif (User::getMyRole() === "simpleUser") {
+//            $dataProvider->query->andWhere(['exe_user_id' =>  \Yii::$app->user->id])->orWhere(['receive_user' => \Yii::$app->user->id]);
+//            $dataProvider->setSort([
+//                'defaultOrder' => ['id'=>SORT_DESC],
+//            ]);
+//        }
 
 
         return $this->render('index', [
@@ -80,6 +80,9 @@ class ContractExecutionController extends Controller
      */
     public function actionView($id)
     {
+        $a = ContractExchange::find()->all();
+        $lastItem = end($a);
+//        var_dump($lastItem);die();
         $searchModel = new ContractExchangeSearch();
         $dataProvider = $searchModel->search(($this->request->queryParams));
         $dataProvider->query->andWhere(['con_exe_id' =>  $id]);
@@ -87,6 +90,7 @@ class ContractExecutionController extends Controller
 //            'defaultOrder' => ['id'=>SORT_DESC],
 //        ]);
         return $this->render('view', [
+            'lastItem' => $lastItem,
             'model' => $this->findModel($id),
             'searchModel'  => $searchModel,
             'dataProvider'  => $dataProvider
@@ -176,41 +180,73 @@ class ContractExecutionController extends Controller
     {
         $model = new ContractExchange();
         $fileUpload = new FileUpload();
+        $contractExecution = $this->findModel($id);
 
         if ($this->request->isPost)
         {
-            if($this->request->post("new_receive_user")){
-                $exe_model = new ContractExecution();
-                $exe_model->contract_id = ContractExecution::findOne($id)->contract_id;
-                $exe_model->user_id = \Yii::$app->user->id;
-                $exe_model->exe_user_id = $this->request->post("new_receive_user");
-                $exe_model->receive_user = \Yii::$app->user->id;
-                $exe_model->status_id = 1;
-                $exe_model->title = $this->request->post("ContractExchange")['info'];
-                if($exe_model->save()){
-                    return $this->redirect(['view', 'id' => $exe_model->id]);
-                }
-            }
             $contractExecution = $this->findModel($id);
             $file = UploadedFile::getInstance($fileUpload, 'file');
             $info = $this->request->post("ContractExchange")['info'];
+//            if($this->request->post("new_receive_user")){
+//                $exe_model = new ContractExecution();
+//                $exe_model->contract_id = ContractExecution::findOne($id)->contract_id;
+//                $exe_model->user_id = \Yii::$app->user->id;
+//                $exe_model->exe_user_id = $this->request->post("new_receive_user");
+//                $exe_model->receive_user = \Yii::$app->user->id;
+//                $exe_model->status_id = 1;
+//                $exe_model->title = $this->request->post("ContractExchange")['info'];
+//                if($exe_model->save()){
+//                    return $this->redirect(['view', 'id' => $exe_model->id]);
+//                }
+//            }
+
+            if($this->request->post("new_receive_user")){
+                $contractExecution = $this->findModel($id);
+                $file = UploadedFile::getInstance($fileUpload, 'file');
+                $info = $this->request->post("ContractExchange")['info'];
+
+                $model->con_exe_id = $id;
+                $model->exe_user_id = $this->request->post("new_receive_user");
+                $model->rec_user_id = \Yii::$app->user->id;
+                $contractExecution->status_id = Status::findOne(['title' => 'В процессе'])->id;
+                $model->info =$info;
+                $model->saveFile($fileUpload->uploadFile($file, $model->file));
+
+                if ($model->save() && $contractExecution->save()) {
+                    return $this->redirect(['view', 'id' => $contractExecution->id]);
+                }
+            }
+
+            if ($contractExecution->exe_user_id !== \Yii::$app->user->id)
+            {
+                $model->con_exe_id = $id;
+                $model->exe_user_id = \Yii::$app->user->id;
+                $model->rec_user_id = $contractExecution->exe_user_id;
+                $model->info =$info;
+                $model->saveFile($fileUpload->uploadFile($file, $model->file));
+
+                if ($model->save()) {
+                    return $this->redirect(['view', 'id' => $contractExecution->id]);
+                }
+            }
 
             $model->con_exe_id = $id;
             $model->exe_user_id = \Yii::$app->user->id;
             $model->rec_user_id = $contractExecution->receive_user;
             $contractExecution->status_id = Status::findOne(['title' => 'Отправленная'])->id;
             $model->info =$info;
-//            var_dump($fileUpload->uploadFile($file, $model->file));die();
             $model->saveFile($fileUpload->uploadFile($file, $model->file));
 
             if ($model->save() && $contractExecution->save()) {
                 return $this->redirect(['view', 'id' => $contractExecution->id]);
             }
 
+
         }
 
         return $this->render('contract-executor', [
             'model' => $model,
+            'contractExecution' => $contractExecution,
             'fileUpload' => $fileUpload,
             'users' => User::getUsers()
         ]);

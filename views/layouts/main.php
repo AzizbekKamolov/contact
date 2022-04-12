@@ -46,11 +46,12 @@ AppAsset::register($this);
 //            ['label' => 'Главная сайт', 'url' => ['/site/index']],
             ['label' => 'Проекты', 'url' => ['/project/index']],
             ['label' => 'Контракты', 'url' => ['/contract/index']],
-            ($myRole !== 'simpleUser') ? (
-                ['label' => 'Контракт на исп', 'url' => ['/contract-execution/index']]
-            ): (
-                ['label' => 'Мои Контракты', 'url' => ['/contract-execution/index']]
-            ),
+//            ($myRole !== 'simpleUser') ? (
+                ['label' => 'Контракт на исп', 'url' => ['/contract-execution/index']],
+//            ): (
+//                ['label' => 'Мои Контракты', 'url' => ['/contract-execution/index']]
+//            ),
+//            ['label' => 'Част Контракты', 'url' => ['/contract-exchange/index']],
             ['label' => 'Задачи', 'url' => ['/task/index']],
             ($myRole !== 'simpleUser') ? (
                     ['label' => 'Задачи на исп', 'url' => ['/task-execution/index']]

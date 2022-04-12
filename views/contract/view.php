@@ -9,7 +9,7 @@ use yii\grid\GridView;
 use yii\helpers\Html;
 use yii\widgets\DetailView;
 
-/* @var $this yii\web\View */
+/* @var $this app\components\View */
 /* @var $model app\models\Contract */
 
 $this->title = $model->title;
@@ -23,9 +23,9 @@ $myRole = \app\models\User::getMyRole();
     <h1><?= Html::encode($this->title) ?></h1>
 
     <p>
-        <?= ($myRole === "admin" || $myRole === "superAdmin") ? Html::a('Обновить', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) : "" ?>
-        <?= (Yii::$app->user->id === $model->user_id || $myRole === "admin" || $myRole === "superAdmin") ? Html::a('Загрузить файл', ['set-file', 'id' => $model->id], ['class' => 'btn btn-success']) : "" ?>
-        <?= ($myRole === "admin" || $myRole === "superAdmin") ? Html::a('Удалить', ['delete', 'id' => $model->id], [
+        <?= ($this->checkRoute('update')) ? Html::a('Обновить', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) : "" ?>
+        <?= ($this->checkRoute('set-file')) ? Html::a('Загрузить файл', ['set-file', 'id' => $model->id], ['class' => 'btn btn-success']) : "" ?>
+        <?= ($this->checkRoute('delete')) ? Html::a('Удалить', ['delete', 'id' => $model->id], [
             'class' => 'btn btn-danger',
             'data' => [
                 'confirm' => 'Are you sure you want to delete this item?',
@@ -69,7 +69,7 @@ $myRole = \app\models\User::getMyRole();
             [
                 'label' => 'Цена',
                 'value' =>  function($data) {
-                    return $data->price;
+                    return number_format($data->price, 2) . ' ' . Currency::getCurrencyById($data->currency_id)->short_name;
                 }
             ],
             [
