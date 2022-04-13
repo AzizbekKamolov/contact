@@ -26,7 +26,7 @@ $this->registerAssetBundle('app\assets\ViewerJsAssets');
             [
                 'label' => 'Исполнитель',
                 'value' =>  function($data) {
-                    return \app\models\User::find()->where(['id' => $data->exe_user_id])->one()->username;
+                    return \app\models\User::find()->where(['id' => $data->exe_user_id])->one()->fullname;
                 }
             ],
             [
@@ -64,7 +64,6 @@ $this->registerAssetBundle('app\assets\ViewerJsAssets');
 //        ])
     ?>
 
-<!--    <iframe src = --><?//= \Yii::getAlias('@web') . 'uploads/' . $contractExchange->file ?><!-- width='724' height='1024' allowfullscreen webkitallowfullscreen></iframe>-->
 
     <?php // \yii2assets\pdfjs\PdfJs::widget([ 'url'=> \Yii::getAlias('@web') . 'uploads/' . $contractExchange->file ]); ?>
 
