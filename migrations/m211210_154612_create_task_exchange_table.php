@@ -18,6 +18,7 @@ class m211210_154612_create_task_exchange_table extends Migration
             'exe_user_id'   => $this->integer(),
             'rec_user_id'   => $this->integer(),
             'info'          => $this->text()->null(),
+            'file'          => $this->string(),
             'created_at'    => $this->integer()->notNull(),
             'updated_at'    => $this->integer()->notNull()
         ]);

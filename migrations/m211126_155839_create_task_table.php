@@ -17,6 +17,7 @@ class m211126_155839_create_task_table extends Migration
             'project_id'    => $this->integer(),
             'title'         => $this->text(),
             'price'         => $this->float()->defaultValue(null),
+            'currency_id'   => $this->integer(),
             'deadline'      => $this->dateTime(),
             'user_id'       => $this->integer(),
             'status_id'     => $this->tinyInteger()->defaultValue(1),

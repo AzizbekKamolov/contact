@@ -2,6 +2,7 @@
 
 namespace app\controllers;
 
+use app\models\FileUpload;
 use app\models\Project;
 use app\models\Status;
 use app\models\Task;
@@ -177,10 +178,12 @@ class TaskExecutionController extends Controller
     public function actionTaskExe($id)
     {
         $model = new TaskExchange;
+        $fileUpload = new FileUpload();
 
         if ($this->request->isPost)
         {
             $taskExecution = $this->findModel($id);
+            $file = UploadedFile::getInstance($fileUpload, 'file');
             $info = $this->request->post("TaskExchange")['info'];
 
             $model->task_exe_id = $id;
@@ -188,7 +191,8 @@ class TaskExecutionController extends Controller
             $model->rec_user_id = $taskExecution->receive_user;
             $taskExecution->status_id = Status::findOne(['title' => 'Отправленная'])->id;
             $model->info =$info;
-//            var_dump($taskExecution->save());die();
+            $model->saveFile($fileUpload->uploadFile($file, $model->file));
+
             if ($model->save() && $taskExecution->save()) {
                 return $this->redirect(['view', 'id' => $taskExecution->id]);
             }
@@ -196,7 +200,8 @@ class TaskExecutionController extends Controller
         }
 
         return $this->render('task-executor', [
-            'model' => $model
+            'model' => $model,
+            'fileUpload' => $fileUpload,
         ]);
     }
 
@@ -204,7 +209,6 @@ class TaskExecutionController extends Controller
     {
         $model = $this->findModel($id);
         $taskExchange = TaskExchange::find()->where(['task_exe_id' => $id])->orderBy(['id' => SORT_DESC])->one();
-//        var_dump($taskExchange);die();
 
         return $this->render('task-receiver',[
             'model' => $model,
@@ -215,10 +219,12 @@ class TaskExecutionController extends Controller
     public function actionTaskDeny($id)
     {
         $model = new TaskExchange;
+        $fileUpload = new FileUpload();
 
         if ($this->request->isPost)
         {
             $taskExecution = $this->findModel($id);
+            $file = UploadedFile::getInstance($fileUpload, 'file');
             $info = $this->request->post("TaskExchange")['info'];
 
             $model->task_exe_id = $id;
@@ -226,6 +232,7 @@ class TaskExecutionController extends Controller
             $model->rec_user_id = \Yii::$app->user->id;
             $taskExecution->status_id = Status::findOne(['title' => 'Отказанная'])->id;
             $model->info =$info;
+            $model->saveFile($fileUpload->uploadFile($file, $model->file));
 
             if ($model->save() && $taskExecution->save()) {
                 return $this->redirect(['view', 'id' => $taskExecution->id]);
@@ -234,7 +241,8 @@ class TaskExecutionController extends Controller
         }
 
         return $this->render('task-deny', [
-            'model' => $model
+            'model' => $model,
+            'fileUpload' => $fileUpload
         ]);
     }
 

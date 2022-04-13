@@ -5,6 +5,7 @@ use app\models\Task;
 use app\models\User;
 use yii\grid\GridView;
 use yii\helpers\Html;
+use yii\helpers\Url;
 use yii\widgets\DetailView;
 
 /* @var $this yii\web\View */
@@ -19,22 +20,6 @@ $myRole = \app\models\User::getMyRole();
 <div class="task-execution-view">
 
     <h1><?= Html::encode($this->title) ?></h1>
-
-    <p>
-        <?= ($myRole === "admin" || $myRole === "superAdmin") ? Html::a('Обновить', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) : "" ?>
-        <?php if (Yii::$app->user->id === $model->receive_user):?>
-            <?= Html::a('Проверить задачу', ['task-check', 'id' => $model->id], ['class' => ($model->status_id !== 2) ? 'btn btn-success disabled' : 'btn btn-success']) ?>
-        <?php elseif(Yii::$app->user->id === $model->exe_user_id): ?>
-            <?= Html::a('Выполнить задачу', ['task-exe', 'id' => $model->id], ['class' => (($model->status_id === 2) || ($model->status_id === 4)) ? 'btn btn-success disabled' : 'btn btn-success']) ?>
-        <?php endif; ?>
-        <?= ($myRole === "admin" || $myRole === "superAdmin") ? Html::a('Удалить', ['delete', 'id' => $model->id], [
-            'class' => 'btn btn-danger',
-            'data' => [
-                'confirm' => 'Are you sure you want to delete this item?',
-                'method' => 'post',
-            ],
-        ]) : "" ?>
-    </p>
 
     <?= DetailView::widget([
         'model' => $model,
@@ -95,7 +80,7 @@ $myRole = \app\models\User::getMyRole();
             [
                 'label' => 'Оценка',
                 'value' =>  function($data) {
-                    return $data->mark;
+                    return $data->mark . ' из 5';
                 }
             ],
 //            [
@@ -156,6 +141,14 @@ $myRole = \app\models\User::getMyRole();
                 }
             ],
             [
+                'label' => 'Документ',
+                'value' => function($data)
+                {
+                    return Html::a('Загрузить',  Url::to('/uploads/' . $data->file), [ ($data->file) ? '' : 'class' => 'btn  disabled']);
+                },
+                'format' => 'raw',
+            ],
+            [
                 'label' => 'Создан',
                 'value' =>  function($data) {
                     date_default_timezone_set('Asia/Tashkent');
@@ -166,5 +159,21 @@ $myRole = \app\models\User::getMyRole();
 //            ['class' => 'yii\grid\ActionColumn'],
         ],
     ]); ?>
+
+    <p>
+        <?= ($myRole === "admin" || $myRole === "superAdmin") ? Html::a('Обновить', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) : "" ?>
+        <?php if (Yii::$app->user->id === $model->receive_user):?>
+            <?= Html::a('Проверить задачу', ['task-check', 'id' => $model->id], ['class' => ($model->status_id !== 2) ? 'btn btn-success disabled' : 'btn btn-success']) ?>
+        <?php elseif(Yii::$app->user->id === $model->exe_user_id): ?>
+            <?= Html::a('Выполнить задачу', ['task-exe', 'id' => $model->id], ['class' => (($model->status_id === 2) || ($model->status_id === 4)) ? 'btn btn-success disabled' : 'btn btn-success']) ?>
+        <?php endif; ?>
+        <?= ($myRole === "admin" || $myRole === "superAdmin") ? Html::a('Удалить', ['delete', 'id' => $model->id], [
+            'class' => 'btn btn-danger',
+            'data' => [
+                'confirm' => 'Are you sure you want to delete this item?',
+                'method' => 'post',
+            ],
+        ]) : "" ?>
+    </p>
 
 </div>

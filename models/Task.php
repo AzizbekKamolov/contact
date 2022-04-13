@@ -42,7 +42,7 @@ class Task extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['project_id', 'user_id', 'status_id', 'created_at', 'updated_at'], 'integer'],
+            [['project_id', 'user_id', 'status_id', 'created_at', 'updated_at', 'currency_id'], 'integer'],
             [['title'], 'string'],
             [['price'], 'number'],
             [['deadline'], 'safe'],
@@ -60,6 +60,7 @@ class Task extends \yii\db\ActiveRecord
             'project_id' => 'Проект',
             'title' => 'Название',
             'price' => 'Цена',
+            'currency_id' => 'Тип валюты',
             'deadline' => 'Срок',
             'user_id' => 'Создатель',
             'status_id' => 'Статус',

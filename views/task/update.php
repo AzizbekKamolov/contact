@@ -15,8 +15,9 @@ $this->params['breadcrumbs'][] = 'Задачи';
     <h1><?= Html::encode($this->title) ?></h1>
 
     <?= $this->render('_form', [
-        'model' => $model,
-        'projects' => $projects
+        'model'      => $model,
+        'projects'   => $projects,
+        'currencies' => $currencies
     ]) ?>
 
 </div>

@@ -2,6 +2,7 @@
 
 namespace app\controllers;
 
+use app\models\Currency;
 use app\models\Project;
 use app\models\Status;
 use app\models\Task;
@@ -118,7 +119,12 @@ class TaskController extends Controller
     public function actionCreate($project_id = 1)
     {
         $model = new Task();
-        $projects = ArrayHelper::map(Project::find()->where(['user_id' => \Yii::$app->user->id])->all(), 'id', 'title');
+//        $projects = ArrayHelper::map(Project::find()->where(['user_id' => \Yii::$app->user->id])->all(), 'id', 'title');
+        if ((User::getMyRole() === 'admin') || (User::getMyRole() === 'superAdmin')){
+            $projects = ArrayHelper::map(Project::find()->all(), 'id', 'title');
+        } else {
+            $projects = ArrayHelper::map(Project::find()->where(['user_id' => \Yii::$app->user->id])->all(), 'id', 'title');
+        }
 
         if ($this->request->isPost) {
             $model->user_id = \Yii::$app->user->id;
@@ -132,7 +138,8 @@ class TaskController extends Controller
         return $this->render('create', [
             'model' => $model,
             'projects' => $projects,
-            'project_id' => $project_id
+            'project_id' => $project_id,
+            'currencies'    => Currency::getCurrencies()
         ]);
     }
 
@@ -155,7 +162,8 @@ class TaskController extends Controller
 
         return $this->render('update', [
             'model' => $model,
-            'projects' => Project::getProjects()
+            'projects' => Project::getProjects(),
+            'currencies'    => Currency::getCurrencies()
         ]);
     }
 

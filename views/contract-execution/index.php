@@ -59,13 +59,13 @@ else {
                     return User::getUserById($data->exe_user_id)->fullname;
                 }
             ],
-            'receive_user' => [
-                'attribute' => 'receive_user',
-                'filter' => $users,
-                'value' =>  function($data) {
-                    return User::getUserById($data->receive_user)->fullname;
-                }
-            ],
+//            'receive_user' => [
+//                'attribute' => 'receive_user',
+//                'filter' => $users,
+//                'value' =>  function($data) {
+//                    return User::getUserById($data->receive_user)->fullname;
+//                }
+//            ],
             'status_id' => [
                 'attribute' => 'status_id',
                 'filter' => $statuses,

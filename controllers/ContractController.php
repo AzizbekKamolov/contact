@@ -119,8 +119,11 @@ class ContractController extends Controller
     public function actionCreate($project_id = 1)
     {
         $model = new Contract();
-
-        $projects = ArrayHelper::map(Project::find()->where(['user_id' => \Yii::$app->user->id])->all(), 'id', 'title');
+        if ((User::getMyRole() === 'admin') || (User::getMyRole() === 'superAdmin')){
+            $projects = ArrayHelper::map(Project::find()->all(), 'id', 'title');
+        } else {
+            $projects = ArrayHelper::map(Project::find()->where(['user_id' => \Yii::$app->user->id])->all(), 'id', 'title');
+        }
         $user_id = \Yii::$app->user->id;
 
         if ($this->request->isPost) {

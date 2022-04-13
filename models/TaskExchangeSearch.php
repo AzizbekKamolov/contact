@@ -18,7 +18,7 @@ class TaskExchangeSearch extends TaskExchange
     {
         return [
             [['id', 'task_exe_id', 'exe_user_id', 'rec_user_id', 'created_at', 'updated_at'], 'integer'],
-            [['info'], 'safe'],
+            [['info', 'file'], 'safe'],
         ];
     }
 
@@ -66,7 +66,9 @@ class TaskExchangeSearch extends TaskExchange
             'updated_at' => $this->updated_at,
         ]);
 
-        $query->andFilterWhere(['like', 'info', $this->info]);
+        $query
+            ->andFilterWhere(['like', 'info', $this->info])
+            ->andFilterWhere(['like', 'file', $this->info]);
 
         return $dataProvider;
     }
