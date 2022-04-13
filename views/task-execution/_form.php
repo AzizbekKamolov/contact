@@ -22,7 +22,7 @@ use yii\widgets\ActiveForm;
     <?= $form->field($model, 'info')->textarea(['rows' => 6]) ?>
 
 
-<!--    --><?//= $form->field($model, 'receive_date')->textInput() ?>
+    <?php // $form->field($model, 'receive_date')->textInput() ?>
 
     <?= $form->field($model, 'receive_user')->dropDownList($users, ['prompt' => 'Выберите получатель']) ?>
 

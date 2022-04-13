@@ -24,7 +24,7 @@ use yii\widgets\DetailView;
             [
                 'label' => 'Исполнитель',
                 'value' =>  function($data) {
-                    return \app\models\User::find()->where(['id' => $data->exe_user_id])->one()->username;
+                    return \app\models\User::find()->where(['id' => $data->exe_user_id])->one()->fullname;
                 }
             ],
             [
@@ -32,6 +32,14 @@ use yii\widgets\DetailView;
                 'value' =>  function($data) {
                     return $data->info;
                 }
+            ],
+            [
+                'label' => 'Документ',
+                'value' => function($data)
+                {
+                    return Html::a('Загрузить',  Url::to('/uploads/' . $data->file), [ ($data->file) ? '' : 'class' => 'btn  disabled']);
+                },
+                'format' => 'raw',
             ],
             [
                 'label' => 'Создан',
