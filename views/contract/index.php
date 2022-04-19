@@ -13,7 +13,7 @@ use yii\grid\GridView;
 $this->title = 'Контракты';
 $this->params['breadcrumbs'][] = $this->title;
 $myRole = \app\models\User::getMyRole();
-if($myRole=="admin" || $myRole === "superAdmin"){
+if($myRole === "superAdmin"){
     $template = '{view}{update}{delete}';
 }
 else{
@@ -67,7 +67,7 @@ else{
             'deadline' => [
                 'attribute' => 'deadline',
                 'value' =>  function($data) {
-                    return date('d-m-Y', strtotime($data->deadline));
+                    return date('d M Y H:i:s', strtotime($data->deadline));
                 }
             ],
             //'created_at',

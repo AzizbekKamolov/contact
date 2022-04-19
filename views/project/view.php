@@ -1,6 +1,7 @@
 <?php
 
 use app\models\Currency;
+use app\models\Project;
 use app\models\Status;
 use yii\grid\GridView;
 use yii\helpers\Html;
@@ -22,8 +23,8 @@ $myRole = \app\models\User::getMyRole();
     <h1><?= Html::encode($this->title) ?></h1>
 
     <p>
-        <?= ($myRole === "admin") ? Html::a('Обновить', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) : "" ?>
-        <?= ($myRole === "admin") ? Html::a('Удалить', ['delete', 'id' => $model->id], [
+        <?= ($myRole === "superAdmin") ? Html::a('Обновить', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) : "" ?>
+        <?= ($myRole === "superAdmin") ? Html::a('Удалить', ['delete', 'id' => $model->id], [
             'class' => 'btn btn-danger',
             'data' => [
                 'confirm' => 'Are you sure you want to delete this item?',
@@ -61,8 +62,9 @@ $myRole = \app\models\User::getMyRole();
             [
                 'label' => 'Бюджет',
                 'value' =>  function($data) {
-                    return number_format($data->budget_sum, 2) . ' ' . Currency::getCurrencyById($data->currency_id)->short_name;
-                }
+
+                    return Project::getExpense($data->id);
+    }
             ],
             [
                 'label' => 'Валюта',
@@ -91,17 +93,19 @@ $myRole = \app\models\User::getMyRole();
 //                    return ['class' => Status::getStatusColor($data->status_id)];
 //                },
             ],
-            [
-                'label' => 'Срок',
-                'value' =>  function($data) {
-                    return $data->deadline;
-                }
-            ],
+
             [
                 'label' => 'Создан',
                 'value' =>  function($data) {
                     date_default_timezone_set('Asia/Tashkent');
                     return date('d M Y H:i:s',$data->created_at);
+                }
+            ],
+            [
+                'label' => 'Срок',
+                'value' =>  function($data) {
+//                    return $data->deadline;
+                    return date('d M Y H:i:s', strtotime($data->deadline));
                 }
             ],
         ],

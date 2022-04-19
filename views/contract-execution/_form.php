@@ -18,7 +18,7 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'exe_user_id')->dropDownList($users, ['prompt' => 'Выберите исполнитель']) ?>
 
-    <?= $form->field($model, 'info')->textarea(['rows' => 6]) ?>
+    <?php // $form->field($model, 'info')->textarea(['rows' => 6]) ?>
 
 
     <?= $form->field($model, 'receive_user')->dropDownList($users, ['prompt' => 'Выберите получатель']) ?>

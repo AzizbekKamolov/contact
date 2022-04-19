@@ -14,7 +14,7 @@ $this->title = 'Проекты';
 $this->params['breadcrumbs'][] = $this->title;
 $myRole = \app\models\User::getMyRole();
 
-if($myRole=="admin" || $myRole === "superAdmin"){
+if($myRole === "superAdmin"){
     $template = '{view}{update}{delete}';
 }
 else{

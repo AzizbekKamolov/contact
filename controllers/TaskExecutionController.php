@@ -103,7 +103,11 @@ class TaskExecutionController extends Controller
      */
     public function actionCreate($task_id = 1)
     {
-        $tasks = ArrayHelper::map(Task::find()->where(['user_id' => \Yii::$app->user->id])->all(), 'id', 'title');
+        if (User::getMyRole() === 'admin' || User::getMyRole() === 'superAdmin') {
+            $tasks = ArrayHelper::map(Task::find()->all(), 'id', 'title');
+        } else {
+            $tasks = ArrayHelper::map(Task::find()->where(['user_id' => \Yii::$app->user->id])->all(), 'id', 'title');
+        }
         $model = new TaskExecution();
 
         if ($this->request->isPost) {
@@ -262,11 +266,13 @@ class TaskExecutionController extends Controller
         if ($this->request->isPost)
         {
             $mark = $this->request->post('TaskExecution')['mark'];
+            $info = $this->request->post('TaskExecution')['info'];
             $done_date = \date('Y-m-d H:i:s');
 //            var_dump($done_date);die();
 
             $taskExecution->status_id   = Status::findOne(['title' => 'Одобренная'])->id;
             $taskExecution->mark        = $mark;
+            $taskExecution->info        = $info;
             $taskExecution->done_date   = $done_date;
 
             if($taskExecution->save())

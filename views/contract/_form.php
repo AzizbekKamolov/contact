@@ -39,7 +39,7 @@ if ($model->deadline) {
 
     <?= $form->field($model, 'currency_id')->dropDownList($currencies) ?>
 
-    <?= $form->field($model, 'deadline')->textInput(['type' => 'date']) ?>
+    <?= $form->field($model, 'deadline')->textInput(['type' => 'datetime-local']) ?>
 
     <div class="form-group">
         <?= Html::submitButton('Сохранить', ['class' => 'btn btn-success']) ?>

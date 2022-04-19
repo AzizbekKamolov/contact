@@ -104,7 +104,11 @@ class ContractExecutionController extends Controller
      */
     public function actionCreate($contract_id = 1)
     {
-        $contracts = ArrayHelper::map(Contract::find()->where(['user_id' => \Yii::$app->user->id])->all(), 'id', 'title');
+        if (User::getMyRole() === 'admin' || User::getMyRole() === 'superAdmin') {
+            $contracts = ArrayHelper::map(Contract::find()->all(), 'id', 'title');
+        } else {
+            $contracts = ArrayHelper::map(Contract::find()->where(['user_id' => \Yii::$app->user->id])->all(), 'id', 'title');
+        }
         $model = new ContractExecution();
 
         if ($this->request->isPost) {
@@ -284,10 +288,13 @@ class ContractExecutionController extends Controller
         if ($this->request->isPost)
         {
             $mark = $this->request->post('ContractExecution')['mark'];
+            $info = $this->request->post('ContractExecution')['info'];
+//            var_dump($info);die();
             $done_date = \date('Y-m-d H:i:s');
 
             $contractExecution->status_id   = Status::findOne(['title' => 'Одобренная'])->id;
             $contractExecution->mark        = $mark;
+            $contractExecution->info        = $info;
             $contractExecution->done_date   = $done_date;
 
             if($contractExecution->save())

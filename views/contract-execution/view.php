@@ -68,28 +68,16 @@ $myRole = \app\models\User::getMyRole();
                     return Status::getStatusById($data->status_id)->title;
                 }
             ],
-            [
-                'label' => 'Описание',
-                'value' =>  function($data) {
-                    return $data->info;
-                }
-            ],
-            [
-                'label' => 'Дата завершения',
-                'value' =>  function($data) {
-                    return $data->done_date;
-                }
-            ],
+//            [
+//                'label' => 'Описание',
+//                'value' =>  function($data) {
+//                    return $data->info;
+//                }
+//            ],
             [
                 'label' => 'Оценка',
                 'value' =>  function($data) {
-                    return $data->mark . ' из 5';
-                }
-            ],
-            [
-                'label' => 'Дата получения',
-                'value' =>  function($data) {
-                    return $data->receive_date;
+                    return ($data->mark) ? $data->mark . ' из 5. Описание: ' . $data->info : '';
                 }
             ],
             [
@@ -105,11 +93,25 @@ $myRole = \app\models\User::getMyRole();
                     return date('d M Y H:i:s',$data->created_at);
                 }
             ],
+            [
+                'label' => 'Дата получения',
+                'value' =>  function($data) {
+                    return date('d M Y H:i:s', strtotime($data->receive_date));
+//                    return $data->receive_date;
+                }
+            ],
+            [
+                'label' => 'Дата завершения',
+                'value' =>  function($data) {
+//                    return $data->done_date;
+                    return ($data->done_date) ? date('d M Y H:i:s', strtotime($data->done_date)) : '(не завершено)';
+                }
+            ],
         ],
     ]) ?>
 
     <br>
-    <h1>Обмен контрактами</h1>
+    <h1>Хронология</h1>
     <br>
 
     <?= GridView::widget([

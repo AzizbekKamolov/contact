@@ -65,22 +65,17 @@ $myRole = \app\models\User::getMyRole();
                     return Status::getStatusById($data->status_id)->title;
                 }
             ],
-            [
-                'label' => 'Описание',
-                'value' =>  function($data) {
-                    return $data->info;
-                }
-            ],
-            [
-                'label' => 'Дата завершения',
-                'value' =>  function($data) {
-                    return $data->done_date;
-                }
-            ],
+//            [
+//                'label' => 'Описание',
+//                'value' =>  function($data) {
+//                    return $data->info;
+//                }
+//            ],
+
             [
                 'label' => 'Оценка',
                 'value' =>  function($data) {
-                    return $data->mark . ' из 5';
+                    return ($data->mark) ? $data->mark . ' из 5. Описание: ' . $data->info : '';
                 }
             ],
 //            [
@@ -102,11 +97,17 @@ $myRole = \app\models\User::getMyRole();
                     return date('d M Y H:i:s',$data->created_at);
                 }
             ],
+            [
+                'label' => 'Дата завершения',
+                'value' =>  function($data) {
+                    return ($data->done_date) ? date('d M Y H:i:s', strtotime($data->done_date)) : '(не завершено)';
+                }
+            ],
         ],
     ]) ?>
 
     <br>
-    <h1>Обмены задачами по <span style="color: rgba(0, 0, 0, 0.4);"><?= $model->title?></span></h1>
+    <h1>Хронология </h1>
     <br>
 
     <?= GridView::widget([
@@ -161,13 +162,13 @@ $myRole = \app\models\User::getMyRole();
     ]); ?>
 
     <p>
-        <?= ($myRole === "admin" || $myRole === "superAdmin") ? Html::a('Обновить', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) : "" ?>
+        <?= ($this->checkRoute('update')) ? Html::a('Обновить', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) : "" ?>
         <?php if (Yii::$app->user->id === $model->receive_user):?>
             <?= Html::a('Проверить задачу', ['task-check', 'id' => $model->id], ['class' => ($model->status_id !== 2) ? 'btn btn-success disabled' : 'btn btn-success']) ?>
         <?php elseif(Yii::$app->user->id === $model->exe_user_id): ?>
             <?= Html::a('Выполнить задачу', ['task-exe', 'id' => $model->id], ['class' => (($model->status_id === 2) || ($model->status_id === 4)) ? 'btn btn-success disabled' : 'btn btn-success']) ?>
         <?php endif; ?>
-        <?= ($myRole === "admin" || $myRole === "superAdmin") ? Html::a('Удалить', ['delete', 'id' => $model->id], [
+        <?= ($this->checkRoute('delete'))  ? Html::a('Удалить', ['delete', 'id' => $model->id], [
             'class' => 'btn btn-danger',
             'data' => [
                 'confirm' => 'Are you sure you want to delete this item?',

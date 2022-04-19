@@ -22,8 +22,8 @@ $myRole = \app\models\User::getMyRole();
     <h1><?= Html::encode($this->title) ?></h1>
 
     <p>
-        <?= ($myRole === "admin" || $myRole === "superAdmin") ? Html::a('Обновить', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) : "" ?>
-        <?= ($myRole === "admin" || $myRole === "superAdmin") ? Html::a('Удалить', ['delete', 'id' => $model->id], [
+        <?= ($this->checkRoute('update')) ? Html::a('Обновить', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) : "" ?>
+        <?= ($this->checkRoute('delete')) ? Html::a('Удалить', ['delete', 'id' => $model->id], [
             'class' => 'btn btn-danger',
             'data' => [
                 'confirm' => 'Are you sure you want to delete this item?',
@@ -64,12 +64,6 @@ $myRole = \app\models\User::getMyRole();
                 }
             ],
             [
-                'label' => 'Срок',
-                'value' =>  function($data) {
-                    return date('d-m-Y', strtotime($data->deadline));
-                }
-            ],
-            [
                 'label' => 'Создатель',
                 'value' =>  function($data) {
                     return User::getUserById($data->user_id)->fullname;
@@ -86,6 +80,12 @@ $myRole = \app\models\User::getMyRole();
                 'value' =>  function($data) {
                     date_default_timezone_set('Asia/Tashkent');
                     return date('d M Y H:i:s',$data->created_at);
+                }
+            ],
+            [
+                'label' => 'Срок',
+                'value' =>  function($data) {
+                    return date('d M Y H:i:s', strtotime($data->deadline));
                 }
             ],
         ],

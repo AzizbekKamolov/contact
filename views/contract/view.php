@@ -101,7 +101,7 @@ $myRole = \app\models\User::getMyRole();
             [
                 'label' => 'Срок',
                 'value' =>  function($data) {
-                    return date('d M Y', strtotime($data->deadline));
+                    return date('d M Y H:i:s', strtotime($data->deadline));
                 }
             ],
             [

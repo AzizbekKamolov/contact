@@ -38,7 +38,7 @@ use yii\widgets\ActiveForm;
 
     <?php // $form->field($model, 'status_id')->textInput() ?>
 
-    <?= $form->field($model, 'deadline')->textInput(['type' => 'date']) ?>
+    <?= $form->field($model, 'deadline')->textInput(['type' => 'datetime-local']) ?>
 
    <?php // $form->field($model, 'created_at')->textInput() ?>
 

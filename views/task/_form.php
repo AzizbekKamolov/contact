@@ -32,7 +32,7 @@ if ($model->deadline) {
     ]) ?>
     <?= $form->field($model, 'currency_id')->dropDownList($currencies) ?>
 
-    <?= $form->field($model, 'deadline')->textInput(['type' => 'date']) ?>
+    <?= $form->field($model, 'deadline')->textInput(['type' => 'datetime-local']) ?>
 
     <?php // $form->field($model, 'user_id')->textInput() ?>
 
