@@ -46,18 +46,21 @@ AppAsset::register($this);
 //            ['label' => 'Главная сайт', 'url' => ['/site/index']],
             ['label' => 'Проекты', 'url' => ['/project/index']],
             ['label' => 'Контракты', 'url' => ['/contract/index']],
-//            ($myRole !== 'simpleUser') ? (
-                ['label' => 'Контракт на исп', 'url' => ['/contract-execution/index']],
-//            ): (
-//                ['label' => 'Мои Контракты', 'url' => ['/contract-execution/index']]
-//            ),
-//            ['label' => 'Част Контракты', 'url' => ['/contract-exchange/index']],
+            ($myRole !== 'simpleUser') ? (
+                ['label' => 'Контракт на исп', 'url' => ['/contract-execution/index']]
+            ):(
+                ['label' => 'Мои Контракты', 'url' => ['/contract-execution/index']]
+            ),
+            ['label' => 'Част Контракты', 'url' => ['/contract-exchange/index']],
             ['label' => 'Задачи', 'url' => ['/task/index']],
             ($myRole !== 'simpleUser') ? (
                     ['label' => 'Задачи на исп', 'url' => ['/task-execution/index']]
             ): (
                     ['label' => 'Мои Задачи', 'url' => ['/task-execution/index']]
             ),
+            ($myRole !== 'simpleUser') ? (
+                    ['label' => 'Create user', 'url' => ['/site/signup']]
+            ):(''),
             Yii::$app->user->isGuest ? (
                 ['label' => 'Войти', 'url' => ['/site/login']]
             ) : (
