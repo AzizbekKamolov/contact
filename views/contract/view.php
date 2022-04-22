@@ -137,31 +137,31 @@ $myRole = \app\models\User::getMyRole();
             'contract_id' => [
                 'attribute' => 'contract_id',
                 'value' =>  function($data) {
-                    return Contract::getContrctById($data->contract_id)->title;
+                    return Contract::getContrctById($data['contract_id'])->title;
                 }
             ],
             'user_id' => [
                 'attribute' => 'user_id',
                 'filter' => $users,
                 'value' =>  function($data) {
-                    return User::getUserById($data->user_id)->fullname;
+                    return User::getUserById($data['user_id'])->fullname;
                 }
             ],
             'exe_user_id' => [
                 'attribute' => 'exe_user_id',
                 'filter' => $users,
                 'value' =>  function($data) {
-                    return User::getUserById($data->exe_user_id)->fullname;
+                    return User::getUserById($data['exe_user_id'])->fullname;
                 }
             ],
             'status_id' => [
                 'attribute' => 'status_id',
                 'filter' => $statuses,
                 'value' =>  function($data) {
-                    return Status::getStatusById($data->status_id)->title;
+                    return Status::getStatusById($data['status_id'])->title;
                 },
                 'contentOptions' => function($data) {
-                    return ['class' => Status::getStatusColor($data->status_id)];
+                    return ['class' => Status::getStatusColor($data['status_id'])];
                 }
             ],
             //'info:ntext',
@@ -172,7 +172,7 @@ $myRole = \app\models\User::getMyRole();
                 'attribute' => 'receive_user',
                 'filter' => $users,
                 'value' =>  function($data) {
-                    return User::getUserById($data->receive_user)->fullname;
+                    return User::getUserById($data['receive_user'])->fullname;
                 }
             ],
             //'created_at',

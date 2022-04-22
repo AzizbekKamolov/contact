@@ -2,7 +2,6 @@
 
 namespace app\models;
 
-use phpDocumentor\Reflection\FqsenResolver;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
 use app\models\ContractExecution;
@@ -41,10 +40,33 @@ class ContractExecutionSearch extends ContractExecution
      */
     public function search($params)
     {
-        $query = ContractExecution::find();
+        $select = '
+
+        exe.id AS id,
+        exe.title AS title,
+        exe.contract_id AS contract_id,
+        exe.user_id AS user_id,
+        exe.exe_user_id AS exe_user_id,
+        exe.status_id AS status_id,
+        exe.info AS info,
+        exe.done_date AS done_date,
+        exe.mark AS mark,
+        exe.receive_date AS receive_date,
+        exe.receive_user AS receive_user,
+        exe.created_at AS created_at,
+        exe.updated_at AS updated_at,';
+//        exc.exe_user_id AS exc_user_id,
+//        exc.rec_user_id AS exc_rec_user_id';
+
+        $query = (new \yii\db\Query())
+            ->select($select)
+            ->leftJoin("contract_exchange AS exc", "exe.id=exc.con_exe_id")
+            ->from('contract_execution AS exe')
+        ;
+
+//        $query = ContractExecution::find();
 
         // add conditions that should always apply here
-
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
         ]);
@@ -57,32 +79,39 @@ class ContractExecutionSearch extends ContractExecution
             return $dataProvider;
         }
 
-        $contractExes = ContractExchange::find()
-            ->orWhere(['exe_user_id' => \Yii::$app->user->id])
-            ->orWhere(['rec_user_id' => \Yii::$app->user->id])
-            ->select(['con_exe_id'])
-            ->distinct()
-            ->all();
-//        var_dump($contracts);die();
-        $str = ' ';
-        foreach ($contractExes as $contractEx){
-            $str .= 'id = ' . $contractEx->con_exe_id . ' or ';
-        }
-//        mb_substr($str ,4,-1);
-//        var_dump($str);die();
-
-//        if (User::getMyRole() === 'headOfDep'){
-//            $query->where('(user_id = :user_id or exe_user_id = :user_id or receive_user = :user_id)', ['user_id'=>\Yii::$app->user->id]);
-//        } elseif (User::getMyRole() === "simpleUser") {
-//            $query->where('(exe_user_id = :user_id or receive_user = :user_id)', ['user_id'=>\Yii::$app->user->id]);
+//        $contractExes = ContractExchange::find()
+//            ->orWhere(['exe_user_id' => \Yii::$app->user->id])
+//            ->orWhere(['rec_user_id' => \Yii::$app->user->id])
+//            ->select(['con_exe_id'])
+//            ->distinct()
+//            ->all();
+////        var_dump($contracts);die();
+//        $str = ' ';
+//        foreach ($contractExes as $contractEx){
+//            $str .= 'id = ' . $contractEx->con_exe_id . ' or ';
 //        }
+////        mb_substr($str ,4,-1);
+////        var_dump($str);die();
+
+        if (User::getMyRole() === 'headOfDep') {
+            $q = '(exe.user_id = :user_id OR exe.exe_user_id = :user_id OR exe.receive_user = :user_id OR exc.exe_user_id = :user_id OR exc.rec_user_id = :user_id)';
+            $query->where($q, [
+                'user_id' => \Yii::$app->user->id,
+            ]);
+        } elseif (User::getMyRole() === "simpleUser") {
+            $q = '(exe.exe_user_id = :user_id OR exe.receive_user = :user_id OR exc.exe_user_id = :user_id OR exc.rec_user_id = :user_id)';
+            $query->where($q, [
+                'user_id' => \Yii::$app->user->id
+            ]);
+        }
 
         // grid filtering conditions
-        $query->andFilterWhere([
+        $query
+            ->andFilterWhere([
             'id' => $this->id,
             'contract_id' => $this->contract_id,
             'user_id' => $this->user_id,
-            'exe_user_id' => $this->exe_user_id,
+            'exe.exe_user_id' => $this->exe_user_id,
             'receive_user' => $this->receive_user,
             'status_id' => $this->status_id,
             'done_date' => $this->done_date,
@@ -92,10 +121,10 @@ class ContractExecutionSearch extends ContractExecution
             'updated_at' => $this->updated_at,
         ]);
 
-
-        $query->andFilterWhere(['like', 'title', $this->title])
+            $query->andFilterWhere(['like', 'title', $this->title])
             ->andFilterWhere(['like', 'info', $this->info]);
 
+        $query->groupBy('exe.id');
         return $dataProvider;
     }
 }

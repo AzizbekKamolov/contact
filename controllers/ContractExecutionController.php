@@ -10,8 +10,6 @@ use app\models\ContractExecutionSearch;
 use app\models\FileUpload;
 use app\models\Status;
 use app\models\User;
-use DateTime;
-use phpDocumentor\Reflection\Types\Null_;
 use yii\helpers\ArrayHelper;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -64,10 +62,10 @@ class ContractExecutionController extends Controller
 
 
         return $this->render('index', [
-            'searchModel' => $searchModel,
-            'dataProvider' => $dataProvider,
+            'searchModel'   => $searchModel,
+            'dataProvider'  => $dataProvider,
             'users'         => User::getUsers(),
-            'statuses'      =>  Status::getStatuses(),
+            'statuses'      => Status::getStatuses(),
             'contracts'     => Contract::getContracts()
         ]);
     }
