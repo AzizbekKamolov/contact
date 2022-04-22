@@ -51,14 +51,14 @@ AppAsset::register($this);
             ):(
                 ['label' => 'Мои Контракты', 'url' => ['/contract-execution/index']]
             ),
-            ['label' => 'Част Контракты', 'url' => ['/contract-exchange/index']],
+//            ['label' => 'Част Контракты', 'url' => ['/contract-exchange/index']],
             ['label' => 'Задачи', 'url' => ['/task/index']],
             ($myRole !== 'simpleUser') ? (
                     ['label' => 'Задачи на исп', 'url' => ['/task-execution/index']]
             ): (
                     ['label' => 'Мои Задачи', 'url' => ['/task-execution/index']]
             ),
-            ($myRole !== 'simpleUser') ? (
+            ($myRole === 'superAdmin') ? (
                     ['label' => 'Create user', 'url' => ['/site/signup']]
             ):(''),
             Yii::$app->user->isGuest ? (
