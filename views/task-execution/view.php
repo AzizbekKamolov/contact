@@ -19,162 +19,166 @@ $myRole = \app\models\User::getMyRole();
 ?>
 <div class="task-execution-view">
 
-    <h1><?= Html::encode($this->title) ?></h1>
+    <div class="card card-outline card-success collapsed-card">
+        <div class="card-header">
+            <h1 class="card-title text-bold">
+                <?= Html::encode($this->title) ?>
+                <?= $this->checkRoute("update") ? Html::a('<i class="fas fa-pen"></i>', ['update', 'id' => $model->id], ['class' => 'text-primary mx-2', 'title' => 'Обнавить Проект']) : "" ?>
+                <?php  if ($model->receive_user === Yii::$app->user->id):?>
+                    <?= Html::a('<i class="fas fa-check"></i>', ['task-check', 'id' => $model->id], ['class' => ($model->status_id !== 2) ? 'btn text-primary mx-2 disabled' : 'text-primary mx-2','title' => 'Проверить задачу']) ?>
+                <?php elseif(Yii::$app->user->id === $model->exe_user_id): ?>
+                    <?= Html::a('<i class="fas fa-play"></i>', ['task-exe', 'id' => $model->id], ['class' => (($model->status_id === 2) || ($model->status_id === 4)) ? 'btn text-success mx-2 disabled' : 'text-success mx-2', 'title' => 'Выполнить задачу']) ?>
+                <?php endif; ?>
+                <?= $this->checkRoute("delete") ? Html::a('<i class="fas fa-times"></i>', ['delete', 'id' => $model->id], [
+                    'class' => 'text-danger',
+                    'data' => [
+                        'confirm' => 'Are you sure you want to delete this item?',
+                        'method' => 'post',
+                    ],
+                ]) : "" ?>
+            </h1>
 
-    <?= DetailView::widget([
-        'model' => $model,
-        'attributes' => [
-            'id',
-//            'title',
-//            'task_id',
-//            'user_id',
-//            'exe_user_id',
-//            'status_id',
-//            'info:ntext',
-//            'done_date',
-//            'mark',
-//            'receive_date',
-//            'receive_user',
-//            'created_at',
-//            'updated_at',
-            [
-                'label' => 'Название',
-                'value' =>  function($data) {
-                    return $data->title;
-                }
-            ],
-            [
-                'label' => 'Задача',
-                'value' =>  function($data) {
-                    return Task::getTaskById($data->task_id)->title;
-                }
-            ],[
-                'label' => 'Создатель',
-                'value' =>  function($data) {
-                    return User::getUserById($data->user_id)->fullname;
-                }
-            ],[
-                'label' => 'Исполнитель',
-                'value' =>  function($data) {
-                    return User::getUserById($data->exe_user_id)->fullname;
-                }
-            ],
-            [
-                'label' => 'Статус',
-                'value' =>  function($data) {
-                    return Status::getStatusById($data->status_id)->title;
-                }
-            ],
-//            [
-//                'label' => 'Описание',
-//                'value' =>  function($data) {
-//                    return $data->info;
-//                }
-//            ],
+            <div class="card-tools">
+                <button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-plus"></i>
+                </button>
+            </div>
+            <!-- /.card-tools -->
+        </div>
+        <!-- /.card-header -->
+        <div class="card-body" >
+            <div class="row">
+                <div class="col-6">
+                    <?= DetailView::widget([
+                        'model' => $model,
+                        'attributes' => [
+                            'id',
+                            [
+                                'label' => 'Название',
+                                'value' =>  function($data) {
+                                    return $data->title;
+                                }
+                            ],
+                            [
+                                'label' => 'Задача',
+                                'value' =>  function($data) {
+                                    return Task::getTaskById($data->task_id)->title;
+                                }
+                            ],
+                            [
+                                'label' => 'Создатель',
+                                'value' =>  function($data) {
+                                    return User::getUserById($data->user_id)->fullname;
+                                }
+                            ],
+                            [
+                                'label' => 'Исполнитель',
+                                'value' =>  function($data) {
+                                    return User::getUserById($data->exe_user_id)->fullname;
+                                }
+                            ],
+                        ],
+                    ]) ?>
+                </div>
+                <div class="col-6">
+                    <?= DetailView::widget([
+                        'model' => $model,
+                        'attributes' => [
+                            [
+                                'label' => 'Статус',
+                                'value' =>  function($data) {
+                                    return Status::getStatusById($data->status_id)->title;
+                                }
+                            ],
+                            [
+                                'label' => 'Оценка',
+                                'value' =>  function($data) {
+                                    return ($data->mark) ? $data->mark . ' из 5. Описание: ' . $data->info : '';
+                                }
+                            ],
+                            [
+                                'label' => 'Получатель',
+                                'value' =>  function($data) {
+                                    return  User::getUserById($data->receive_user)->fullname;
+                                }
+                            ],
+                            [
+                                'label' => 'Создан',
+                                'value' =>  function($data) {
+                                    date_default_timezone_set('Asia/Tashkent');
+                                    return date('d M Y H:i:s',$data->created_at);
+                                }
+                            ],
+                            [
+                                'label' => 'Дата завершения',
+                                'value' =>  function($data) {
+                                    return ($data->done_date) ? date('d M Y H:i:s', strtotime($data->done_date)) : '(не завершено)';
+                                }
+                            ],
+                        ],
+                    ]) ?>
+                </div>
+            </div>
+        </div>
+        <!-- /.card-body -->
+    </div>
 
-            [
-                'label' => 'Оценка',
-                'value' =>  function($data) {
-                    return ($data->mark) ? $data->mark . ' из 5. Описание: ' . $data->info : '';
-                }
-            ],
-//            [
-//                'label' => 'Дата получения',
-//                'value' =>  function($data) {
-//                    return $data->receive_date;
-//                }
-//            ],
-            [
-                'label' => 'Получатель',
-                'value' =>  function($data) {
-                    return  User::getUserById($data->receive_user)->fullname;
-                }
-            ],
-            [
-                'label' => 'Создан',
-                'value' =>  function($data) {
-                    date_default_timezone_set('Asia/Tashkent');
-                    return date('d M Y H:i:s',$data->created_at);
-                }
-            ],
-            [
-                'label' => 'Дата завершения',
-                'value' =>  function($data) {
-                    return ($data->done_date) ? date('d M Y H:i:s', strtotime($data->done_date)) : '(не завершено)';
-                }
-            ],
-        ],
-    ]) ?>
+    <div class="card card-outline card-success collapsed-card">
+        <div class="card-header">
+            <h1 class="card-title">
+                Хронология
+            </h1>
 
-    <br>
-    <h1>Хронология </h1>
-    <br>
+            <div class="card-tools">
+                <button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-plus"></i>
+                </button>
+            </div>
+            <!-- /.card-tools -->
+        </div>
+        <!-- /.card-header -->
+        <div class="card-body">
+            <?= GridView::widget([
+                'dataProvider' => $dataProvider,
+                'columns' => [
+                    ['class' => 'yii\grid\SerialColumn'],
 
-    <?= GridView::widget([
-        'dataProvider' => $dataProvider,
-//        'filterModel' => $searchModel,
-        'columns' => [
-            ['class' => 'yii\grid\SerialColumn'],
+                    [
+                        'label' => 'Исполнитель',
+                        'value' =>  function($data) {
+                            return  User::getUserById($data->exe_user_id)->fullname;
+                        }
+                    ],
+                    [
+                        'label' => 'Получатель',
+                        'value' =>  function($data) {
+                            return  User::getUserById($data->rec_user_id)->fullname;
+                        }
+                    ],
+                    [
+                        'label' => 'Описание',
+                        'value' =>  function($data) {
+                            return $data->info;
+                        }
+                    ],
+                    [
+                        'label' => 'Документ',
+                        'value' => function($data)
+                        {
+                            return Html::a('Загрузить',  Url::to('/uploads/' . $data->file), [ ($data->file) ? '' : 'class' => 'btn  disabled']);
+                        },
+                        'format' => 'raw',
+                    ],
+                    [
+                        'label' => 'Создан',
+                        'value' =>  function($data) {
+                            date_default_timezone_set('Asia/Tashkent');
+                            return date('d M Y H:i:s',$data->created_at);
+                        }
+                    ],
 
-//            'id',
-//            'task_exe_id',
-//            'exe_user_id',
-//            'rec_user_id',
-//            'info:ntext',
-//            'created_at',
-//            'updated_at',
-            [
-                'label' => 'Исполнитель',
-                'value' =>  function($data) {
-                    return  User::getUserById($data->exe_user_id)->fullname;
-                }
-            ],
-            [
-                'label' => 'Получатель',
-                'value' =>  function($data) {
-                    return  User::getUserById($data->rec_user_id)->fullname;
-                }
-            ],
-            [
-                'label' => 'Описание',
-                'value' =>  function($data) {
-                    return $data->info;
-                }
-            ],
-            [
-                'label' => 'Документ',
-                'value' => function($data)
-                {
-                    return Html::a('Загрузить',  Url::to('/uploads/' . $data->file), [ ($data->file) ? '' : 'class' => 'btn  disabled']);
-                },
-                'format' => 'raw',
-            ],
-            [
-                'label' => 'Создан',
-                'value' =>  function($data) {
-                    date_default_timezone_set('Asia/Tashkent');
-                    return date('d M Y H:i:s',$data->created_at);
-                }
-            ],
-
-//            ['class' => 'yii\grid\ActionColumn'],
-        ],
-    ]); ?>
-
-    <p>
-        <?= ($this->checkRoute('update')) ? Html::a('Обновить', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) : "" ?>
-        <?php if (Yii::$app->user->id === $model->receive_user):?>
-            <?= Html::a('Проверить задачу', ['task-check', 'id' => $model->id], ['class' => ($model->status_id !== 2) ? 'btn btn-success disabled' : 'btn btn-success']) ?>
-        <?php elseif(Yii::$app->user->id === $model->exe_user_id): ?>
-            <?= Html::a('Выполнить задачу', ['task-exe', 'id' => $model->id], ['class' => (($model->status_id === 2) || ($model->status_id === 4)) ? 'btn btn-success disabled' : 'btn btn-success']) ?>
-        <?php endif; ?>
-        <?= ($this->checkRoute('delete'))  ? Html::a('Удалить', ['delete', 'id' => $model->id], [
-            'class' => 'btn btn-danger',
-            'data' => [
-                'confirm' => 'Are you sure you want to delete this item?',
-                'method' => 'post',
-            ],
-        ]) : "" ?>
-    </p>
+                ],
+            ]); ?>
+        </div>
+        <!-- /.card-body -->
+    </div>
 
 </div>

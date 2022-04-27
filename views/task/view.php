@@ -19,145 +19,139 @@ $myRole = \app\models\User::getMyRole();
 ?>
 <div class="task-view">
 
-    <h1><?= Html::encode($this->title) ?></h1>
+    <div class="card card-outline card-success collapsed-card">
+        <div class="card-header">
+            <h1 class="card-title text-bold">
+                <?= Html::encode($this->title) ?>
+                <?= ($this->checkRoute('update')) ? Html::a('<i class="fas fa-pen"></i>', ['update', 'id' => $model->id], ['class' => 'text-primary mx-2', 'title' => 'Обнавить задача']) : "" ?>
+                <?= ($this->checkRoute('delete')) ? Html::a('<i class="fas fa-times"></i>', ['delete', 'id' => $model->id], [
+                    'class' => 'text-danger',
+                    'title' => 'Удалить задача',
+                    'data' => [
+                        'confirm' => 'Вы уверены, что хотите удалить этот задача?',
+                        'method' => 'post',
+                    ],
+                ]) : "" ?>
+            </h1>
 
-    <p>
-        <?= ($this->checkRoute('update')) ? Html::a('Обновить', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) : "" ?>
-        <?= ($this->checkRoute('delete')) ? Html::a('Удалить', ['delete', 'id' => $model->id], [
-            'class' => 'btn btn-danger',
-            'data' => [
-                'confirm' => 'Are you sure you want to delete this item?',
-                'method' => 'post',
-            ],
-        ]) : "" ?>
-    </p>
-
-    <?= DetailView::widget([
-        'model' => $model,
-        'attributes' => [
-            'id',
-//            'project_id',
-//            'title:ntext',
-//            'price',
-//            'deadline',
-//            'user_id',
-//            'status_id',
-//            'created_at',
-//            'updated_at',
-
-            [
-                'label' => 'Проект',
-                'value' =>  function($data) {
-                    return Project::getProjectById($data->project_id)->title;
-                }
-            ],
-            [
-                'label' => 'Название',
-                'value' =>  function($data) {
-                    return $data->title;
-                }
-            ],
-            [
-                'label' => 'Цена',
-                'value' =>  function($data) {
-                    return $data->price;
-                }
-            ],
-            [
-                'label' => 'Создатель',
-                'value' =>  function($data) {
-                    return User::getUserById($data->user_id)->fullname;
-                }
-            ],
-            [
-                'label' => 'Статус',
-                'value' =>  function($data) {
-                    return Status::getStatusById($data->status_id)->title;
-                }
-            ],
-            [
-                'label' => 'Создан',
-                'value' =>  function($data) {
-                    date_default_timezone_set('Asia/Tashkent');
-                    return date('d M Y H:i:s',$data->created_at);
-                }
-            ],
-            [
-                'label' => 'Срок',
-                'value' =>  function($data) {
-                    return date('d M Y H:i:s', strtotime($data->deadline));
-                }
-            ],
-        ],
-    ]) ?>
-
-    <br>
-    <div class="row">
-        <div class="col-9">
-            <h1>Исполнение по <span style="color: rgba(0, 0, 0, 0.4);"><?= $model->title?></span></h1>
+            <div class="card-tools">
+                <button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-plus"></i>
+                </button>
+            </div>
+            <!-- /.card-tools -->
         </div>
-        <div class="col-3">
-            <?= (Yii::$app->user->id === $model->user_id) ? Html::a('Создать Исп по Задачу', ['task-execution/create', 'task_id' => $model->id], ['class' => 'btn btn-success float-right']) : "" ?>
+        <!-- /.card-header -->
+        <div class="card-body" >
+            <?= DetailView::widget([
+                'model' => $model,
+                'attributes' => [
+                    'id',
+                    [
+                        'label' => 'Проект',
+                        'value' =>  function($data) {
+                            return Project::getProjectById($data->project_id)->title;
+                        }
+                    ],
+                    [
+                        'label' => 'Название',
+                        'value' =>  function($data) {
+                            return $data->title;
+                        }
+                    ],
+                    [
+                        'label' => 'Цена',
+                        'value' =>  function($data) {
+                            return $data->price;
+                        }
+                    ],
+                    [
+                        'label' => 'Создатель',
+                        'value' =>  function($data) {
+                            return User::getUserById($data->user_id)->fullname;
+                        }
+                    ],
+                    [
+                        'label' => 'Статус',
+                        'value' =>  function($data) {
+                            return Status::getStatusById($data->status_id)->title;
+                        }
+                    ],
+                    [
+                        'label' => 'Создан',
+                        'value' =>  function($data) {
+                            date_default_timezone_set('Asia/Tashkent');
+                            return date('d M Y H:i:s',$data->created_at);
+                        }
+                    ],
+                    [
+                        'label' => 'Срок',
+                        'value' =>  function($data) {
+                            return date('d M Y H:i:s', strtotime($data->deadline));
+                        }
+                    ],
+                ],
+            ]) ?>
         </div>
+        <!-- /.card-body -->
     </div>
-    <br>
 
-    <?= GridView::widget([
-        'dataProvider' => $dataProvider,
-//        'filterModel' => $searchModel,
-        'columns' => [
-            ['class' => 'yii\grid\SerialColumn'],
+    <div class="card card-outline card-success collapsed-card">
+        <div class="card-header">
+            <h1 class="card-title">
+                Исполнение по <span class="mr-1 text-bold" style="color: black;"><?= $model->title?></span>
+                <?= (Yii::$app->user->id === $model->user_id || $myRole == "admin" || $myRole == "superAdmin") ? Html::a('+', ['task-execution/create', 'task_id' => $model->id], ['class' => 'btn btn-info', 'title' => 'Создать Исп по Kонтракт']) : "" ?>
+            </h1>
 
-//            'id',
-//            'title',
-//            'task_id',
-//            'user_id',
-//            'exe_user_id',
-//            'status_id',
-            //'info:ntext',
-            //'done_date',
-            //'mark',
-            //'receive_date',
-            //'receive_user',
-            //'created_at',
-            //'updated_at',
-            [
-                'label' => 'Название',
-                'value' =>  function($data) {
-                    return $data->title;
-                }
-            ],
-            [
-                'label' => 'Задача',
-                'value' =>  function($data) {
-                    return Task::getTaskById($data->task_id)->title;
-                }
-            ],
-            [
-                'label' => 'Исполнитель',
-                'value' =>  function($data) {
-                    return User::getUserById($data->exe_user_id)->fullname;
-                }
-            ],
-            [
-                'label' => 'Статус',
-                'value' =>  function($data) {
-                    return Status::getStatusById($data->status_id)->title;
-                },
-                'contentOptions' => function($data) {
-                    return ['class' => Status::getStatusColor($data->status_id)];
-                }
-            ],
-            [
-                'header' => 'Меню',
-                'format' => 'raw',
-                'value' => function($data){
-                    return Html::a('Перейти', ['task-execution/view', 'id'=>$data->id]);
-                }
-            ],
-
-//            ['class' => 'yii\grid\ActionColumn'],
-        ],
-    ]); ?>
+            <div class="card-tools">
+                <button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-plus"></i>
+                </button>
+            </div>
+            <!-- /.card-tools -->
+        </div>
+        <!-- /.card-header -->
+        <div class="card-body">
+            <?= GridView::widget([
+                'dataProvider' => $dataProvider,
+                'columns' => [
+                    ['class' => 'yii\grid\SerialColumn'],
+                    [
+                        'label' => 'Название',
+                        'value' =>  function($data) {
+                            return $data->title;
+                        }
+                    ],
+                    [
+                        'label' => 'Задача',
+                        'value' =>  function($data) {
+                            return Task::getTaskById($data->task_id)->title;
+                        }
+                    ],
+                    [
+                        'label' => 'Исполнитель',
+                        'value' =>  function($data) {
+                            return User::getUserById($data->exe_user_id)->fullname;
+                        }
+                    ],
+                    [
+                        'label' => 'Статус',
+                        'value' =>  function($data) {
+                            return Status::getStatusById($data->status_id)->title;
+                        },
+                        'contentOptions' => function($data) {
+                            return ['class' => Status::getStatusColor($data->status_id)];
+                        }
+                    ],
+                    [
+                        'header' => 'Меню',
+                        'format' => 'raw',
+                        'value' => function($data){
+                            return Html::a('Перейти', ['task-execution/view', 'id'=>$data->id]);
+                        }
+                    ],
+                ],
+            ]); ?>
+        </div>
+        <!-- /.card-body -->
+    </div>
 
 </div>

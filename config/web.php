@@ -75,6 +75,13 @@ $config = [
         'view' => [
             'class' => 'app\components\View',
         ],
+//        'view' => [
+//            'theme' => [
+//                'pathMap' => [
+//                    '@app/views' => '@vendor/hail812/yii2-adminlte3/src/views'
+//                ],
+//            ],
+//        ],
     ],
     'modules' => [
         'admin' => [
@@ -129,6 +136,7 @@ if (YII_ENV_DEV) {
         // uncomment the following to add your IP if you are not connecting from localhost.
 //        'allowedIPs' => ['127.0.0.1', '::1', '10.10.10.1'],
         'allowedIPs' => ['*'],
+
     ];
 }
 

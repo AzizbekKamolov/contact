@@ -59,7 +59,7 @@ AppAsset::register($this);
                     ['label' => 'Мои Задачи', 'url' => ['/task-execution/index']]
             ),
             ($myRole === 'superAdmin') ? (
-                    ['label' => 'Create user', 'url' => ['/site/signup']]
+                    ['label' => 'Админка', 'url' => ['/admin/']]
             ):(''),
             Yii::$app->user->isGuest ? (
                 ['label' => 'Войти', 'url' => ['/site/login']]

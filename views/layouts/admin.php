@@ -39,7 +39,8 @@ AppAsset::register($this);
         ['label' => 'Задачи на Exch', 'url' => ['/admin/task-exchange/index']],
         ['label' => 'Валюта', 'url' => ['/admin/currency/index']],
         ['label' => 'Статусы', 'url' => ['/admin/status/index']],
-        ['label' => 'Users', 'url' => ['/rbac/default/index']],
+        ['label' => 'RBAC', 'url' => ['/rbac/default/index']],
+        ['label' => 'Users', 'url' => ['/admin/user/index']],
         Yii::$app->user->isGuest ? (
         ['label' => 'Войти', 'url' => ['/site/login']]
         ) : (
@@ -80,8 +81,9 @@ AppAsset::register($this);
 
 <footer class="footer mt-auto py-3 text-muted">
     <div class="container">
-        <p class="float-left">&copy; My Company <?= date('Y') ?></p>
-        <p class="float-right"><?= Yii::powered() ?></p>
+        <p class="text-center">&copy; 2017 - <?= date('Y') ?> Фонд развития культуры и искусства при Кабинете Министров Республики Узбекистан.</p>
+<!--        <p class="float-left">&copy; My Company --><?//= date('Y') ?><!--</p>-->
+<!--        <p class="float-right">--><?//= Yii::powered() ?><!--</p>-->
     </div>
 </footer>
 
