@@ -36,7 +36,7 @@ class Currency extends \yii\db\ActiveRecord
     {
         return [
             [['name', 'short_name'], 'string', 'max' => 255],
-            [['created_at', 'updated_at'], 'integer'],
+            [['code', 'created_at', 'updated_at'], 'integer'],
         ];
     }
 
@@ -49,6 +49,7 @@ class Currency extends \yii\db\ActiveRecord
             'id' => 'ID',
             'name' => 'Name',
             'short_name' => 'Short Name',
+            'code' => 'Code',
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',
         ];

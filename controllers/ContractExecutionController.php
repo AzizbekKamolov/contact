@@ -7,6 +7,7 @@ use app\models\ContractExchange;
 use app\models\ContractExchangeSearch;
 use app\models\ContractExecution;
 use app\models\ContractExecutionSearch;
+use app\models\Expense;
 use app\models\FileUpload;
 use app\models\Status;
 use app\models\User;
@@ -45,6 +46,7 @@ class ContractExecutionController extends Controller
      */
     public function actionIndex()
     {
+//        var_dump(User::getMyRole());die();
         $searchModel = new ContractExecutionSearch();
         $dataProvider = $searchModel->search($this->request->queryParams);
 
@@ -78,15 +80,22 @@ class ContractExecutionController extends Controller
      */
     public function actionView($id)
     {
+        $model = $this->findModel($id);
         $a = ContractExchange::find()->all();
         $lastItem = end($a);
 //        var_dump($lastItem);die();
         $searchModel = new ContractExchangeSearch();
         $dataProvider = $searchModel->search(($this->request->queryParams));
         $dataProvider->query->andWhere(['con_exe_id' =>  $id]);
-//        $dataProvider->setSort([
-//            'defaultOrder' => ['id'=>SORT_DESC],
-//        ]);
+
+        if (\Yii::$app->user->id === $model->exe_user_id) {
+            if ($model->receive_date === NULL)
+            {
+                $receive_date = \date('Y-m-d H:i:s');
+                $model->receive_date = $receive_date;
+                $model->save();
+            }
+        }
         return $this->render('view', [
             'lastItem' => $lastItem,
             'model' => $this->findModel($id),
@@ -182,25 +191,28 @@ class ContractExecutionController extends Controller
     {
         $model = new ContractExchange();
         $fileUpload = new FileUpload();
+        $expenseModel = new Expense();
         $contractExecution = $this->findModel($id);
+        $contract_id = $this->findModel($id)->contract_id;
+        $currency_id = Contract::find()->where(['id' => $contract_id])->one()->currency_id;
+        $project_id = Contract::find()->where(['id' => $contract_id])->one()->project_id;
 
         if ($this->request->isPost)
         {
             $contractExecution = $this->findModel($id);
             $file = UploadedFile::getInstance($fileUpload, 'file');
             $info = $this->request->post("ContractExchange")['info'];
-//            if($this->request->post("new_receive_user")){
-//                $exe_model = new ContractExecution();
-//                $exe_model->contract_id = ContractExecution::findOne($id)->contract_id;
-//                $exe_model->user_id = \Yii::$app->user->id;
-//                $exe_model->exe_user_id = $this->request->post("new_receive_user");
-//                $exe_model->receive_user = \Yii::$app->user->id;
-//                $exe_model->status_id = 1;
-//                $exe_model->title = $this->request->post("ContractExchange")['info'];
-//                if($exe_model->save()){
-//                    return $this->redirect(['view', 'id' => $exe_model->id]);
-//                }
-//            }
+
+            if($this->request->post("Expense")['sum']) {
+                $expenseModel->user_id = \Yii::$app->user->id;
+                $expenseModel->project_id = $project_id;
+                $expenseModel->contract_id = $contract_id;
+                $expenseModel->currency_id = $currency_id;
+                $expenseModel->sum = $this->request->post("Expense")['sum'];
+                $expenseModel->rate = $this->request->post("Expense")['rate'];
+                $expenseModel->desc = $info;
+                $expenseModel->save(false);
+            }
 
             if($this->request->post("new_receive_user")){
                 $contractExecution = $this->findModel($id);
@@ -248,7 +260,9 @@ class ContractExecutionController extends Controller
 
         return $this->render('contract-executor', [
             'model' => $model,
+            'expenseModel' => $expenseModel,
             'contractExecution' => $contractExecution,
+            'currency_id' => $currency_id,
             'fileUpload' => $fileUpload,
             'users' => User::getUsers()
         ]);
@@ -258,13 +272,6 @@ class ContractExecutionController extends Controller
     {
         $model = $this->findModel($id);
         $contractExchange = ContractExchange::find()->where(['con_exe_id' => $id])->orderBy(['id' => SORT_DESC])->one();
-
-        if ($model->receive_date === NULL)
-        {
-            $receive_date = \date('Y-m-d H:i:s');
-            $model->receive_date = $receive_date;
-            $model->save();
-        }
 
         return $this->render('contract-receiver',[
             'model' => $model,

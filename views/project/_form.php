@@ -22,15 +22,15 @@ use yii\widgets\ActiveForm;
             'name' => 'amount_german',
             'value' => 0,
             'pluginOptions' => [
-                'prefix' => '¢ ',
+                'prefix' => '| ',
                 'thousands' => ' ',
                 'decimal' => ',',
-                'precision' => 0
+                'precision' => 0,
             ],
         ]);
     ?>
 
-    <?= $form->field($model, 'currency_id')->dropDownList($currencies, ['prompt'=>'Выберите валюту']) ?>
+    <?php // $form->field($model, 'currency_id')->dropDownList($currencies, ['prompt'=>'Выберите валюту']) ?>
 
     <?= $form->field($model, 'project_year')->textInput(['type'=>'date']) ?>
 

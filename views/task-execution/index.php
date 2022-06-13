@@ -3,6 +3,7 @@
 use app\models\Status;
 use app\models\Task;
 use app\models\User;
+use kartik\select2\Select2;
 use yii\helpers\Html;
 use yii\grid\GridView;
 
@@ -44,30 +45,86 @@ else{
                     ['class' => 'yii\grid\SerialColumn'],
 
                     'title',
-                    'task_id' => [
-                        'attribute' => 'task_id',
-                        'filter' => $tasks,
+                    'task_id' =>[
+                        'attribute'=>'task_id',
+                        'filter' => Select2::widget([
+                            'model' => $searchModel,
+                            'attribute' => 'task_id',
+                            'name' => 'kv-type-01',
+                            'data' => $tasks,
+                            'options' => [
+                                'class' => 'form-control',
+                                'placeholder' => 'Задача',
+
+                            ],
+                            'pluginOptions' => [
+                                'allowClear' => true,
+                                'selectOnClose' => true,
+                            ]
+                        ]),
                         'value' =>  function($data) {
                             return Task::getTaskById($data->task_id)->title;
-                        }
+                        },
                     ],
-                    'user_id' => [
-                        'attribute' => 'user_id',
-                        'filter' => $users,
+                    'user_id' =>[
+                        'attribute'=>'user_id',
+                        'filter' => Select2::widget([
+                            'model' => $searchModel,
+                            'attribute' => 'user_id',
+                            'name' => 'kv-type-01',
+                            'data' => $users,
+                            'options' => [
+                                'class' => 'form-control',
+                                'placeholder' => 'Создатель',
+
+                            ],
+                            'pluginOptions' => [
+                                'allowClear' => true,
+                                'selectOnClose' => true,
+                            ]
+                        ]),
                         'value' =>  function($data) {
                             return User::getUserById($data->user_id)->fullname;
-                        }
+                        },
                     ],
-                    'exe_user_id' => [
-                        'attribute' => 'exe_user_id',
-                        'filter' => $users,
+                    'exe_user_id' =>[
+                        'attribute'=>'exe_user_id',
+                        'filter' => Select2::widget([
+                            'model' => $searchModel,
+                            'attribute' => 'exe_user_id',
+                            'name' => 'kv-type-01',
+                            'data' => $users,
+                            'options' => [
+                                'class' => 'form-control',
+                                'placeholder' => 'Исполнитель',
+
+                            ],
+                            'pluginOptions' => [
+                                'allowClear' => true,
+                                'selectOnClose' => true,
+                            ]
+                        ]),
                         'value' =>  function($data) {
                             return User::getUserById($data->exe_user_id)->fullname;
-                        }
+                        },
                     ],
                     'status_id' => [
-                        'attribute' => 'status_id',
-                        'filter'    => $statuses,
+                        'attribute'=>'status_id',
+                        'filter' => Select2::widget([
+                            'model' => $searchModel,
+                            'attribute' => 'status_id',
+                            'name' => 'kv-type-01',
+                            'data' => $statuses,
+                            'options' => [
+                                'class' => 'form-control',
+                                'placeholder' => 'Статус',
+
+                            ],
+                            'pluginOptions' => [
+                                'allowClear' => true,
+                                'selectOnClose' => true,
+                            ]
+                        ]),
                         'value' =>  function($data) {
                             return Status::getStatusById($data->status_id)->title;
                         },
@@ -75,10 +132,20 @@ else{
                             return ['class' => Status::getStatusColor($data->status_id)];
                         }
                     ],
+//                    'status_id' => [
+//                        'attribute' => 'status_id',
+//                        'filter'    => $statuses,
+//                        'value' =>  function($data) {
+//                            return Status::getStatusById($data->status_id)->title;
+//                        },
+//                        'contentOptions' => function($data) {
+//                            return ['class' => Status::getStatusColor($data->status_id)];
+//                        }
+//                    ],
 
                     [
                         'class' => 'yii\grid\ActionColumn',
-                        'template'  =>$template
+                        'template' => $template
                     ],
                 ],
             ]); ?>

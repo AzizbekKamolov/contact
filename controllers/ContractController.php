@@ -8,6 +8,7 @@ use app\models\ContractExecution;
 use app\models\ContractExecutionSearch;
 use app\models\ContractSearch;
 use app\models\Currency;
+use app\models\ExpenseSearch;
 use app\models\ImageUpload;
 use app\models\Project;
 use app\models\Status;
@@ -102,12 +103,17 @@ class ContractController extends Controller
         $dataProvider = $searchModel->search($this->request->queryParams);
         $dataProvider->query->andWhere(['contract_id' =>  $id]);
 
+        $searchModelExpense = new ExpenseSearch();
+        $dataProviderExpense = $searchModelExpense->search(\Yii::$app->request->queryParams);
+        $dataProviderExpense->query->andWhere(['contract_id' => $id]);
         return $this->render('view', [
             'model' => $this->findModel($id),
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
             'users'         => User::getUsers(),
-            'statuses'      =>  Status::getStatuses()
+            'statuses'      =>  Status::getStatuses(),
+            'searchModelExpense' => $searchModelExpense,
+            'dataProviderExpense' => $dataProviderExpense
         ]);
     }
 

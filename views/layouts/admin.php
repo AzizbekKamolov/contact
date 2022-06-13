@@ -32,11 +32,11 @@ AppAsset::register($this);
 //        ['label' => 'Главная', 'url' => ['/admin/default/index']],
         ['label' => 'Проекты', 'url' => ['/admin/project/index']],
         ['label' => 'Контракты', 'url' => ['/admin/contract/index']],
-        ['label' => 'Конт на Исп', 'url' => ['/admin/contract-execution/index']],
-        ['label' => 'Конт на Exch', 'url' => ['/admin/contract-exchange/index']],
+        ['label' => 'Кон на Исп', 'url' => ['/admin/contract-execution/index']],
+        ['label' => 'Кон на Exch', 'url' => ['/admin/contract-exchange/index']],
         ['label' => 'Задачи', 'url' => ['/admin/task/index']],
-        ['label' => 'Задачи на Исп', 'url' => ['/admin/task-execution/index']],
-        ['label' => 'Задачи на Exch', 'url' => ['/admin/task-exchange/index']],
+        ['label' => 'Зад на Исп', 'url' => ['/admin/task-execution/index']],
+        ['label' => 'Зад на Exch', 'url' => ['/admin/task-exchange/index']],
         ['label' => 'Валюта', 'url' => ['/admin/currency/index']],
         ['label' => 'Статусы', 'url' => ['/admin/status/index']],
         ['label' => 'RBAC', 'url' => ['/rbac/default/index']],
@@ -55,7 +55,7 @@ AppAsset::register($this);
         )
     ];
     NavBar::begin([
-        'brandLabel' => Yii::$app->name,
+        'brandLabel' => 'ACDF',
         'brandUrl' => Yii::$app->homeUrl,
         'options' => [
             'class' => 'navbar navbar-expand-md navbar-dark bg-dark fixed-top',

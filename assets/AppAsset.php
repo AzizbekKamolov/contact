@@ -27,7 +27,7 @@ class AppAsset extends AssetBundle
         'adminlte/dist/css/adminlte.min.css',
     ];
     public $js = [
-        'adminlte/plugins/jquery/jquery.min.js',
+//        'adminlte/plugins/jquery/jquery.min.js',
         'adminlte/plugins/bootstrap/js/bootstrap.bundle.min.js',
         'adminlte/dist/js/adminlte.min.js',
 //        'adminlte/dist/js/demo.js',

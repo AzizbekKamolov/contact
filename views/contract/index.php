@@ -3,6 +3,7 @@
 use app\models\Currency;
 use app\models\Status;
 use app\models\User;
+use kartik\select2\Select2;
 use yii\helpers\Html;
 use yii\grid\GridView;
 
@@ -52,7 +53,20 @@ else{
                     ],
                     'user_id' => [
                         'attribute' => 'user_id',
-                        'filter' => $users,
+                        'filter' => Select2::widget([
+                            'model' => $searchModel,
+                            'attribute' => 'user_id',
+                            'name' => 'kv-type-01',
+                            'data' => $users,
+                            'options' => [
+                                'class' => 'form-control',
+                                'placeholder' => 'Создатель',
+                            ],
+                            'pluginOptions' => [
+                                'allowClear' => true,
+                                'selectOnClose' => true,
+                            ]
+                        ]),
                         'value' =>  function($data) {
                             return User::getUserById($data->user_id)->fullname;
                         },
@@ -61,8 +75,22 @@ else{
 //                        },
                     ],
                     'status_id' => [
-                        'attribute' => 'status_id',
-                        'filter'    => $statuses,
+                        'attribute'=>'status_id',
+                        'filter' => Select2::widget([
+                            'model' => $searchModel,
+                            'attribute' => 'status_id',
+                            'name' => 'kv-type-01',
+                            'data' => $statuses,
+                            'options' => [
+                                'class' => 'form-control',
+                                'placeholder' => 'Статус',
+
+                            ],
+                            'pluginOptions' => [
+                                'allowClear' => true,
+                                'selectOnClose' => true,
+                            ]
+                        ]),
                         'value' =>  function($data) {
                             return Status::getStatusById($data->status_id)->title;
                         },
@@ -74,7 +102,8 @@ else{
                         'attribute' => 'deadline',
                         'value' =>  function($data) {
                             return date('d M Y H:i:s', strtotime($data->deadline));
-                        }
+                        },
+//                        'format' => ['datetime', 'php:d.m.Y H:i:s']
                     ],
                     [
                         'class' => 'yii\grid\ActionColumn',

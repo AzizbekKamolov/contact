@@ -57,7 +57,7 @@ class TaskExecutionController extends Controller
             $dataProvider->setSort([
                 'defaultOrder' => ['id'=>SORT_DESC],
             ]);
-        } elseif ($myRole === "simpleUser") {
+        } elseif ($myRole === "simpleUser" || $myRole === "accountant") {
             $dataProvider->query->andWhere(['exe_user_id' =>  \Yii::$app->user->id])->orWhere(['receive_user' => \Yii::$app->user->id]);
             $dataProvider->setSort([
                 'defaultOrder' => ['id'=>SORT_DESC],

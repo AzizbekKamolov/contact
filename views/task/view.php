@@ -42,55 +42,66 @@ $myRole = \app\models\User::getMyRole();
         </div>
         <!-- /.card-header -->
         <div class="card-body" >
-            <?= DetailView::widget([
-                'model' => $model,
-                'attributes' => [
-                    'id',
-                    [
-                        'label' => 'Проект',
-                        'value' =>  function($data) {
-                            return Project::getProjectById($data->project_id)->title;
-                        }
-                    ],
-                    [
-                        'label' => 'Название',
-                        'value' =>  function($data) {
-                            return $data->title;
-                        }
-                    ],
-                    [
-                        'label' => 'Цена',
-                        'value' =>  function($data) {
-                            return $data->price;
-                        }
-                    ],
-                    [
-                        'label' => 'Создатель',
-                        'value' =>  function($data) {
-                            return User::getUserById($data->user_id)->fullname;
-                        }
-                    ],
-                    [
-                        'label' => 'Статус',
-                        'value' =>  function($data) {
-                            return Status::getStatusById($data->status_id)->title;
-                        }
-                    ],
-                    [
-                        'label' => 'Создан',
-                        'value' =>  function($data) {
-                            date_default_timezone_set('Asia/Tashkent');
-                            return date('d M Y H:i:s',$data->created_at);
-                        }
-                    ],
-                    [
-                        'label' => 'Срок',
-                        'value' =>  function($data) {
-                            return date('d M Y H:i:s', strtotime($data->deadline));
-                        }
-                    ],
-                ],
-            ]) ?>
+            <div class="row">
+                <div class="col-6">
+                    <?= DetailView::widget([
+                        'model' => $model,
+                        'attributes' => [
+                            'id',
+                            [
+                                'label' => 'Проект',
+                                'value' =>  function($data) {
+                                    return Project::getProjectById($data->project_id)->title;
+                                }
+                            ],
+                            [
+                                'label' => 'Название',
+                                'value' =>  function($data) {
+                                    return $data->title;
+                                }
+                            ],
+                            [
+                                'label' => 'Цена',
+                                'value' =>  function($data) {
+                                    return $data->price;
+                                }
+                            ],
+                        ],
+                    ]) ?>
+                </div>
+                <div class="col-6">
+                    <?= DetailView::widget([
+                        'model' => $model,
+                        'attributes' => [
+                            [
+                                'label' => 'Создатель',
+                                'value' =>  function($data) {
+                                    return User::getUserById($data->user_id)->fullname;
+                                }
+                            ],
+                            [
+                                'label' => 'Статус',
+                                'value' =>  function($data) {
+                                    return Status::getStatusById($data->status_id)->title;
+                                }
+                            ],
+                            [
+                                'label' => 'Создан',
+                                'value' =>  function($data) {
+                                    date_default_timezone_set('Asia/Tashkent');
+                                    return date('d M Y H:i:s',$data->created_at);
+                                }
+                            ],
+                            [
+                                'label' => 'Срок',
+                                'value' =>  function($data) {
+                                    return date('d M Y H:i:s', strtotime($data->deadline));
+                                }
+                            ],
+                        ],
+                    ]) ?>
+                </div>
+            </div>
         </div>
         <!-- /.card-body -->
     </div>

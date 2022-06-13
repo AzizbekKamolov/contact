@@ -3,6 +3,7 @@
 use app\models\Project;
 use app\models\Status;
 use app\models\User;
+use kartik\select2\Select2;
 use yii\helpers\Html;
 use yii\grid\GridView;
 
@@ -42,19 +43,71 @@ $myRole = \app\models\User::getMyRole();
                 'filterModel' => $searchModel,
                 'columns' => [
                     ['class' => 'yii\grid\SerialColumn'],
-                    'project_id' => [
-                        'attribute' => 'project_id',
-                        'filter'    =>  $projects,
+                    'project_id' =>[
+                        'attribute'=>'project_id',
+                        'filter' => Select2::widget([
+                            'model' => $searchModel,
+                            'attribute' => 'project_id',
+                            'name' => 'kv-type-01',
+                            'data' => $projects,
+                            'options' => [
+                                'class' => 'form-control',
+                                'placeholder' => 'Проект',
+
+                            ],
+                            'pluginOptions' => [
+                                'allowClear' => true,
+                                'selectOnClose' => true,
+                            ]
+                        ]),
                         'value' =>  function($data) {
                             return Project::getProjectById($data->project_id)->title;
-                        }
+                        },
                     ],
                     'title:ntext',
-                    'user_id' => [
-                        'attribute' => 'user_id',
-                        'filter'    => $users,
-                        'value'     =>  function($data) {
+                    'user_id' =>[
+                        'attribute'=>'user_id',
+                        'filter' => Select2::widget([
+                            'model' => $searchModel,
+                            'attribute' => 'user_id',
+                            'name' => 'kv-type-01',
+                            'data' => $users,
+                            'options' => [
+                                'class' => 'form-control',
+                                'placeholder' => 'Создатель',
+
+                            ],
+                            'pluginOptions' => [
+                                'allowClear' => true,
+                                'selectOnClose' => true,
+                            ]
+                        ]),
+                        'value' =>  function($data) {
                             return User::getUserById($data->user_id)->fullname;
+                        },
+                    ],
+                    'status_id' => [
+                        'attribute'=>'status_id',
+                        'filter' => Select2::widget([
+                            'model' => $searchModel,
+                            'attribute' => 'status_id',
+                            'name' => 'kv-type-01',
+                            'data' => $statuses,
+                            'options' => [
+                                'class' => 'form-control',
+                                'placeholder' => 'Статус',
+
+                            ],
+                            'pluginOptions' => [
+                                'allowClear' => true,
+                                'selectOnClose' => true,
+                            ]
+                        ]),
+                        'value' =>  function($data) {
+                            return Status::getStatusById($data->status_id)->title;
+                        },
+                        'contentOptions' => function($data) {
+                            return ['class' => Status::getStatusColor($data->status_id)];
                         }
                     ],
                     'deadline' => [
@@ -63,16 +116,16 @@ $myRole = \app\models\User::getMyRole();
                             return date('d M Y H:i:s', strtotime($data->deadline));
                         }
                     ],
-                    'status_id' => [
-                        'attribute' => 'status_id',
-                        'filter'    => $statuses,
-                        'value'     =>  function($data) {
-                            return Status::getStatusById($data->status_id)->title;
-                        },
-                        'contentOptions' => function($data) {
-                            return ['class' => Status::getStatusColor($data->status_id)];
-                        }
-                    ],
+//                    'status_id' => [
+//                        'attribute' => 'status_id',
+//                        'filter'    => $statuses,
+//                        'value'     =>  function($data) {
+//                            return Status::getStatusById($data->status_id)->title;
+//                        },
+//                        'contentOptions' => function($data) {
+//                            return ['class' => Status::getStatusColor($data->status_id)];
+//                        }
+//                    ],
                     [
                         'class' => 'yii\grid\ActionColumn',
                         'template'  =>$template

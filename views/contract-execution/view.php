@@ -110,7 +110,7 @@ $myRole = \app\models\User::getMyRole();
                             [
                                 'label' => 'Дата получения',
                                 'value' =>  function($data) {
-                                    return date('d M Y H:i:s', strtotime($data->receive_date));
+                                    return ($data->receive_date) ? date('d M Y H:i:s', strtotime($data->receive_date)) : '(не получено)';
                                 }
                             ],
                             [

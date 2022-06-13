@@ -4,12 +4,12 @@ namespace app\models;
 
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use app\models\Currency;
+use app\models\Expense;
 
 /**
- * CurrencySearch represents the model behind the search form of `app\models\Currency`.
+ * ExpenseSearch represents the model behind the search form of `app\models\Expense`.
  */
-class CurrencySearch extends Currency
+class ExpenseSearch extends Expense
 {
     /**
      * {@inheritdoc}
@@ -17,8 +17,9 @@ class CurrencySearch extends Currency
     public function rules()
     {
         return [
-            [['id', 'created_at', 'updated_at', 'code'], 'integer'],
-            [['name', 'short_name'], 'safe'],
+            [['id', 'contract_id', 'currency_id', 'created_at', 'updated_at'], 'integer'],
+            [['sum', 'rate'], 'number'],
+            [['desc'], 'safe'],
         ];
     }
 
@@ -40,7 +41,7 @@ class CurrencySearch extends Currency
      */
     public function search($params)
     {
-        $query = Currency::find();
+        $query = Expense::find();
 
         // add conditions that should always apply here
 
@@ -59,12 +60,15 @@ class CurrencySearch extends Currency
         // grid filtering conditions
         $query->andFilterWhere([
             'id' => $this->id,
+            'contract_id' => $this->contract_id,
+            'currency_id' => $this->currency_id,
+            'sum' => $this->sum,
+            'rate' => $this->rate,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
         ]);
 
-        $query->andFilterWhere(['like', 'name', $this->name])
-            ->andFilterWhere(['like', 'short_name', $this->short_name]);
+        $query->andFilterWhere(['like', 'desc', $this->desc]);
 
         return $dataProvider;
     }

@@ -16,6 +16,7 @@ class m211225_163203_create_currency_table extends Migration
             'id'            => $this->primaryKey(),
             'name'          =>  $this->string(),
             'short_name'    => $this->string(),
+            'code'          => $this->integer(),
             'created_at'    => $this->integer()->notNull(),
             'updated_at'    => $this->integer()->notNull()
         ]);

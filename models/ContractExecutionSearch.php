@@ -79,26 +79,13 @@ class ContractExecutionSearch extends ContractExecution
             return $dataProvider;
         }
 
-//        $contractExes = ContractExchange::find()
-//            ->orWhere(['exe_user_id' => \Yii::$app->user->id])
-//            ->orWhere(['rec_user_id' => \Yii::$app->user->id])
-//            ->select(['con_exe_id'])
-//            ->distinct()
-//            ->all();
-////        var_dump($contracts);die();
-//        $str = ' ';
-//        foreach ($contractExes as $contractEx){
-//            $str .= 'id = ' . $contractEx->con_exe_id . ' or ';
-//        }
-////        mb_substr($str ,4,-1);
-////        var_dump($str);die();
 
         if (User::getMyRole() === 'headOfDep') {
             $q = '(exe.user_id = :user_id OR exe.exe_user_id = :user_id OR exe.receive_user = :user_id OR exc.exe_user_id = :user_id OR exc.rec_user_id = :user_id)';
             $query->where($q, [
                 'user_id' => \Yii::$app->user->id,
             ]);
-        } elseif (User::getMyRole() === "simpleUser") {
+        } elseif ((User::getMyRole() === "simpleUser") || (User::getMyRole() === "accountant")) {
             $q = '(exe.exe_user_id = :user_id OR exe.receive_user = :user_id OR exc.exe_user_id = :user_id OR exc.rec_user_id = :user_id)';
             $query->where($q, [
                 'user_id' => \Yii::$app->user->id

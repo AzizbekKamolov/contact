@@ -6,6 +6,7 @@ namespace app\controllers;
 use app\models\Contract;
 use app\models\ContractSearch;
 use app\models\Currency;
+use app\models\ExpenseSearch;
 use app\models\Project;
 use app\models\ProjectSearch;
 use app\models\Status;
@@ -93,17 +94,22 @@ class ProjectController extends Controller
         $searchModelTask = new TaskSearch();
         $dataProviderTask = $searchModelTask->search(\Yii::$app->request->queryParams);
         $dataProviderTask->query->andWhere(['project_id' => $id]);
-//        $dataProviderTask->setSort([
-//            'defaultOrder' => ['id'=>SORT_DESC],
-//        ]);
+
+        $searchModelExpense = new ExpenseSearch();
+        $dataProviderExpense = $searchModelExpense->search(\Yii::$app->request->queryParams);
+        $dataProviderExpense->query->andWhere(['project_id' => $id]);
 
         return $this->render('view', [
-            'model' => $this->findModel($id),
-            'searchModel' => $searchModel,
-            'dataProvider' => $dataProvider,
-            'searchModelTask' => $searchModelTask,
-            'dataProviderTask' => $dataProviderTask,
-            'statuses'  => Status::getStatuses()
+            'model'             => $this->findModel($id),
+            'searchModel'       => $searchModel,
+            'dataProvider'      => $dataProvider,
+            'searchModelTask'   => $searchModelTask,
+            'dataProviderTask'  => $dataProviderTask,
+            'statuses'          => Status::getStatuses(),
+            'contracts'         => ArrayHelper::map(Contract::find()->where(['project_id' => $id])->all(), 'id', 'title'),
+            'currencies'        => Currency::getCurrencies(),
+            'searchModelExpense' => $searchModelExpense,
+            'dataProviderExpense' => $dataProviderExpense
         ]);
     }
 
@@ -113,7 +119,7 @@ class ProjectController extends Controller
         $user_id = \Yii::$app->user->id;
 
         if ($this->request->isPost) {
-//            $model->user_id = $user_id;
+            $model->currency_id = 1;
             if ($model->load($this->request->post()) && $model->save()) {
                 return $this->redirect(['view', 'id' => $model->id]);
             }
@@ -123,7 +129,7 @@ class ProjectController extends Controller
 
         return $this->render('create', [
             'model'         => $model,
-            'currencies'    => Currency::getCurrencies(),
+//            'currencies'    => Currency::getCurrencies(),
             'users'         => User::getUsers()
         ]);
     }

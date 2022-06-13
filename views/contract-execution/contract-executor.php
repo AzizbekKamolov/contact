@@ -1,5 +1,7 @@
 <?php
 
+use app\models\User;
+use kartik\money\MaskMoney;
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
@@ -24,6 +26,42 @@ use yii\widgets\ActiveForm;
                 <?=Html::dropDownList('new_receive_user','',$users, ['prompt' => "Выберите сотрудник", 'class' => 'form-control'])?>
             </div>
         <?php endif;?>
+
+        <?php if (User::getMyRole() === "accountant"):?>
+            <div class="col-6">
+                <input type="checkbox" id="pay" value="">
+                <label for="pay">Вы хотите оплатить по этому контракту</label>
+                <div class="info_area">
+                    <?=
+                        $form->field($expenseModel, 'sum')->widget(MaskMoney::classname(), [
+                            'name' => 'amount_german',
+                            'value' => 0,
+                            'pluginOptions' => [
+                                'prefix' => '| ',
+                                'thousands' => ' ',
+                                'decimal' => ',',
+                                'precision' => 0,
+                            ],
+                        ]);
+                    ?>
+                    <?php if ($currency_id !== 1): ?>
+                        <?=
+                            $form->field($expenseModel, 'rate')->widget(MaskMoney::classname(), [
+                                'name' => 'amount_german',
+                                'value' => 0,
+                                'pluginOptions' => [
+                                    'prefix' => '| ',
+                                    'thousands' => ' ',
+                                    'decimal' => ',',
+                                    'precision' => 0,
+                                ],
+                            ]);
+                        ?>
+                    <?php endif;?>
+                </div>
+
+            </div>
+        <?php endif; ?>
     </div>
 
     <div class="form-group">
@@ -33,3 +71,15 @@ use yii\widgets\ActiveForm;
     <?php ActiveForm::end(); ?>
 
 </div>
+
+<style>
+
+    .info_area {
+        display:none;
+    }
+
+    input[type="checkbox"]:checked ~ .info_area {
+        display: block;
+    }
+
+</style>
