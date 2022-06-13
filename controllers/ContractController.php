@@ -112,6 +112,7 @@ class ContractController extends Controller
             'dataProvider' => $dataProvider,
             'users'         => User::getUsers(),
             'statuses'      =>  Status::getStatuses(),
+            'contracts'     => Contract::getContracts(),
             'searchModelExpense' => $searchModelExpense,
             'dataProviderExpense' => $dataProviderExpense
         ]);
