@@ -332,7 +332,7 @@ $myRole = \app\models\User::getMyRole();
                     'rate' => [
                         'attribute' => 'rate',
                         'value' =>  function($data) {
-                            return ($data->rate) ? number_format($data->rate, 2) : '1.00';
+                            return number_format($data->rate, 2);
                         }
                     ],
                     'desc' => [

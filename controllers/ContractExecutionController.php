@@ -11,6 +11,7 @@ use app\models\Expense;
 use app\models\FileUpload;
 use app\models\Status;
 use app\models\User;
+use phpDocumentor\Reflection\Types\Null_;
 use yii\helpers\ArrayHelper;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -210,7 +211,7 @@ class ContractExecutionController extends Controller
                     $expenseModel->contract_id = $contract_id;
                     $expenseModel->currency_id = $currency_id;
                     $expenseModel->sum = $this->request->post("Expense")['sum'];
-                    $expenseModel->rate = $this->request->post("Expense")['rate'];
+                    $expenseModel->rate = ($currency_id !== 1) ? $this->request->post("Expense")['rate'] : 1;
                     $expenseModel->desc = $info;
                     $expenseModel->save(false);
                 }
