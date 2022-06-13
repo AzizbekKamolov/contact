@@ -203,15 +203,17 @@ class ContractExecutionController extends Controller
             $file = UploadedFile::getInstance($fileUpload, 'file');
             $info = $this->request->post("ContractExchange")['info'];
 
-            if($this->request->post("Expense")['sum']) {
-                $expenseModel->user_id = \Yii::$app->user->id;
-                $expenseModel->project_id = $project_id;
-                $expenseModel->contract_id = $contract_id;
-                $expenseModel->currency_id = $currency_id;
-                $expenseModel->sum = $this->request->post("Expense")['sum'];
-                $expenseModel->rate = $this->request->post("Expense")['rate'];
-                $expenseModel->desc = $info;
-                $expenseModel->save(false);
+            if ($this->request->post("Expense")) {
+                if($this->request->post("Expense")['sum']) {
+                    $expenseModel->user_id = \Yii::$app->user->id;
+                    $expenseModel->project_id = $project_id;
+                    $expenseModel->contract_id = $contract_id;
+                    $expenseModel->currency_id = $currency_id;
+                    $expenseModel->sum = $this->request->post("Expense")['sum'];
+                    $expenseModel->rate = $this->request->post("Expense")['rate'];
+                    $expenseModel->desc = $info;
+                    $expenseModel->save(false);
+                }
             }
 
             if($this->request->post("new_receive_user")){
