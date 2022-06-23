@@ -17,7 +17,7 @@ class TaskExchangeSearch extends TaskExchange
     public function rules()
     {
         return [
-            [['id', 'task_exe_id', 'exe_user_id', 'rec_user_id', 'created_at', 'updated_at'], 'integer'],
+            [['id', 'chat_id', 'task_exe_id', 'exe_user_id', 'rec_user_id', 'created_at', 'updated_at'], 'integer'],
             [['info', 'file'], 'safe'],
         ];
     }
@@ -59,6 +59,7 @@ class TaskExchangeSearch extends TaskExchange
         // grid filtering conditions
         $query->andFilterWhere([
             'id' => $this->id,
+            'chat_id' => $this->chat_id,
             'task_exe_id' => $this->task_exe_id,
             'exe_user_id' => $this->exe_user_id,
             'rec_user_id' => $this->rec_user_id,

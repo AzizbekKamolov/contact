@@ -21,7 +21,7 @@ $myRole = \app\models\User::getMyRole();
 ?>
 <div class="contract-view">
 
-    <div class="card card-outline card-success collapsed-card">
+    <div class="card card-outline card-success">
         <div class="card-header">
             <h1 class="card-title text-bold">
                 <?= Html::encode($this->title) ?>
@@ -38,7 +38,7 @@ $myRole = \app\models\User::getMyRole();
             </h1>
 
             <div class="card-tools">
-                <button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-plus"></i>
+                <button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-minus"></i>
                 </button>
             </div>
             <!-- /.card-tools -->

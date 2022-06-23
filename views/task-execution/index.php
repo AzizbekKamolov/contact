@@ -63,7 +63,7 @@ else{
                             ]
                         ]),
                         'value' =>  function($data) {
-                            return Task::getTaskById($data->task_id)->title;
+                            return Task::getTaskById($data['task_id'])->title;
                         },
                     ],
                     'user_id' =>[
@@ -84,7 +84,7 @@ else{
                             ]
                         ]),
                         'value' =>  function($data) {
-                            return User::getUserById($data->user_id)->fullname;
+                            return User::getUserById($data['user_id'])->fullname;
                         },
                     ],
                     'exe_user_id' =>[
@@ -105,7 +105,7 @@ else{
                             ]
                         ]),
                         'value' =>  function($data) {
-                            return User::getUserById($data->exe_user_id)->fullname;
+                            return User::getUserById($data['exe_user_id'])->fullname;
                         },
                     ],
                     'status_id' => [
@@ -126,26 +126,30 @@ else{
                             ]
                         ]),
                         'value' =>  function($data) {
-                            return Status::getStatusById($data->status_id)->title;
+                            return Status::getStatusById($data['status_id'])->title;
                         },
                         'contentOptions' => function($data) {
-                            return ['class' => Status::getStatusColor($data->status_id)];
+                            return ['class' => Status::getStatusColor($data['status_id'])];
                         }
                     ],
-//                    'status_id' => [
-//                        'attribute' => 'status_id',
-//                        'filter'    => $statuses,
-//                        'value' =>  function($data) {
-//                            return Status::getStatusById($data->status_id)->title;
-//                        },
-//                        'contentOptions' => function($data) {
-//                            return ['class' => Status::getStatusColor($data->status_id)];
-//                        }
-//                    ],
 
                     [
                         'class' => 'yii\grid\ActionColumn',
-                        'template' => $template
+                        'template' => $template,
+                        'buttons' => [
+                            'view' => function($url, $model, $key) {
+                                $i = '<i class="fas fa-eye"></i>';
+                                return Html::a($i, ['task-execution/view', 'id' => $model['id']],[]);
+                            },
+                            'update' => function($url, $model, $key) {
+                                $i = '<i class="fas fa-pen"></i>';
+                                return Html::a($i, ['task-execution/update', 'id' => $model['id']],[]);
+                            },
+                            'delete' => function($url, $model, $key) {
+                                $i = '<i class="fas fa-trash"></i>';
+                                return Html::a($i, ['task-execution/delete', 'id' => $model['id']],[]);
+                            },
+                        ],
                     ],
                 ],
             ]); ?>

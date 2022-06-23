@@ -41,7 +41,6 @@ class ContractExecutionSearch extends ContractExecution
     public function search($params)
     {
         $select = '
-
         exe.id AS id,
         exe.title AS title,
         exe.contract_id AS contract_id,

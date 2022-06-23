@@ -81,15 +81,18 @@ class ContractExecutionController extends Controller
      */
     public function actionView($id)
     {
+        $current_user_id = \Yii::$app->user->id;
         $model = $this->findModel($id);
-        $a = ContractExchange::find()->all();
-        $lastItem = end($a);
-//        var_dump($lastItem);die();
-        $searchModel = new ContractExchangeSearch();
-        $dataProvider = $searchModel->search(($this->request->queryParams));
-        $dataProvider->query->andWhere(['con_exe_id' =>  $id]);
 
-        if (\Yii::$app->user->id === $model->exe_user_id) {
+        $lastItem = ContractExchange::find()->orWhere(['con_exe_id' => $id, 'exe_user_id' => $current_user_id])->orWhere(['con_exe_id' => $id, 'rec_user_id' => $current_user_id])->orderBy(['id' => SORT_DESC])->one();
+        $contractExchanges = ContractExchange::find()->where(['con_exe_id' => $id])->all();
+        $chat_ids = [];
+        foreach($contractExchanges as $item) {
+                array_push($chat_ids, $item['chat_id']);
+        }
+        $chat_ids = array_unique($chat_ids);
+
+        if ($current_user_id === $model->exe_user_id) {
             if ($model->receive_date === NULL)
             {
                 $receive_date = \date('Y-m-d H:i:s');
@@ -98,10 +101,12 @@ class ContractExecutionController extends Controller
             }
         }
         return $this->render('view', [
-            'lastItem' => $lastItem,
-            'model' => $this->findModel($id),
-            'searchModel'  => $searchModel,
-            'dataProvider'  => $dataProvider
+            'lastItem'      => $lastItem,
+            'model'         => $this->findModel($id),
+//            'searchModel'   => $searchModel,
+//            'dataProvider'  => $dataProvider,
+            'contractExchanges' => $contractExchanges,
+            'chats'             => $chat_ids
         ]);
     }
 
@@ -217,25 +222,51 @@ class ContractExecutionController extends Controller
                 }
             }
 
+            $exe_user_id = \Yii::$app->user->id;
+            $rec_user_id = $this->request->post("new_receive_user");
+            $query_exe = ContractExchange::find()->where(['con_exe_id' => $id, 'exe_user_id' => $exe_user_id, 'rec_user_id' => $rec_user_id])->orderBy(['id' => SORT_DESC])->one();
+            $query_rec = ContractExchange::find()->where(['con_exe_id' => $id, 'exe_user_id' => $rec_user_id, 'rec_user_id' => $exe_user_id])->orderBy(['id' => SORT_DESC])->one();
             if($this->request->post("new_receive_user")){
-                $contractExecution = $this->findModel($id);
-                $file = UploadedFile::getInstance($fileUpload, 'file');
-                $info = $this->request->post("ContractExchange")['info'];
 
-                $model->con_exe_id = $id;
-                $model->exe_user_id = $this->request->post("new_receive_user");
-                $model->rec_user_id = \Yii::$app->user->id;
-                $contractExecution->status_id = Status::findOne(['title' => 'В процессе'])->id;
-                $model->info =$info;
-                $model->saveFile($fileUpload->uploadFile($file, $model->file));
+                if ( $query_exe || $query_rec){
+                        $contractExecution = $this->findModel($id);
+                        $file = UploadedFile::getInstance($fileUpload, 'file');
+                        $info = $this->request->post("ContractExchange")['info'];
 
-                if ($model->save() && $contractExecution->save()) {
-                    return $this->redirect(['view', 'id' => $contractExecution->id]);
+                        $model->chat_id = $query_exe->chat_id;
+                        $model->con_exe_id = $id;
+                        $model->exe_user_id = $exe_user_id;
+                        $model->rec_user_id = $rec_user_id;
+                        $contractExecution->status_id = Status::findOne(['title' => 'В процессе'])->id;
+                        $model->info =$info;
+                        $model->saveFile($fileUpload->uploadFile($file, $model->file));
+                        if ($model->save() && $contractExecution->save()) {
+                            return $this->redirect(['view', 'id' => $contractExecution->id]);
+                        }
+
+                } else {
+                    $contractExecution = $this->findModel($id);
+                    $file = UploadedFile::getInstance($fileUpload, 'file');
+                    $info = $this->request->post("ContractExchange")['info'];
+
+                    $model->chat_id = rand(time(), 1000000);
+                    $model->con_exe_id = $id;
+                    $model->exe_user_id = $exe_user_id;
+                    $model->rec_user_id = $rec_user_id;
+                    $contractExecution->status_id = Status::findOne(['title' => 'В процессе'])->id;
+                    $model->info =$info;
+                    $model->saveFile($fileUpload->uploadFile($file, $model->file));
+                    if ($model->save() && $contractExecution->save()) {
+                        return $this->redirect(['view', 'id' => $contractExecution->id]);
+                    }
                 }
             }
 
             if ($contractExecution->exe_user_id !== \Yii::$app->user->id)
             {
+                $chat_id = ContractExchange::find()->where(['con_exe_id' => $id, 'exe_user_id' => $contractExecution->exe_user_id, 'rec_user_id' => \Yii::$app->user->id])->orderBy(['id' => SORT_DESC])->one()->chat_id;
+//                var_dump($chat_id);die();
+                $model->chat_id = $chat_id;
                 $model->con_exe_id = $id;
                 $model->exe_user_id = \Yii::$app->user->id;
                 $model->rec_user_id = $contractExecution->exe_user_id;
@@ -247,15 +278,31 @@ class ContractExecutionController extends Controller
                 }
             }
 
-            $model->con_exe_id = $id;
-            $model->exe_user_id = \Yii::$app->user->id;
-            $model->rec_user_id = $contractExecution->receive_user;
-            $contractExecution->status_id = Status::findOne(['title' => 'Отправленная'])->id;
-            $model->info =$info;
-            $model->saveFile($fileUpload->uploadFile($file, $model->file));
+            if ( $query_exe || $query_rec) {
 
-            if ($model->save() && $contractExecution->save()) {
-                return $this->redirect(['view', 'id' => $contractExecution->id]);
+                $model->chat_id = $query_exe->chat_id;
+                $model->con_exe_id = $id;
+                $model->exe_user_id = \Yii::$app->user->id;
+                $model->rec_user_id = $contractExecution->receive_user;
+                $contractExecution->status_id = Status::findOne(['title' => 'Отправленная'])->id;
+                $model->info =$info;
+                $model->saveFile($fileUpload->uploadFile($file, $model->file));
+
+                if ($model->save() && $contractExecution->save()) {
+                    return $this->redirect(['view', 'id' => $contractExecution->id]);
+                }
+            }else {
+                $model->chat_id = rand(time(), 1000000);
+                $model->con_exe_id = $id;
+                $model->exe_user_id = \Yii::$app->user->id;
+                $model->rec_user_id = $contractExecution->receive_user;
+                $contractExecution->status_id = Status::findOne(['title' => 'Отправленная'])->id;
+                $model->info =$info;
+                $model->saveFile($fileUpload->uploadFile($file, $model->file));
+
+                if ($model->save() && $contractExecution->save()) {
+                    return $this->redirect(['view', 'id' => $contractExecution->id]);
+                }
             }
 
 
@@ -327,7 +374,9 @@ class ContractExecutionController extends Controller
             $contractExecution = $this->findModel($id);
             $file = UploadedFile::getInstance($fileUpload, 'file');
             $info = $this->request->post("ContractExchange")['info'];
+            $chat_id = ContractExchange::find()->where(['con_exe_id' => $id, 'exe_user_id' => $contractExecution->exe_user_id, 'rec_user_id' => \Yii::$app->user->id])->orderBy(['id' => SORT_DESC])->one()->chat_id;
 
+            $model->chat_id = $chat_id;
             $model->con_exe_id = $id;
             $model->exe_user_id = \Yii::$app->user->id;
             $model->rec_user_id = $contractExecution->exe_user_id;

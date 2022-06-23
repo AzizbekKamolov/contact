@@ -13,7 +13,14 @@ class FileUpload extends Model {
     {
         return [
 //          [['file'], 'required'],
-          [['file'], 'file', 'extensions' => 'doc,docx,pdf,pptx']
+          [['file'], 'file', 'maxSize' => 1024 * 1024 * 3]
+        ];
+    }
+
+    public function attributeLabels()
+    {
+        return [
+            'file' => 'Файл'
         ];
     }
 

@@ -47,22 +47,22 @@ class TaskExecutionController extends Controller
      */
     public function actionIndex()
     {
-        $myRole = User::getMyRole();
+//        $myRole = User::getMyRole();
 
         $searchModel = new TaskExecutionSearch();
         $dataProvider = $searchModel->search($this->request->queryParams);
 
-        if ($myRole === 'headOfDep'){
-            $dataProvider->query->andWhere(['user_id' =>  \Yii::$app->user->id])->orWhere(['receive_user' => \Yii::$app->user->id])->orWhere(['exe_user_id' => \Yii::$app->user->id]);
-            $dataProvider->setSort([
-                'defaultOrder' => ['id'=>SORT_DESC],
-            ]);
-        } elseif ($myRole === "simpleUser" || $myRole === "accountant") {
-            $dataProvider->query->andWhere(['exe_user_id' =>  \Yii::$app->user->id])->orWhere(['receive_user' => \Yii::$app->user->id]);
-            $dataProvider->setSort([
-                'defaultOrder' => ['id'=>SORT_DESC],
-            ]);
-        }
+//        if ($myRole === 'headOfDep'){
+//            $dataProvider->query->andWhere(['user_id' =>  \Yii::$app->user->id])->orWhere(['receive_user' => \Yii::$app->user->id])->orWhere(['exe_user_id' => \Yii::$app->user->id]);
+//            $dataProvider->setSort([
+//                'defaultOrder' => ['id'=>SORT_DESC],
+//            ]);
+//        } elseif ($myRole === "simpleUser" || $myRole === "accountant") {
+//            $dataProvider->query->andWhere(['exe_user_id' =>  \Yii::$app->user->id])->orWhere(['receive_user' => \Yii::$app->user->id]);
+//            $dataProvider->setSort([
+//                'defaultOrder' => ['id'=>SORT_DESC],
+//            ]);
+//        }
 
         return $this->render('index', [
             'searchModel'   => $searchModel,
@@ -81,18 +81,36 @@ class TaskExecutionController extends Controller
      */
     public function actionView($id)
     {
-        $searchModel = new TaskExchangeSearch();
-        $dataProvider = $searchModel->search(($this->request->queryParams));
-        $dataProvider->query->andWhere(['task_exe_id' =>  $id]);
-//        $dataProvider->setSort([
-//            'defaultOrder' => ['id'=>SORT_DESC],
-//        ]);
+        $current_user_id = \Yii::$app->user->id;
+        $model = $this->findModel($id);
+
+        $lastItem = TaskExchange::find()->orWhere(['task_exe_id' => $id, 'exe_user_id' => $current_user_id])->orWhere(['task_exe_id' => $id, 'rec_user_id' => $current_user_id])->orderBy(['id' => SORT_DESC])->one();
+        $taskExchanges = TaskExchange::find()->where(['task_exe_id' => $id])->all();
+        $chat_ids = [];
+        foreach($taskExchanges as $item) {
+            array_push($chat_ids, $item['chat_id']);
+        }
+        $chat_ids = array_unique($chat_ids);
+
+        if ($current_user_id === $model->exe_user_id) {
+            if ($model->receive_date === NULL)
+            {
+                $receive_date = \date('Y-m-d H:i:s');
+                $model->receive_date = $receive_date;
+                $model->save();
+            }
+        }
+
+
 
 
         return $this->render('view', [
             'model'         => $this->findModel($id),
-            'searchModel'  => $searchModel,
-            'dataProvider'  => $dataProvider
+            'lastItem'      => $lastItem,
+            'chats'         => $chat_ids,
+            'taskExchanges' => $taskExchanges
+//            'searchModel'  => $searchModel,
+//            'dataProvider'  => $dataProvider
         ]);
     }
 
@@ -183,6 +201,7 @@ class TaskExecutionController extends Controller
     {
         $model = new TaskExchange;
         $fileUpload = new FileUpload();
+        $taskExecution = $this->findModel($id);
 
         if ($this->request->isPost)
         {
@@ -190,15 +209,87 @@ class TaskExecutionController extends Controller
             $file = UploadedFile::getInstance($fileUpload, 'file');
             $info = $this->request->post("TaskExchange")['info'];
 
-            $model->task_exe_id = $id;
-            $model->exe_user_id = \Yii::$app->user->id;
-            $model->rec_user_id = $taskExecution->receive_user;
-            $taskExecution->status_id = Status::findOne(['title' => 'Отправленная'])->id;
-            $model->info =$info;
-            $model->saveFile($fileUpload->uploadFile($file, $model->file));
+            $exe_user_id = \Yii::$app->user->id;
+            $rec_user_id = $this->request->post("new_receive_user");
+            $query_exe = TaskExchange::find()->where(['task_exe_id' => $id, 'exe_user_id' => $exe_user_id, 'rec_user_id' => $rec_user_id])->orderBy(['id' => SORT_DESC])->one();
+            $query_rec = TaskExchange::find()->where(['task_exe_id' => $id, 'exe_user_id' => $rec_user_id, 'rec_user_id' => $exe_user_id])->orderBy(['id' => SORT_DESC])->one();
+            if($this->request->post("new_receive_user")){
 
-            if ($model->save() && $taskExecution->save()) {
-                return $this->redirect(['view', 'id' => $taskExecution->id]);
+                if ( $query_exe || $query_rec){
+                    $taskExecution = $this->findModel($id);
+                    $file = UploadedFile::getInstance($fileUpload, 'file');
+                    $info = $this->request->post("TaskExchange")['info'];
+
+                    $model->chat_id = $query_exe->chat_id;
+                    $model->task_exe_id = $id;
+                    $model->exe_user_id = $exe_user_id;
+                    $model->rec_user_id = $rec_user_id;
+                    $taskExecution->status_id = Status::findOne(['title' => 'В процессе'])->id;
+                    $model->info =$info;
+                    $model->saveFile($fileUpload->uploadFile($file, $model->file));
+                    if ($model->save() && $taskExecution->save()) {
+                        return $this->redirect(['view', 'id' => $taskExecution->id]);
+                    }
+
+                } else {
+                    $taskExecution = $this->findModel($id);
+                    $file = UploadedFile::getInstance($fileUpload, 'file');
+                    $info = $this->request->post("TaskExchange")['info'];
+
+                    $model->chat_id = rand(time(), 1000000);
+                    $model->task_exe_id = $id;
+                    $model->exe_user_id = $exe_user_id;
+                    $model->rec_user_id = $rec_user_id;
+                    $taskExecution->status_id = Status::findOne(['title' => 'В процессе'])->id;
+                    $model->info =$info;
+                    $model->saveFile($fileUpload->uploadFile($file, $model->file));
+                    if ($model->save() && $taskExecution->save()) {
+                        return $this->redirect(['view', 'id' => $taskExecution->id]);
+                    }
+                }
+            }
+
+            if ($taskExecution->exe_user_id !== \Yii::$app->user->id)
+            {
+                $chat_id = TaskExchange::find()->where(['task_exe_id' => $id, 'exe_user_id' => $taskExecution->exe_user_id, 'rec_user_id' => \Yii::$app->user->id])->orderBy(['id' => SORT_DESC])->one()->chat_id;
+
+                $model->chat_id = $chat_id;
+                $model->task_exe_id = $id;
+                $model->exe_user_id = \Yii::$app->user->id;
+                $model->rec_user_id = $taskExecution->exe_user_id;
+                $model->info =$info;
+                $model->saveFile($fileUpload->uploadFile($file, $model->file));
+
+                if ($model->save()) {
+                    return $this->redirect(['view', 'id' => $taskExecution->id]);
+                }
+            }
+
+            if ( $query_exe || $query_rec) {
+
+                $model->chat_id = $query_exe->chat_id;
+                $model->task_exe_id = $id;
+                $model->exe_user_id = \Yii::$app->user->id;
+                $model->rec_user_id = $taskExecution->receive_user;
+                $taskExecution->status_id = Status::findOne(['title' => 'Отправленная'])->id;
+                $model->info =$info;
+                $model->saveFile($fileUpload->uploadFile($file, $model->file));
+
+                if ($model->save() && $taskExecution->save()) {
+                    return $this->redirect(['view', 'id' => $taskExecution->id]);
+                }
+            }else {
+                $model->chat_id = rand(time(), 1000000);
+                $model->task_exe_id = $id;
+                $model->exe_user_id = \Yii::$app->user->id;
+                $model->rec_user_id = $taskExecution->receive_user;
+                $taskExecution->status_id = Status::findOne(['title' => 'Отправленная'])->id;
+                $model->info =$info;
+                $model->saveFile($fileUpload->uploadFile($file, $model->file));
+
+                if ($model->save() && $taskExecution->save()) {
+                    return $this->redirect(['view', 'id' => $taskExecution->id]);
+                }
             }
 
         }
@@ -206,6 +297,8 @@ class TaskExecutionController extends Controller
         return $this->render('task-executor', [
             'model' => $model,
             'fileUpload' => $fileUpload,
+            'taskExecution' => $taskExecution,
+            'users' => User::getUsers()
         ]);
     }
 
@@ -230,10 +323,12 @@ class TaskExecutionController extends Controller
             $taskExecution = $this->findModel($id);
             $file = UploadedFile::getInstance($fileUpload, 'file');
             $info = $this->request->post("TaskExchange")['info'];
+            $chat_id = TaskExchange::find()->where(['task_exe_id' => $id, 'exe_user_id' => $taskExecution->exe_user_id, 'rec_user_id' => \Yii::$app->user->id])->orderBy(['id' => SORT_DESC])->one()->chat_id;
 
+            $model->chat_id = $chat_id;
             $model->task_exe_id = $id;
-            $model->exe_user_id = $taskExecution->exe_user_id;
-            $model->rec_user_id = \Yii::$app->user->id;
+            $model->exe_user_id = \Yii::$app->user->id;
+            $model->rec_user_id = $taskExecution->exe_user_id;
             $taskExecution->status_id = Status::findOne(['title' => 'Отказанная'])->id;
             $model->info =$info;
             $model->saveFile($fileUpload->uploadFile($file, $model->file));
@@ -246,7 +341,8 @@ class TaskExecutionController extends Controller
 
         return $this->render('task-deny', [
             'model' => $model,
-            'fileUpload' => $fileUpload
+            'fileUpload' => $fileUpload,
+
         ]);
     }
 

@@ -14,6 +14,7 @@ class m211210_154612_create_task_exchange_table extends Migration
     {
         $this->createTable('{{%task_exchange}}', [
             'id'            => $this->primaryKey(),
+            'chat_id'       => $this->integer(),
             'task_exe_id'   => $this->integer(),
             'exe_user_id'   => $this->integer(),
             'rec_user_id'   => $this->integer(),

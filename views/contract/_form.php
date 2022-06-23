@@ -30,7 +30,7 @@ if ($model->deadline) {
         'name' => 'amount_german',
         'value' => 0,
         'pluginOptions' => [
-            'prefix' => '¢ ',
+            'prefix' => '| ',
             'thousands' => ' ',
             'decimal' => ',',
             'precision' => 0

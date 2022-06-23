@@ -40,7 +40,7 @@ class ContractExchange extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['con_exe_id', 'exe_user_id', 'rec_user_id', 'created_at', 'updated_at'], 'integer'],
+            [['chat_id', 'con_exe_id', 'exe_user_id', 'rec_user_id', 'created_at', 'updated_at'], 'integer'],
             [['info'], 'string'],
 //            [['created_at', 'updated_at'], 'required'],
             [['file'], 'string', 'max' => 255],
@@ -54,9 +54,10 @@ class ContractExchange extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
+            'chat_id' => 'Chat ID',
             'con_exe_id' => 'Контракт',
-            'exe_user_id' => 'Исполнитель',
-            'rec_user_id' => 'Rec User ID',
+            'exe_user_id' => 'Отправитель',
+            'rec_user_id' => 'Получатель',
             'info' => 'Описание',
             'file' => 'Документ',
             'created_at' => 'Created At',

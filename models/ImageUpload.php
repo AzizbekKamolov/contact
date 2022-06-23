@@ -12,7 +12,14 @@ class ImageUpload extends Model {
     {
         return [
           [['image'], 'required'],
-          [['image'], 'file', 'extensions' => 'doc,docx,pdf']
+          [['image'], 'file', 'maxSize' => 1024 * 1024 * 3]
+        ];
+    }
+
+    public function attributeLabels()
+    {
+        return [
+            'image' => 'Файл',
         ];
     }
 

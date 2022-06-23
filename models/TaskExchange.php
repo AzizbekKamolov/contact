@@ -18,7 +18,7 @@ use yii\behaviors\TimestampBehavior;
  * @property int $created_at
  * @property int $updated_at
  */
-class TaskExchange extends \yii\db\ActiveRecord
+class  TaskExchange extends \yii\db\ActiveRecord
 {
     /**
      * {@inheritdoc}
@@ -41,7 +41,7 @@ class TaskExchange extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['task_exe_id', 'exe_user_id', 'rec_user_id', 'created_at', 'updated_at'], 'integer'],
+            [['chat_id', 'task_exe_id', 'exe_user_id', 'rec_user_id', 'created_at', 'updated_at'], 'integer'],
             [['info'], 'string'],
 //            [['created_at', 'updated_at'], 'required'],
         ];
@@ -54,10 +54,11 @@ class TaskExchange extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
+            'chat_id' => 'Chat ID',
             'task_exe_id' => 'Task Exe ID',
             'exe_user_id' => 'Exe User ID',
             'rec_user_id' => 'Rec User ID',
-            'info' => 'Info',
+            'info' => 'Описание',
             'file' => 'Документ',
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',

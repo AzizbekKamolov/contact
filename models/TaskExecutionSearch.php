@@ -40,7 +40,29 @@ class TaskExecutionSearch extends TaskExecution
      */
     public function search($params)
     {
-        $query = TaskExecution::find();
+        $select = '
+        exe.id AS id,
+        exe.title AS title,
+        exe.task_id AS task_id,
+        exe.user_id AS user_id,
+        exe.exe_user_id AS exe_user_id,
+        exe.status_id AS status_id,
+        exe.info AS info,
+        exe.done_date AS done_date,
+        exe.mark AS mark,
+        exe.receive_date AS receive_date,
+        exe.receive_user AS receive_user,
+        exe.created_at AS created_at,
+        exe.updated_at AS updated_at,';
+//        exc.exe_user_id AS exc_user_id,
+//        exc.rec_user_id AS exc_rec_user_id';
+
+        $query = (new \yii\db\Query())
+            ->select($select)
+            ->leftJoin("task_exchange AS exc", "exe.id=exc.task_exe_id")
+            ->from('task_execution AS exe')
+        ;
+//        $query = TaskExecution::find();
 
         // add conditions that should always apply here
 
@@ -54,6 +76,18 @@ class TaskExecutionSearch extends TaskExecution
             // uncomment the following line if you do not want to return any records when validation fails
             // $query->where('0=1');
             return $dataProvider;
+        }
+
+        if (User::getMyRole() === 'headOfDep') {
+            $q = '(exe.user_id = :user_id OR exe.exe_user_id = :user_id OR exe.receive_user = :user_id OR exc.exe_user_id = :user_id OR exc.rec_user_id = :user_id)';
+            $query->where($q, [
+                'user_id' => \Yii::$app->user->id,
+            ]);
+        } elseif ((User::getMyRole() === "simpleUser") || (User::getMyRole() === "accountant")) {
+            $q = '(exe.exe_user_id = :user_id OR exe.receive_user = :user_id OR exc.exe_user_id = :user_id OR exc.rec_user_id = :user_id)';
+            $query->where($q, [
+                'user_id' => \Yii::$app->user->id
+            ]);
         }
 
         // grid filtering conditions
@@ -74,6 +108,7 @@ class TaskExecutionSearch extends TaskExecution
         $query->andFilterWhere(['like', 'info', $this->info])
         ->andFilterWhere(['like', 'title', $this->title]);
 
+        $query->groupBy('exe.id');
         return $dataProvider;
     }
 }

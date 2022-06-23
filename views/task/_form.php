@@ -20,17 +20,19 @@ if ($model->deadline) {
 
     <?= $form->field($model, 'title')->textarea(['rows' => 6]) ?>
 
-    <?= $form->field($model, 'price')->widget(MaskMoney::classname(), [
-        'name' => 'amount_german',
-        'value' => 0,
-        'pluginOptions' => [
-            'prefix' => '¢ ',
-            'thousands' => ' ',
-            'decimal' => ',',
-            'precision' => 0
-        ],
-    ]) ?>
-    <?= $form->field($model, 'currency_id')->dropDownList($currencies) ?>
+    <?php
+//        $form->field($model, 'price')->widget(MaskMoney::classname(), [
+//            'name' => 'amount_german',
+//            'value' => 0,
+//            'pluginOptions' => [
+//                'prefix' => '| ',
+//                'thousands' => ' ',
+//                'decimal' => ',',
+//                'precision' => 0
+//            ],
+//        ])
+    ?>
+    <?php // $form->field($model, 'currency_id')->dropDownList($currencies) ?>
 
     <?= $form->field($model, 'deadline')->textInput(['type' => 'datetime-local']) ?>
 

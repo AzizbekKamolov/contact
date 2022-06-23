@@ -17,7 +17,7 @@ class ContractExchangeSearch extends ContractExchange
     public function rules()
     {
         return [
-            [['id', 'con_exe_id', 'exe_user_id', 'rec_user_id', 'created_at', 'updated_at'], 'integer'],
+            [['id', 'chat_id', 'con_exe_id', 'exe_user_id', 'rec_user_id', 'created_at', 'updated_at'], 'integer'],
             [['info', 'file'], 'safe'],
         ];
     }
@@ -59,6 +59,7 @@ class ContractExchangeSearch extends ContractExchange
         // grid filtering conditions
         $query->andFilterWhere([
             'id' => $this->id,
+            'chat_id' => $this->chat_id,
             'con_exe_id' => $this->con_exe_id,
             'exe_user_id' => $this->exe_user_id,
             'rec_user_id' => $this->rec_user_id,

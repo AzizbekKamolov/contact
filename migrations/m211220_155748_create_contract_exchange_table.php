@@ -14,6 +14,7 @@ class m211220_155748_create_contract_exchange_table extends Migration
     {
         $this->createTable('{{%contract_exchange}}', [
             'id'            => $this->primaryKey(),
+            'chat_id'       => $this->integer(),
             'con_exe_id'    => $this->integer(),
             'exe_user_id'   => $this->integer(),
             'rec_user_id'   => $this->integer(),
