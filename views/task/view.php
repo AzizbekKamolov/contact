@@ -128,35 +128,35 @@ $myRole = \app\models\User::getMyRole();
                     [
                         'label' => 'Название',
                         'value' =>  function($data) {
-                            return $data->title;
+                            return $data['title'];
                         }
                     ],
                     [
                         'label' => 'Задача',
                         'value' =>  function($data) {
-                            return Task::getTaskById($data->task_id)->title;
+                            return Task::getTaskById($data['task_id'])->title;
                         }
                     ],
                     [
                         'label' => 'Исполнитель',
                         'value' =>  function($data) {
-                            return User::getUserById($data->exe_user_id)->fullname;
+                            return User::getUserById($data['exe_user_id'])->fullname;
                         }
                     ],
                     [
                         'label' => 'Статус',
                         'value' =>  function($data) {
-                            return Status::getStatusById($data->status_id)->title;
+                            return Status::getStatusById($data['status_id'])->title;
                         },
                         'contentOptions' => function($data) {
-                            return ['class' => Status::getStatusColor($data->status_id)];
+                            return ['class' => Status::getStatusColor($data['status_id'])];
                         }
                     ],
                     [
                         'header' => 'Меню',
                         'format' => 'raw',
                         'value' => function($data){
-                            return Html::a('Перейти', ['task-execution/view', 'id'=>$data->id]);
+                            return Html::a('Перейти', ['task-execution/view', 'id'=>$data['id']]);
                         }
                     ],
                 ],
