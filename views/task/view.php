@@ -60,12 +60,12 @@ $myRole = \app\models\User::getMyRole();
                                     return $data->title;
                                 }
                             ],
-                            [
-                                'label' => 'Цена',
-                                'value' =>  function($data) {
-                                    return $data->price;
-                                }
-                            ],
+//                            [
+//                                'label' => 'Цена',
+//                                'value' =>  function($data) {
+//                                    return $data->price;
+//                                }
+//                            ],
                         ],
                     ]) ?>
                 </div>

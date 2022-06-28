@@ -20,17 +20,10 @@ if ($model->deadline) {
 
     <?= $form->field($model, 'title')->textarea(['rows' => 6]) ?>
 
+    <?= $form->field($taskExeModel, 'exe_user_id')->dropDownList($users, ['prompt' => 'Выберите исполнитель']) ?>
+
     <?php
-//        $form->field($model, 'price')->widget(MaskMoney::classname(), [
-//            'name' => 'amount_german',
-//            'value' => 0,
-//            'pluginOptions' => [
-//                'prefix' => '| ',
-//                'thousands' => ' ',
-//                'decimal' => ',',
-//                'precision' => 0
-//            ],
-//        ])
+
     ?>
     <?php // $form->field($model, 'currency_id')->dropDownList($currencies) ?>
 

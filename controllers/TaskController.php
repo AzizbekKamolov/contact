@@ -119,6 +119,7 @@ class TaskController extends Controller
     public function actionCreate($project_id = 1)
     {
         $model = new Task();
+        $taskExeModel = new TaskExecution();
 //        $projects = ArrayHelper::map(Project::find()->where(['user_id' => \Yii::$app->user->id])->all(), 'id', 'title');
         if ((User::getMyRole() === 'admin') || (User::getMyRole() === 'superAdmin')){
             $projects = ArrayHelper::map(Project::find()->all(), 'id', 'title');
@@ -127,9 +128,26 @@ class TaskController extends Controller
         }
 
         if ($this->request->isPost) {
+            $task = $this->request->post("Task");
+            $taskExe = $this->request->post('TaskExecution');
+
+            $model->project_id = $task['project_id'];
+            $model->title = $task['title'];
+            $model->deadline = $task['deadline'];
             $model->user_id = \Yii::$app->user->id;
-            if ($model->load($this->request->post()) && $model->save()) {
-                return $this->redirect(['view', 'id' => $model->id]);
+            $model->status_id = Status::findOne(['title' => 'В процессе'])->id;
+
+            if ($model->save()) {
+                $taskExeModel->title = $model->title;
+                $taskExeModel->task_id = $model->id;
+                $taskExeModel->user_id = $model->user_id;
+                $taskExeModel->exe_user_id = $taskExe['exe_user_id'];
+                $taskExeModel->status_id = Status::findOne(['title' => 'В процессе'])->id;
+                $taskExeModel->receive_user = $model->user_id;
+
+                if ($taskExeModel->save()) {
+                    return $this->redirect(['view', 'id' => $model->id]);
+                }
             }
         } else {
             $model->loadDefaultValues();
@@ -137,9 +155,10 @@ class TaskController extends Controller
 
         return $this->render('create', [
             'model' => $model,
+            'taskExeModel' => $taskExeModel,
             'projects' => $projects,
             'project_id' => $project_id,
-            'currencies'    => Currency::getCurrencies()
+            'users'    => User::getUsers()
         ]);
     }
 

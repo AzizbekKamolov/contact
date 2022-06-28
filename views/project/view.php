@@ -212,12 +212,12 @@ $myRole = \app\models\User::getMyRole();
                 'columns' => [
                     ['class' => 'yii\grid\SerialColumn'],
                     'title:ntext',
-                    'price' => [
-                        'attribute' => 'price',
-                        'value' => function($data) {
-                            return $data->price;
-                        }
-                    ],
+//                    'price' => [
+//                        'attribute' => 'price',
+//                        'value' => function($data) {
+//                            return $data->price;
+//                        }
+//                    ],
                     'deadline' => [
                         'attribute' => 'deadline',
                         'value' =>  function($data) {
