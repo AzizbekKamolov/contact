@@ -1,5 +1,6 @@
 <?php
 
+use kartik\date\DatePicker;
 use kartik\money\MaskMoney;
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
@@ -32,7 +33,18 @@ use yii\widgets\ActiveForm;
 
     <?php // $form->field($model, 'currency_id')->dropDownList($currencies, ['prompt'=>'Выберите валюту']) ?>
 
-    <?= $form->field($model, 'project_year')->textInput(['type'=>'date']) ?>
+    <?php // $form->field($model, 'project_year')->textInput(['type' => 'datetime']) ?>
+    <?= $form->field($model, 'project_year')->widget(DatePicker::classname(),[
+        'options' => [
+            'autocomplete' => 'off',
+        ],
+        'pluginOptions' => [
+            'format' => 'yyyy',
+            'autoclose' => true,
+            'minViewMode' => 2,
+        ]
+    ]) ?>
+
 
     <?= $form->field($model, 'user_id')->dropDownList($users, ['prompt' => 'Выберите ответственный']) ?>
 

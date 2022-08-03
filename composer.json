@@ -24,7 +24,8 @@
         "kartik-v/yii2-money": "*",
         "kartik-v/yii2-number": "dev-master",
         "kartik-v/yii2-widget-select2": "dev-master",
-        "guzzlehttp/guzzle": "^7.4"
+        "guzzlehttp/guzzle": "^7.4",
+        "kartik-v/yii2-widget-datepicker": "dev-master"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.1.0",
@@ -42,6 +43,9 @@
         "process-timeout": 1800,
         "fxp-asset": {
             "enabled": false
+        },
+        "allow-plugins": {
+            "yiisoft/yii2-composer": true
         }
     },
     "scripts": {

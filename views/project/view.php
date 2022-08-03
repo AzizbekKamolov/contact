@@ -66,6 +66,13 @@ $myRole = \app\models\User::getMyRole();
                                     return $data->description;
                                 }
                             ],
+                            [
+                                'label' => 'Остаток бюджета',
+                                'value' =>  function($data) {
+                                    return Project::getExpense($data->id);
+                                },
+                                'contentOptions' => ['class' => 'bg-danger'],
+                            ],
                         ],
                     ]) ?>
                 </div>
@@ -168,7 +175,7 @@ $myRole = \app\models\User::getMyRole();
                             ],
                             'pluginOptions' => [
                                 'allowClear' => true,
-                                'selectOnClose' => true,
+                                'selectOnClose' => false,
                             ]
                         ]),
                         'value' =>  function($data) {
@@ -238,7 +245,7 @@ $myRole = \app\models\User::getMyRole();
                             ],
                             'pluginOptions' => [
                                 'allowClear' => true,
-                                'selectOnClose' => true,
+                                'selectOnClose' => false,
                             ]
                         ]),
                         'value' =>  function($data) {
@@ -295,7 +302,7 @@ $myRole = \app\models\User::getMyRole();
                             ],
                             'pluginOptions' => [
                                 'allowClear' => true,
-                                'selectOnClose' => true,
+                                'selectOnClose' => false,
                             ]
                         ]),
                         'value' =>  function($data) {
@@ -316,7 +323,7 @@ $myRole = \app\models\User::getMyRole();
                             ],
                             'pluginOptions' => [
                                 'allowClear' => true,
-                                'selectOnClose' => true,
+                                'selectOnClose' => false,
                             ]
                         ]),
                         'value' =>  function($data) {

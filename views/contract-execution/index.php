@@ -58,7 +58,7 @@ else {
                             ],
                             'pluginOptions' => [
                                 'allowClear' => true,
-                                'selectOnClose' => true,
+                                'selectOnClose' => false,
                             ]
                         ]),
                         'value' =>  function($data) {
@@ -79,7 +79,7 @@ else {
                             ],
                             'pluginOptions' => [
                                 'allowClear' => true,
-                                'selectOnClose' => true,
+                                'selectOnClose' => false,
                             ]
                         ]),
                         'value' =>  function($data) {
@@ -100,7 +100,7 @@ else {
                             ],
                             'pluginOptions' => [
                                 'allowClear' => true,
-                                'selectOnClose' => true,
+                                'selectOnClose' => false,
                             ]
                         ]),
                         'value' =>  function($data) {
@@ -121,7 +121,7 @@ else {
                             ],
                             'pluginOptions' => [
                                 'allowClear' => true,
-                                'selectOnClose' => true,
+                                'selectOnClose' => false,
                             ]
                         ]),
                         'value' =>  function($data) {

@@ -57,7 +57,7 @@ $myRole = \app\models\User::getMyRole();
                             ],
                             'pluginOptions' => [
                                 'allowClear' => true,
-                                'selectOnClose' => true,
+                                'selectOnClose' => false,
                             ]
                         ]),
                         'value' =>  function($data) {
@@ -79,7 +79,7 @@ $myRole = \app\models\User::getMyRole();
                             ],
                             'pluginOptions' => [
                                 'allowClear' => true,
-                                'selectOnClose' => true,
+                                'selectOnClose' => false,
                             ]
                         ]),
                         'value' =>  function($data) {
@@ -100,7 +100,7 @@ $myRole = \app\models\User::getMyRole();
                             ],
                             'pluginOptions' => [
                                 'allowClear' => true,
-                                'selectOnClose' => true,
+                                'selectOnClose' => false,
                             ]
                         ]),
                         'value' =>  function($data) {
