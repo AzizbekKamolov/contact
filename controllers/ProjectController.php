@@ -10,6 +10,7 @@ use app\models\ExpenseSearch;
 use app\models\Project;
 use app\models\ProjectSearch;
 use app\models\Status;
+use app\models\StatusChanges;
 use app\models\Task;
 use app\models\TaskSearch;
 use app\models\User;
@@ -21,7 +22,7 @@ class ProjectController extends Controller
 {
     public function actionIndex()
     {
-        $this->checkStatus();
+//        $this->checkStatus();
         $searchModel = new ProjectSearch();
         $dataProvider = $searchModel->search($this->request->queryParams);
 
@@ -164,4 +165,57 @@ class ProjectController extends Controller
 
         throw new NotFoundHttpException('The requested page does not exist.');
     }
+
+    public function actionProjectSend($id)
+    {
+        $model = new StatusChanges();
+
+        if ($this->request->isPost)
+        {
+            $model->object_type = StatusChanges::PROJECT_TYPE;
+            $model->object_id   = $id;
+            $model->status_id   = Status::findOne(['title' => 'Отправленная'])->id;
+            $model->comment     = $this->request->post("StatusChanges")["comment"];
+            $model->user_id     = \Yii::$app->user->id;
+
+            $project = Project::findOne($id);
+            $project->status_id = Status::findOne(['title' => 'Отправленная'])->id;
+            $project->save();
+
+            if ($model->save())
+            {
+                $this->redirect(['view', 'id' => $id]);
+            }
+        }
+
+        return $this->render('project-send',[
+            'model' => $model
+        ]);
+    }
+
+    public function actionProjectApprove($id)
+    {
+        $product = Project::findOne($id);
+        $product->status_id = Status::findOne(['title' => 'Завершенная'])->id;
+
+        if ($product->save())
+        {
+            \Yii::$app->session->setFlash('success', "User created successfully.");
+            $this->redirect(['view', 'id' => $id]);
+        }
+    }
+    public function actionProjectDeny($id)
+    {
+//        var_dump($id);die();
+        $product = Project::findOne($id);
+        $product->status_id = Status::findOne(['title' => 'Отказанная'])->id;
+
+        if ($product->save())
+        {
+            \Yii::$app->session->setFlash('success', "Reject project");
+            $this->redirect(['view', 'id' => $id]);
+        }
+    }
+
+
 }

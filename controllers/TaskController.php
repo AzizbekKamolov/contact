@@ -138,6 +138,9 @@ class TaskController extends Controller
             $model->status_id = Status::findOne(['title' => 'В процессе'])->id;
 
             if ($model->save()) {
+                $projectId = $this->request->post("Contract")['project_id'];
+                Project::updateProjectStatus($project_id);
+
                 $taskExeModel->title = $model->title;
                 $taskExeModel->task_id = $model->id;
                 $taskExeModel->user_id = $model->user_id;

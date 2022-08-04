@@ -25,6 +25,17 @@ $myRole = \app\models\User::getMyRole();
 
 ?>
 <div class="project-view">
+    <?php if (Yii::$app->session->hasFlash('success')): ?>
+        <div id="toast-container" class="toast-top-right">
+            <div class="toast toast-success" aria-live="polite" style="">
+                <div class="toast-message"><?php  Yii::$app->session->getFlash('success') ?></div>
+            </div>
+        </div>
+<!--        <div class="alert alert-success alert-dismissable">-->
+<!--            <button aria-hidden="true" data-dismiss="alert" class="close" type="button">×</button>-->
+<!--            <h4><i class="icon fa fa-check"></i>Saved!</h4>-->
+<!--        </div>-->
+    <?php endif; ?>
     <div class="card card-outline card-success">
         <div class="card-header">
             <h1 class="card-title text-bold">
@@ -38,6 +49,14 @@ $myRole = \app\models\User::getMyRole();
                         'method' => 'post',
                     ],
                 ]) : "" ?>
+                <?php if(Yii::$app->user->id === $model->user_id): ?>
+                    <?= Html::a('<button type="button" class="btn btn-block btn-success btn-sm">Отправить на одобрение</button>', ['project-send', 'id' => $model->id], ['class' => (($model->status_id === 2) || ($model->status_id === 6)) ? 'btn text-success mx-2 disabled' : 'btn text-success mx-2', 'title' => 'Отправить на одобрение']) ?>
+                <?php elseif ($myRole === "admin" || $myRole === "superAdmin"): ?>
+                    <?php if ($model->status_id === 2):?>
+                        <?= Html::a('<button type="button" class="btn btn-block btn-success btn-sm">Одобрить проект</button>', ['project-approve', 'id' => $model->id], ['class' => 'btn text-success', 'title' => 'Одобрить проект']) ?>
+                        <?= Html::a('<button type="button" class="btn btn-block btn-danger btn-sm">Отказать проект</button>', ['project-deny', 'id' => $model->id], ['class' => 'btn text-danger', 'title' => 'Отказать проект']) ?>
+                    <?php endif;?>
+                <?php endif; ?>
             </h1>
 
             <div class="card-tools">
@@ -69,9 +88,9 @@ $myRole = \app\models\User::getMyRole();
                             [
                                 'label' => 'Остаток бюджета',
                                 'value' =>  function($data) {
-                                    return Project::getExpense($data->id);
+                                    return number_format(Project::getRemaider($data->id), 2) . ' UZS';
                                 },
-                                'contentOptions' => ['class' => 'bg-danger'],
+                                'contentOptions' => ['class' => (Project::getRemaider($model->id) > 0)? '' : 'bg-danger'],
                             ],
                         ],
                     ]) ?>

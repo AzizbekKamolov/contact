@@ -87,42 +87,74 @@ class Project extends \yii\db\ActiveRecord
         return Project::find()->where(['id' => $id])->one();
     }
 
-    public static function getExpense($id)
+//    public static function getExpense($id)
+//    {
+//        $project = Project::find()->where(['id' => $id])->one();
+//        $currencies = Currency::find()->all();
+//        $contracts = Contract::find()->where(['project_id' => $id ])->all();
+//        $tasks = Task::find()->where(['project_id' => $id])->all();
+//
+//        $sum = [
+//            'UZS' => 0,
+//            'USD' => 0,
+//            'RUB' => 0
+//        ];
+//
+//        foreach ($currencies as $currency) {
+//            foreach ($contracts as $contract) {
+//                if ($currency->id === $contract->currency_id) {
+//                    $sum[$currency->short_name] += $contract->price;
+//                }
+//            }
+//            foreach ($tasks as $task) {
+//                if ($currency->id === $task->currency_id) {
+//                    $sum[$currency->short_name] += $task->price;
+//                }
+//            }
+//        }
+//
+//        $sum_keys = array_keys($sum);
+//        $str = number_format($project->budget_sum, 2). ' ' . Currency::getCurrencyById($project->currency_id)->short_name . ' из них потрачено ';
+//
+//        for ($i = 0; $i < count($sum_keys); $i++){
+//            if($sum[$sum_keys[$i]] !== 0){
+//                $str .= number_format($sum[$sum_keys[$i]], 2) . ' ' . $sum_keys[$i] . ', ';
+//            }
+//        }
+////        var_dump($str);die();
+//        return $str;
+//    }
+
+    public static function getRemaider($id)
     {
-        $project = Project::find()->where(['id' => $id])->one();
-        $currencies = Currency::find()->all();
+        $project = Project::findOne($id);
         $contracts = Contract::find()->where(['project_id' => $id ])->all();
-        $tasks = Task::find()->where(['project_id' => $id])->all();
-
-        $sum = [
-            'UZS' => 0,
-            'USD' => 0,
-            'RUB' => 0
-        ];
-
-        foreach ($currencies as $currency) {
-            foreach ($contracts as $contract) {
-                if ($currency->id === $contract->currency_id) {
-                    $sum[$currency->short_name] += $contract->price;
-                }
-            }
-            foreach ($tasks as $task) {
-                if ($currency->id === $task->currency_id) {
-                    $sum[$currency->short_name] += $task->price;
+        $currencies = Currency::find()->all();
+        $sum = 0;
+        foreach ($currencies as $currency)
+        {
+            foreach ($contracts as $contract)
+            {
+                if ($currency->id === $contract->currency_id)
+                {
+                    $value = SystemVariables::find()->where(['key' => $currency->short_name])->one()->value;
+                    $sum += (1 * $value) * $contract->price;
                 }
             }
         }
 
-        $sum_keys = array_keys($sum);
-        $str = number_format($project->budget_sum, 2). ' ' . Currency::getCurrencyById($project->currency_id)->short_name . ' из них потрачено ';
+        $remainder = $project->budget_sum - $sum;
+        return $remainder;
+    }
 
-        for ($i = 0; $i < count($sum_keys); $i++){
-            if($sum[$sum_keys[$i]] !== 0){
-                $str .= number_format($sum[$sum_keys[$i]], 2) . ' ' . $sum_keys[$i] . ', ';
-            }
+    public static function updateProjectStatus($project_id)
+    {
+        $project = Project::findOne($project_id);
+        if ($project->status_id === 1)
+        {
+            $project->status_id = 5;
+            $project->save(false);
         }
-//        var_dump($str);die();
-        return $str;
     }
 
 }

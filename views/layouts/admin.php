@@ -38,16 +38,40 @@ AppAsset::register($this);
     $menuItems = [
 //        ['label' => 'Главная', 'url' => ['/admin/default/index']],
         ['label' => 'Проекты', 'url' => ['/admin/project/index']],
-        ['label' => 'Контракты', 'url' => ['/admin/contract/index']],
-        ['label' => 'Кон на Исп', 'url' => ['/admin/contract-execution/index']],
-        ['label' => 'Кон на Exch', 'url' => ['/admin/contract-exchange/index']],
-        ['label' => 'Задачи', 'url' => ['/admin/task/index']],
-        ['label' => 'Зад на Исп', 'url' => ['/admin/task-execution/index']],
-        ['label' => 'Зад на Exch', 'url' => ['/admin/task-exchange/index']],
-        ['label' => 'Валюта', 'url' => ['/admin/currency/index']],
-        ['label' => 'Статусы', 'url' => ['/admin/status/index']],
+        [
+            'label' => 'Контракты',
+            'visible' => (!Yii::$app->user->isGuest),
+            'items' => [
+                ['label' => 'Контракты', 'url' => ['/admin/contract/index']],
+                ['label' => 'Кон на Исп', 'url' => ['/admin/contract-execution/index']],
+                ['label' => 'Кон на Exch', 'url' => ['/admin/contract-exchange/index']],
+            ],
+        ],
+
+        [
+            'label' => 'Задачи',
+            'visible' => (!Yii::$app->user->isGuest),
+            'items' => [
+                ['label' => 'Задачи', 'url' => ['/admin/task/index']],
+                ['label' => 'Зад на Исп', 'url' => ['/admin/task-execution/index']],
+                ['label' => 'Зад на Exch', 'url' => ['/admin/task-exchange/index']],
+            ],
+        ],
+
+        [
+            'label' => 'Системные данные',
+            'visible' => (!Yii::$app->user->isGuest),
+            'items' => [
+                ['label' => 'Валюта', 'url' => ['/admin/currency/index']],
+                ['label' => 'Статусы', 'url' => ['/admin/status/index']],
+                ['label' => 'Изменения статуса', 'url' => ['/admin/status-changes/index']],
+                ['label' => 'Системные переменные', 'url' => ['/admin/system-variables/index']],
+            ],
+        ],
+
         ['label' => 'RBAC', 'url' => ['/rbac/default/index']],
         ['label' => 'Users', 'url' => ['/admin/user/index']],
+
         Yii::$app->user->isGuest ? (
         ['label' => 'Войти', 'url' => ['/site/login']]
         ) : (
@@ -67,6 +91,9 @@ AppAsset::register($this);
         'options' => [
             'class' => 'navbar navbar-expand-md navbar-dark bg-dark fixed-top',
         ],
+        'containerOptions' => [
+            'class' => 'justify-content-end'
+        ]
     ]);
     echo Nav::widget([
         'options' => ['class' => 'navbar-nav'],

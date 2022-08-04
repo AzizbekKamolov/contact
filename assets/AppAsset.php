@@ -25,11 +25,13 @@ class AppAsset extends AssetBundle
         'https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css',
         'https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback',
         'adminlte/dist/css/adminlte.min.css',
+        'adminlte/plugins/toastr/toastr.min.css',
     ];
     public $js = [
 //        'adminlte/plugins/jquery/jquery.min.js',
         'adminlte/plugins/bootstrap/js/bootstrap.bundle.min.js',
         'adminlte/dist/js/adminlte.min.js',
+        'adminlte/plugins/toastr/toastr.min.js',
 //        'adminlte/dist/js/demo.js',
     ];
     public $depends = [
