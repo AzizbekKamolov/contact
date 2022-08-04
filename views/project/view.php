@@ -25,17 +25,6 @@ $myRole = \app\models\User::getMyRole();
 
 ?>
 <div class="project-view">
-    <?php if (Yii::$app->session->hasFlash('success')): ?>
-        <div id="toast-container" class="toast-top-right">
-            <div class="toast toast-success" aria-live="polite" style="">
-                <div class="toast-message"><?php  Yii::$app->session->getFlash('success') ?></div>
-            </div>
-        </div>
-<!--        <div class="alert alert-success alert-dismissable">-->
-<!--            <button aria-hidden="true" data-dismiss="alert" class="close" type="button">×</button>-->
-<!--            <h4><i class="icon fa fa-check"></i>Saved!</h4>-->
-<!--        </div>-->
-    <?php endif; ?>
     <div class="card card-outline card-success">
         <div class="card-header">
             <h1 class="card-title text-bold">

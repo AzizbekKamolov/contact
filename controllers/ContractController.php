@@ -137,7 +137,7 @@ class ContractController extends Controller
         if ($this->request->isPost) {
             $model->user_id = $user_id;
             $projectId = $this->request->post("Contract")['project_id'];
-            Project::updateProjectStatus($project_id);
+            Project::updateProjectStatus($projectId);
             if ($model->load($this->request->post()) && $model->save()) {
                 return $this->redirect(['view', 'id' => $model->id]);
             }

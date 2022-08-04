@@ -35,57 +35,53 @@ class ProjectController extends Controller
         ]);
     }
 
-    public function checkStatus()
-    {
-        $contracts  = Contract::find()->all();
-        $tasks      = Task::find()->all();
-        $projects   = Project::find()->all();
-
-        $check = 0;
-        $hasProject = 0;
-        foreach ($projects as $project) {
-            foreach ($contracts as $contract) {
-                if ($project->id == $contract->project_id){
-                    if ($contract->status_id !== 6){
-                        $check++;
-                    }
-                    $hasProject++;
-                }
-            }
-
-            foreach ($tasks as $task) {
-                if ($project->id == $task->project_id){
-                    if ($task->status_id !== 6){
-                        $check++;
-                    }
-                    $hasProject++;
-                }
-            }
-
-            if($hasProject != 0) {
-                if ($check != 0) {
-                    $model = $this->findModel($project->id);
-                    $model->status_id = 5;
-                    $model->save();
-                } else {
-                    $model = $this->findModel($project->id);
-                    $model->status_id = 6;
-                    $model->save();
-                }
-            }
-            $check = 0;
-            $hasProject = 0;
-        }
-    }
+//    public function checkStatus()
+//    {
+//        $contracts  = Contract::find()->all();
+//        $tasks      = Task::find()->all();
+//        $projects   = Project::find()->all();
+//
+//        $check = 0;
+//        $hasProject = 0;
+//        foreach ($projects as $project) {
+//            foreach ($contracts as $contract) {
+//                if ($project->id == $contract->project_id){
+//                    if ($contract->status_id !== 6){
+//                        $check++;
+//                    }
+//                    $hasProject++;
+//                }
+//            }
+//
+//            foreach ($tasks as $task) {
+//                if ($project->id == $task->project_id){
+//                    if ($task->status_id !== 6){
+//                        $check++;
+//                    }
+//                    $hasProject++;
+//                }
+//            }
+//
+//            if($hasProject != 0) {
+//                if ($check != 0) {
+//                    $model = $this->findModel($project->id);
+//                    $model->status_id = 5;
+//                    $model->save();
+//                } else {
+//                    $model = $this->findModel($project->id);
+//                    $model->status_id = 6;
+//                    $model->save();
+//                }
+//            }
+//            $check = 0;
+//            $hasProject = 0;
+//        }
+//    }
 
     public function actionView($id)
     {
         $searchModel = new ContractSearch();
         $dataProvider = $searchModel->search(\Yii::$app->request->queryParams);
-
-//        if (User::getMyRole() !== 'admin') {
-//            $dataProvider->query->andWhere(['project_id' =>  $id]);
-//        }
 
         $dataProvider->query->andWhere(['project_id' =>  $id]);
 //        $dataProvider->setSort([
@@ -200,7 +196,7 @@ class ProjectController extends Controller
 
         if ($product->save())
         {
-            \Yii::$app->session->setFlash('success', "User created successfully.");
+            \Yii::$app->session->setFlash('success', "Проект одобрен");
             $this->redirect(['view', 'id' => $id]);
         }
     }
@@ -212,7 +208,7 @@ class ProjectController extends Controller
 
         if ($product->save())
         {
-            \Yii::$app->session->setFlash('success', "Reject project");
+            \Yii::$app->session->setFlash('success', "Проект отклонен");
             $this->redirect(['view', 'id' => $id]);
         }
     }
