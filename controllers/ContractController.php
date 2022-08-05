@@ -124,9 +124,10 @@ class ContractController extends Controller
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
-    public function actionCreate($project_id = 1)
+    public function actionCreate($project_id = null)
     {
         $model = new Contract();
+        $conExeModel = new ContractExecution();
         if ((User::getMyRole() === 'admin') || (User::getMyRole() === 'superAdmin')){
             $projects = ArrayHelper::map(Project::find()->all(), 'id', 'title');
         } else {
@@ -135,21 +136,48 @@ class ContractController extends Controller
         $user_id = \Yii::$app->user->id;
 
         if ($this->request->isPost) {
-            $model->user_id = $user_id;
-            $projectId = $this->request->post("Contract")['project_id'];
-            Project::updateProjectStatus($projectId);
-            if ($model->load($this->request->post()) && $model->save()) {
-                return $this->redirect(['view', 'id' => $model->id]);
+
+            $contrant = $this->request->post("Contract");
+            $conExe = $this->request->post('ContractExecution');
+            $projectId = $contrant['project_id'];
+
+            $model->project_id  = $projectId;
+            $model->title       = $contrant["title"];
+            $model->description = $contrant["description"];
+            $model->price       = $contrant["price"];
+            $model->currency_id = $contrant["currency_id"];
+            $model->user_id     = $user_id;
+            $model->status_id   = Status::findOne(['title' => 'В процессе'])->id;
+            $model->deadline = $this->request->post("deadline");
+
+            if ($model->save())
+            {
+                Project::updateProjectStatus($projectId);
+
+                $conExeModel->title         = 'Заключить контракт ' . $contrant["title"];
+                $conExeModel->contract_id   = $model->id;
+                $conExeModel->user_id       = $user_id;
+                $conExeModel->exe_user_id   = $conExe['exe_user_id'];
+                $conExeModel->status_id     = Status::findOne(['title' => 'В процессе'])->id;
+                $conExeModel->info          = $model->description;
+                $conExeModel->receive_user  = $user_id;
+
+                if ($conExeModel->save()) {
+                    return $this->redirect(['view', 'id' => $model->id]);
+                }
             }
+
         } else {
             $model->loadDefaultValues();
         }
 
         return $this->render('create', [
             'model'         => $model,
+            'conExeModel'   => $conExeModel,
             'projects'      => $projects,
             'project_id'    => $project_id,
-            'currencies'    => Currency::getCurrencies()
+            'currencies'    => Currency::getCurrencies(),
+            'users'         => User::getUsers()
         ]);
     }
 

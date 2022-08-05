@@ -25,7 +25,8 @@
         "kartik-v/yii2-number": "dev-master",
         "kartik-v/yii2-widget-select2": "dev-master",
         "guzzlehttp/guzzle": "^7.4",
-        "kartik-v/yii2-widget-datepicker": "dev-master"
+        "kartik-v/yii2-widget-datepicker": "dev-master",
+        "kartik-v/yii2-widget-datetimepicker": "dev-master"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.1.0",
