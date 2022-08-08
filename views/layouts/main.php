@@ -57,7 +57,7 @@ DashboardAsset::register($this);
 
             <li class="nav-item">
                 <?= Html::beginForm(['/site/logout'], 'post', ['class' => 'form-inline']); ?>
-                <?= Html::submitButton('<i class="fa fa-sign-out"></i> Выйти ', ['class' => 'btn btn-link logout']) ?>
+                <?= Html::submitButton('<i class="fa fa-sign-out"></i> Выйти ', ['class' => 'btn btn-link logout', 'title' => 'Выйти']) ?>
                 <?= Html::endForm();?>
             </li>
         </ul>
