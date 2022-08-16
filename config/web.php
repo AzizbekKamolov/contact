@@ -104,6 +104,9 @@ $config = [
         'pdfjs' => [
             'class' => '\yii2assets\pdfjs\Module',
         ],
+        'contact' => [
+            'class' => 'app\modules\contact\Contact',
+        ],
     ],
     'as access' => [
         'class' => 'mdm\admin\components\AccessControl',

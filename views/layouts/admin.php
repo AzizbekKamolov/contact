@@ -37,6 +37,7 @@ AppAsset::register($this);
     <?php
     $menuItems = [
 //        ['label' => 'Главная', 'url' => ['/admin/default/index']],
+        ['label' => 'Разрешение на просмотр', 'url' => ['/admin/permission-to-view/index']],
         ['label' => 'Проекты', 'url' => ['/admin/project/index']],
         [
             'label' => 'Контракты',

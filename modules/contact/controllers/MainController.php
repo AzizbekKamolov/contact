@@ -1,17 +1,25 @@
 <?php
 
-namespace app\modules\admin\controllers;
+namespace app\modules\contact\controllers;
 
-use app\modules\contact\models\ViewToPermission;
-use yii\data\ActiveDataProvider;
+//use accessBeahaviors;
+use app\models\User;
+use app\modules\contact\models\Category;
+use app\modules\contact\models\Main;
+use app\modules\contact\models\MainSearch;
+use app\modules\contact\models\Subcategory;
+use phpDocumentor\Reflection\Types\Integer;
+use yii\filters\AccessControl;
+use yii\helpers\Json;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\web\Request;
 
 /**
- * PermissionToViewController implements the CRUD actions for ViewToPermission model.
+ * MainController implements the CRUD actions for Main model.
  */
-class PermissionToViewController extends Controller
+class MainController extends Controller
 {
     /**
      * @inheritDoc
@@ -32,33 +40,23 @@ class PermissionToViewController extends Controller
     }
 
     /**
-     * Lists all ViewToPermission models.
+     * Lists all Main models.
      *
      * @return string
      */
     public function actionIndex()
     {
-        $dataProvider = new ActiveDataProvider([
-            'query' => ViewToPermission::find(),
-            /*
-            'pagination' => [
-                'pageSize' => 50
-            ],
-            'sort' => [
-                'defaultOrder' => [
-                    'id' => SORT_DESC,
-                ]
-            ],
-            */
-        ]);
+        $searchModel = new MainSearch();
+        $dataProvider = $searchModel->search($this->request->queryParams);
 
         return $this->render('index', [
+            'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
         ]);
     }
 
     /**
-     * Displays a single ViewToPermission model.
+     * Displays a single Main model.
      * @param int $id ID
      * @return string
      * @throws NotFoundHttpException if the model cannot be found
@@ -71,13 +69,13 @@ class PermissionToViewController extends Controller
     }
 
     /**
-     * Creates a new ViewToPermission model.
+     * Creates a new Main model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return string|\yii\web\Response
      */
     public function actionCreate()
     {
-        $model = new ViewToPermission();
+        $model = new Main();
 
         if ($this->request->isPost) {
             if ($model->load($this->request->post()) && $model->save()) {
@@ -93,7 +91,7 @@ class PermissionToViewController extends Controller
     }
 
     /**
-     * Updates an existing ViewToPermission model.
+     * Updates an existing Main model.
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param int $id ID
      * @return string|\yii\web\Response
@@ -103,9 +101,14 @@ class PermissionToViewController extends Controller
     {
         $model = $this->findModel($id);
 
-        if ($this->request->isPost && $model->load($this->request->post()) && $model->save()) {
+        $this->isAccess($model);
+        $oldOwnerId = $model->owner_id;
+        if ($this->request->isPost && $model->load($this->request->post())) {
+            $model->owner_id = $oldOwnerId;
+             $model->save();
             return $this->redirect(['view', 'id' => $model->id]);
         }
+
 
         return $this->render('update', [
             'model' => $model,
@@ -113,7 +116,7 @@ class PermissionToViewController extends Controller
     }
 
     /**
-     * Deletes an existing ViewToPermission model.
+     * Deletes an existing Main model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param int $id ID
      * @return \yii\web\Response
@@ -121,24 +124,47 @@ class PermissionToViewController extends Controller
      */
     public function actionDelete($id)
     {
-        $this->findModel($id)->delete();
+        $model = $this->findModel($id);
+        $this->isAccess($model);
+        $model->delete();
 
         return $this->redirect(['index']);
     }
 
     /**
-     * Finds the ViewToPermission model based on its primary key value.
+     * Finds the Main model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param int $id ID
-     * @return ViewToPermission the loaded model
+     * @return Main the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)
     {
-        if (($model = ViewToPermission::findOne(['id' => $id])) !== null) {
+        if (($model = Main::findOne(['id' => $id])) !== null) {
             return $model;
         }
 
         throw new NotFoundHttpException('The requested page does not exist.');
+    }
+
+    public function actionChoose()
+    {
+        $subCategoryCount = Subcategory::find()->where(['category_id' => $_POST['category']])->count();
+        $category = isset($_POST['category']);
+        if ($subCategoryCount > 0) {
+            $subcategories = Subcategory::find()->where(['category_id' => $_POST['category']])->all();
+            foreach ($subcategories as $subcategory) {
+                echo "<option value='" . $subcategory->id . "'>" . $subcategory->title . "</option>";
+            }
+        } else {
+            echo "<option>-</option>";
+        }
+
+    }
+
+    public function isAccess($model){
+        if (\Yii::$app->user->identity->id != $model['owner_id'] && User::getMyRole() != 'superAdmin'){
+            return $this->redirect('/contact/main');
+        }
     }
 }

@@ -1,6 +1,7 @@
 <?php
 
 /* @var $this \yii\web\View */
+
 /* @var $content string */
 
 use app\assets\DashboardAsset;
@@ -20,12 +21,16 @@ DashboardAsset::register($this);
     <?php $this->registerCsrfMetaTags() ?>
     <title><?= Html::encode($this->title) ?></title>
     <?php $this->head() ?>
-<!--    <link rel="shortcut icon" href="img/favicon.png" type="image/png">-->
-    <link rel="apple-touch-icon" sizes="180x180" href="<?php echo Yii::$app->request->baseUrl; ?>/img/favicon/apple-touch-icon.png">
-    <link rel="icon" type="image/png" sizes="32x32" href="<?php echo Yii::$app->request->baseUrl; ?>/img/favicon/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="<?php echo Yii::$app->request->baseUrl; ?>/img/favicon/favicon-16x16.png">
+    <!--    <link rel="shortcut icon" href="img/favicon.png" type="image/png">-->
+    <link rel="apple-touch-icon" sizes="180x180"
+          href="<?php echo Yii::$app->request->baseUrl; ?>/img/favicon/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32"
+          href="<?php echo Yii::$app->request->baseUrl; ?>/img/favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16"
+          href="<?php echo Yii::$app->request->baseUrl; ?>/img/favicon/favicon-16x16.png">
     <link rel="manifest" href="<?php echo Yii::$app->request->baseUrl; ?>/site.webmanifest">
-    <link rel="mask-icon" href="<?php echo Yii::$app->request->baseUrl; ?>/img/favicon/safari-pinned-tab.svg" color="#5bbad5">
+    <link rel="mask-icon" href="<?php echo Yii::$app->request->baseUrl; ?>/img/favicon/safari-pinned-tab.svg"
+          color="#5bbad5">
     <meta name="msapplication-TileColor" content="#da532c">
     <meta name="theme-color" content="#ffffff">
 </head>
@@ -35,7 +40,8 @@ DashboardAsset::register($this);
 <div class="wrapper">
     <!-- Preloader -->
     <div class="preloader flex-column justify-content-center align-items-center">
-        <img class="animation__shake" src="<?=Yii::getAlias('@web/adminlte/dist/img/') . "spinner.gif"?>" alt="AdminLTELogo" height="100" width="100">
+        <img class="animation__shake" src="<?= Yii::getAlias('@web/adminlte/dist/img/') . "spinner.gif" ?>"
+             alt="AdminLTELogo" height="100" width="100">
     </div>
 
     <!-- Navbar -->
@@ -58,7 +64,7 @@ DashboardAsset::register($this);
             <li class="nav-item">
                 <?= Html::beginForm(['/site/logout'], 'post', ['class' => 'form-inline']); ?>
                 <?= Html::submitButton('<i class="fa fa-sign-out"></i> Выйти ', ['class' => 'btn btn-link logout', 'title' => 'Выйти']) ?>
-                <?= Html::endForm();?>
+                <?= Html::endForm(); ?>
             </li>
         </ul>
     </nav>
@@ -68,7 +74,8 @@ DashboardAsset::register($this);
     <aside class="main-sidebar sidebar-dark-primary elevation-4">
         <!-- Brand Logo -->
         <a href="/" class="brand-link">
-            <img src="<?=Yii::getAlias('@web/img/favicon/') . "android-chrome-384x384.png"?>" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
+            <img src="<?= Yii::getAlias('@web/img/favicon/') . "android-chrome-384x384.png" ?>" alt="AdminLTE Logo"
+                 class="brand-image img-circle elevation-3" style="opacity: .8">
             <span class="brand-text font-weight-light">ACDF</span>
         </a>
 
@@ -77,7 +84,8 @@ DashboardAsset::register($this);
             <!-- Sidebar user panel (optional) -->
             <div class="user-panel mt-3 pb-3 mb-3 d-flex">
                 <div class="image">
-                    <img src="<?=Yii::getAlias('@web/adminlte/dist/img/') . "user2-160x160.jpg"?>" class="img-circle elevation-2" alt="User Image">
+                    <img src="<?= Yii::getAlias('@web/adminlte/dist/img/') . "user2-160x160.jpg" ?>"
+                         class="img-circle elevation-2" alt="User Image">
                 </div>
                 <div class="info">
                     <a href="#" class="d-block"><?= \Yii::$app->user->identity->fullname ?></a>
@@ -86,7 +94,8 @@ DashboardAsset::register($this);
 
             <!-- Sidebar Menu -->
             <nav class="mt-2">
-                <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+                <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu"
+                    data-accordion="false">
                     <li class="nav-item">
                         <a href="/project/index" class="nav-link">
                             <i class="nav-icon fas fa-book"></i>
@@ -117,6 +126,49 @@ DashboardAsset::register($this);
                             <p>Задачи на исп</p>
                         </a>
                     </li>
+                    <li class="nav-item">
+                        <a href="/contact/main/index" class="nav-link">
+                            <i class="nav-icon fas fa-address-card"></i>
+                            <p>Контакты</p>
+                            <i class="right fas fa-angle-left"></i>
+                        </a>
+                        <ul class="nav nav-treeview">
+                            <li class="nav-item">
+                                <a href="/contact/main/index" class="nav-link">
+                                    <i class="nav-icon fas fa-address-book"></i>
+                                    <p>Контакты</p>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="/contact/category/index" class="nav-link">
+                                    <i class="nav-icon fas fa-bars"></i>
+                                    <p>Категории</p>
+                                </a>
+                            </li>
+
+                            <li class="nav-item">
+                                <a href="/contact/sub-category/index" class="nav-link">
+                                    <i class="nav-icon fas fa-align-left"></i>
+                                    <p>Подкатегории</p>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="/contact/additional-field/index" class="nav-link">
+                                    <i class="nav-icon fas fa-folder-plus"></i>
+                                    <p>Дополнительные поля</p>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="/contact/additional-fields-val/index" class="nav-link">
+                                    <i class="nav-icon fas fa-folder-plus"></i>
+                                    <p>Дополнительные значе</p>
+                                </a>
+                            </li>
+                        </ul>
+
+
+
+                    </li>
 
                 </ul>
             </nav>
@@ -139,8 +191,8 @@ DashboardAsset::register($this);
         <!-- Main content -->
         <section class="content">
             <div class="container-fluid">
-            <?= Alert::widget() ?>
-            <?= $content ?>
+                <?= Alert::widget() ?>
+                <?= $content ?>
             </div>
         </section>
     </div>
@@ -148,8 +200,9 @@ DashboardAsset::register($this);
 
 <footer class="footer mt-auto py-3 text-muted">
     <div class="container">
-        <p class="text-center">&copy; 2017 - <?= date('Y') ?> Фонд развития культуры и искусства при Кабинете Министров Республики Узбекистан.</p>
-<!--        <p class="float-right">--><?//= Yii::powered() ?><!--</p>-->
+        <p class="text-center">&copy; 2017 - <?= date('Y') ?> Фонд развития культуры и искусства при Кабинете Министров
+            Республики Узбекистан.</p>
+        <!--        <p class="float-right">--><? //= Yii::powered() ?><!--</p>-->
     </div>
 </footer>
 
@@ -157,3 +210,16 @@ DashboardAsset::register($this);
 </body>
 </html>
 <?php $this->endPage() ?>
+<script>
+    var url = window.location;
+
+    // for sidebar menu entirely but not cover treeview
+    $('ul.nav-sidebar a').filter(function() {
+        return this.href == url;
+    }).addClass('active');
+
+    // for treeview
+    $('ul.nav-treeview a').filter(function() {
+        return this.href == url;
+    }).parentsUntil(".nav-sidebar > .nav-treeview").addClass('menu-open').prev('a').addClass('active');
+</script>

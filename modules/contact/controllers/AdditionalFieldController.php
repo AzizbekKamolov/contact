@@ -1,17 +1,18 @@
 <?php
 
-namespace app\modules\admin\controllers;
+namespace app\modules\contact\controllers;
 
-use app\modules\contact\models\ViewToPermission;
-use yii\data\ActiveDataProvider;
+use app\models\User;
+use app\modules\contact\models\AdditionalField;
+use app\modules\contact\models\AdditionalFieldSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
 /**
- * PermissionToViewController implements the CRUD actions for ViewToPermission model.
+ * AdditionalFieldController implements the CRUD actions for AdditionalField model.
  */
-class PermissionToViewController extends Controller
+class AdditionalFieldController extends Controller
 {
     /**
      * @inheritDoc
@@ -32,33 +33,23 @@ class PermissionToViewController extends Controller
     }
 
     /**
-     * Lists all ViewToPermission models.
+     * Lists all AdditionalField models.
      *
      * @return string
      */
     public function actionIndex()
     {
-        $dataProvider = new ActiveDataProvider([
-            'query' => ViewToPermission::find(),
-            /*
-            'pagination' => [
-                'pageSize' => 50
-            ],
-            'sort' => [
-                'defaultOrder' => [
-                    'id' => SORT_DESC,
-                ]
-            ],
-            */
-        ]);
+        $searchModel = new AdditionalFieldSearch();
+        $dataProvider = $searchModel->search($this->request->queryParams);
 
         return $this->render('index', [
+            'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
         ]);
     }
 
     /**
-     * Displays a single ViewToPermission model.
+     * Displays a single AdditionalField model.
      * @param int $id ID
      * @return string
      * @throws NotFoundHttpException if the model cannot be found
@@ -71,14 +62,13 @@ class PermissionToViewController extends Controller
     }
 
     /**
-     * Creates a new ViewToPermission model.
+     * Creates a new AdditionalField model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return string|\yii\web\Response
      */
     public function actionCreate()
     {
-        $model = new ViewToPermission();
-
+        $model = new AdditionalField();
         if ($this->request->isPost) {
             if ($model->load($this->request->post()) && $model->save()) {
                 return $this->redirect(['view', 'id' => $model->id]);
@@ -93,7 +83,7 @@ class PermissionToViewController extends Controller
     }
 
     /**
-     * Updates an existing ViewToPermission model.
+     * Updates an existing AdditionalField model.
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param int $id ID
      * @return string|\yii\web\Response
@@ -113,7 +103,7 @@ class PermissionToViewController extends Controller
     }
 
     /**
-     * Deletes an existing ViewToPermission model.
+     * Deletes an existing AdditionalField model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param int $id ID
      * @return \yii\web\Response
@@ -121,21 +111,23 @@ class PermissionToViewController extends Controller
      */
     public function actionDelete($id)
     {
-        $this->findModel($id)->delete();
+        $model = $this->findModel($id);
+
+        $model->delete();
 
         return $this->redirect(['index']);
     }
 
     /**
-     * Finds the ViewToPermission model based on its primary key value.
+     * Finds the AdditionalField model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param int $id ID
-     * @return ViewToPermission the loaded model
+     * @return AdditionalField the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)
     {
-        if (($model = ViewToPermission::findOne(['id' => $id])) !== null) {
+        if (($model = AdditionalField::findOne(['id' => $id])) !== null) {
             return $model;
         }
 
